@@ -1,0 +1,75 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/atgback1"
+    
+    tools:context="edu.gmu.ttaconline.atcguide.MainActivity$PlaceholderFragment" >
+ <LinearLayout		android:id="@+id/header" 
+    				android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+            		android:layout_alignParentTop="true"        
+                     android:gravity="center_horizontal"
+                    android:layout_marginLeft="20dp"
+        			android:layout_marginRight="20dp"
+                    android:orientation="horizontal"
+                    android:weightSum="100" >
+			<LinearLayout android:gravity="end" 
+    				android:orientation="horizontal"
+    				android:background="@drawable/titleback"
+    				android:layout_width="fill_parent"
+    				android:layout_height="wrap_content"
+    				android:layout_weight="98">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/savedformback"
+                        android:text="@string/savedforms"
+                        android:textColor="@android:color/white" />
+                </LinearLayout></LinearLayout>
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+       
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="0dp"
+        android:fillViewport="true" 
+        android:layout_below="@+id/header">
+
+        <TableLayout
+            android:id="@+id/studentData"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/tableback"
+            android:divider="@drawable/divider_list"
+             >
+
+            
+            <TableRow android:layout_height="wrap_content" >
+
+                <Space
+                    android:layout_width="fill_parent"
+                    android:layout_height="30dp" />
+            </TableRow>
+
+            <TableRow android:layout_height="wrap_content" 
+                android:paddingBottom="0dp" android:background="@drawable/rowback">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/textviewback"
+                    android:text="@string/sampledata"
+                    android:paddingBottom="0dp" />
+            </TableRow>
+
+            <TableRow android:layout_height="fill_parent" >
+                <Space
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent" />
+            </TableRow>
+        </TableLayout>
+    </ScrollView>
+	
+</RelativeLayout>

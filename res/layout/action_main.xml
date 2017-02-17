@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    android:background="@drawable/actionbarbackground"
+android:layout_alignParentTop="true"
+android:weightSum="100"
+    >
+
+    <ImageButton
+        android:id="@+id/newrecord"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        
+        android:src="@drawable/ic_action_plusbutton"
+        android:background="@drawable/actionbarbackground"
+        android:contentDescription="New"
+       android:layout_weight="1"/>
+
+    <TextView android:id="@+id/actionbartitle" android:layout_height="match_parent" android:layout_width="wrap_content"
+       android:layout_gravity="center_horizontal|center_vertical" android:gravity="center_horizontal|center_vertical"
+       android:textColor="#588BA3"
+       android:text="@string/title_main"
+       android:textStyle="bold"
+       android:layout_weight="97"
+       />
+    <ImageButton
+        android:id="@+id/deleterecordbutton"
+        android:layout_width="wrap_content"
+        android:background="@drawable/actionbarbackground"
+        android:layout_height="match_parent"
+        android:contentDescription="Delete"
+       android:src="@drawable/ic_action_delete"
+    	android:layout_weight="1"
+       />
+        <ImageButton
+        android:id="@+id/helpbutton"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:contentDescription="Help"
+        android:scaleType="fitXY"
+        android:textColor="@android:color/holo_blue_dark"
+        android:src="@drawable/ic_action_help" 
+        
+        android:background="@drawable/actionbarbackground"
+      	android:layout_weight="1"
+       />
+
+</LinearLayout>

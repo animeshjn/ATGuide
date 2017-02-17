@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">ATCGuide</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_main">Assistive Technology Consideration Guide</string>
+    <string name="savedforms">\u25CF Saved Forms \u25CF</string>
+    <string name="studentInformation">\u25CF Student Information \u25CF</string>
+    <string name="part2">\u25CF Part 2 \u25CF</string>
+    <string name="trial1">1st Trial</string>
+    <string name="trial2">2nd Trial</string>
+    <string name="open">Open</string>
+    <string name="preview">Preview</string>
+    <string name="sampledata">\u25CF Sample Data \u25CF</string>
+    <string name="title_activity_input_form">InputForm</string>
+    <string name="student">Student ID</string>
+    <string name="grade">Grade</string>
+    <string name="school">School</string>
+    <string name="participants">Participants</string>
+    <string name="date">Date</string>
+    <string name="next">Next</string>
+    <string name="preschool">Pre-school</string>
+    <string name="kindergarten">Kindergarten</string>
+    <string name="grade1">1st Grade</string>
+    <string name="grade2">2nd Grade</string>
+    <string name="grade3">3rd Grade</string>
+    <string name="grade4">4th Grade</string>
+    <string name="grade5">5th Grade</string>
+    <string name="grade6">6th Grade</string>
+    <string name="grade7">7th Grade</string>
+    <string name="grade8">8th Grade</string>
+    <string name="grade9">9th Grade</string>
+    <string name="grade10">10th Grade</string>
+    <string name="grade11">11th Grade</string>
+    <string name="grade12">12th Grade</string>
+
+    <string-array name="gradearray">
+        <item>Grade</item>
+        <item>@string/preschool</item>
+        <item>@string/kindergarten</item>
+        <item>@string/grade1</item>
+        <item>@string/grade2</item>
+        <item>@string/grade3</item>
+        <item>@string/grade4</item>
+        <item>@string/grade5</item>
+        <item>@string/grade6</item>
+        <item>@string/grade7</item>
+        <item>@string/grade8</item>
+        <item>@string/grade9</item>
+        <item>@string/grade10</item>
+        <item>@string/grade11</item>
+        <item>@string/grade12</item>
+    </string-array>
+
+    <string name="title_activity_iepgoals">IEPGoals</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="title_activity_instructional_areas">InstructionalAreas</string>
+    <string name="subtitle_instructional">Please check relevant instructional area(s).</string>
+    <string name="listeninginstr">Listening</string>
+    <string name="readinginstr">Reading</string>
+    <string name="writinginstr">Writing</string>
+    <string name="oralinstr">Oral Communication</string>
+    <string name="activitiesinstr">Activities of Daily Living</string>
+    <string name="positioninginstr">Positioning, Seating, and Mobility</string>
+    <string name="otherinstr">Other</string>
+    <string name="mathinstr">Math</string>
+    <string name="spellinginstr">Spelling</string>
+    <string name="computerinstr">Computer Access</string>
+    <string name="studyinstr">Study/Organizational Skills</string>
+    <string name="environmentinstr">Environment Controls</string>
+    <string name="recreationinstr">Recreation, Leisure and Adaptive Play</string>
+    <string name="part1">\u25CF  Part 1 \u25CF </string>
+    <string name="completetaskform">Complete the following form(s) for each area identified.</string>
+	<string name="instructionalarea">Instructional Area</string>
+    <string-array name="list1">
+        <item name="listening">@string/listeninginstr</item>
+        <item name="reading">@string/readinginstr</item>
+        <item name="writing">@string/writinginstr</item>
+        <item name="oral">@string/oralinstr</item>
+        <item name="activities">@string/activitiesinstr</item>
+        <item name="positioning">@string/positioninginstr</item>
+    </string-array>
+    <string-array name="list2">
+        <item name="math">@string/mathinstr</item>
+        <item name="spelling">@string/spellinginstr</item>
+        <item name="computer">@string/computerinstr</item>
+        <item name="study">@string/studyinstr</item>
+        <item name="environment">@string/environmentinstr</item>
+        <item name="recreation">@string/recreationinstr</item>
+    </string-array>
+
+    <string name="title_activity_iepreading">IEPReading</string>
+    <string name="IEPReadingquestion">Does the student have IEP goals or accomodations in the area of reading?</string>
+    <string name="printdisability">Does a student with a disability have difficulty reading printed based materials?</string>
+    <string name="printalternative">Has the IEP team tested the student to determine if they might benefit from print material in alternative formats (i.e., Large Print, Braille, Electronic Text, Audio)?</string>
+    <string name="title_activity_task_form">TaskForm</string>
+    <string name="areataskheader">Area/Task</string>
+	<string name="ready">Ready</string>
+</resources>

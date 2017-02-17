@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TableRow xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/tableRow1"
+    android:layout_marginLeft="5dp"
+    android:layout_marginRight="5dp"
+    android:layout_width="fill_parent"
+    
+    android:layout_height="40dp"
+    android:orientation="horizontal"
+    android:background="@drawable/rowback"
+   android:weightSum="100">
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:text=""
+        android:background="@drawable/textviewback"
+        android:layout_weight="50"
+       
+         />
+<LinearLayout 
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+	android:layout_weight="50">
+     <Space android:layout_width="20sp" android:layout_height="wrap_content"/> 
+
+    <Button
+        android:id="@+id/open"
+        android:text="@string/open" 
+        android:background="@drawable/mybutton"
+      	 android:fontFamily="@android:style/TextAppearance.DeviceDefault"
+      	 android:textColor="#4F4F4F"
+       	android:layout_width="wrap_content"
+       	android:layout_height="wrap_content"
+        />
+	<Space android:layout_width="10sp" android:layout_height="wrap_content"/>
+    <Button
+        android:id="@+id/preview"
+        android:text="@string/preview" 
+        android:background="@drawable/mybutton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#4F4F4F"
+       />
+<Space android:layout_width="10sp" android:layout_height="wrap_content"/>
+  
+    <Button
+        android:id="@+id/trial1"
+        android:background="@drawable/mybutton"
+        android:text="@string/trial1" 
+        android:textColor="#4F4F4F"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+       />
+<Space android:layout_width="10sp" android:layout_height="wrap_content"/>
+    <Button
+        android:id="@+id/trial2"
+        android:background="@drawable/mybutton"
+        android:textColor="#4F4F4F"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/trial2" 
+       />
+   
+    <Button
+        android:id="@+id/deleterecordbutton"
+        android:background="@drawable/ic_delete_forever"
+        android:visibility="visible"
+        android:textColor="#4F4F4F"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+       />
+</LinearLayout>
+</TableRow>

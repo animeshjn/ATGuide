@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="edu.gmu.ttaconline.atcguide"
+    android:versionCode="1"
+    android:versionName="1.0" >
+
+    <uses-sdk
+        android:minSdkVersion="19"
+        android:targetSdkVersion="21" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme" >
+        <activity
+            android:name=".MainActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="sensorLandscape"
+            android:windowSoftInputMode="adjustPan" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".InputForm"
+            android:label="@string/title_activity_input_form"
+            android:screenOrientation="sensorLandscape"
+            android:windowSoftInputMode="adjustPan" >
+        </activity>
+        <activity
+            android:name=".IEPGoals"
+            android:label="@string/title_activity_iepgoals"
+            android:screenOrientation="sensorLandscape" >
+        </activity>
+        <activity
+            android:name=".InstructionalAreas"
+            android:label="@string/title_activity_instructional_areas"
+            android:screenOrientation="sensorLandscape"
+            android:windowSoftInputMode="adjustPan" >
+        </activity>
+        <activity
+            android:name=".IEPReading"
+            android:label="@string/title_activity_iepreading" >
+        </activity>
+        <activity
+            android:name=".TaskForm"
+            android:label="@string/title_activity_task_form" >
+        </activity>
+    </application>
+
+</manifest>

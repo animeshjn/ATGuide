@@ -1,0 +1,257 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/atgback1"
+    tools:context="edu.gmu.ttaconline.atcguide.InputForm" >
+
+    <LinearLayout
+        android:id="@+id/header"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:background="@drawable/titleback"
+        android:gravity="end"
+        android:orientation="horizontal"
+        android:weightSum="100" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/savedformback"
+            android:text="@string/studentInformation"
+            android:textColor="@android:color/white" />
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/header"
+        android:layout_above="@+id/nextbuttonlayout"
+        android:id="@+id/scroll"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="10dp"
+        android:padding="10dp"
+        android:background="@drawable/tableback"
+        android:fillViewport="true" >
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:weightSum="100"
+            android:background="@drawable/rowback" 
+            android:divider="@drawable/dividerline"
+            android:dividerPadding="15sp"
+            android:showDividers="middle"
+            >
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="100" >
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="20"
+                    android:gravity="end" >
+
+                    <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="match_parent"
+                        android:text="@string/student" 
+                        android:textSize="18sp"
+                        android:paddingStart="15dp"
+                        android:paddingTop="10dp"
+                        android:paddingEnd="0dp"
+                        android:paddingBottom="0dp"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="80"
+                    android:gravity="start" >
+                
+                <EditText
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                   android:background="@drawable/textviewback"
+                    android:hint="@string/student"
+                    android:id="@+id/studentid"
+                    android:inputType="text" />
+                </LinearLayout>
+            </LinearLayout>
+           
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="100"
+                android:baselineAligned="false" >
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="20"
+                    android:gravity="end" >
+
+                    <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="match_parent"
+                        android:text="@string/grade" 
+                        android:textSize="18sp"
+                        android:paddingStart="15dp"
+                        android:paddingTop="10dp"
+                        android:paddingEnd="0dp"
+                        android:paddingBottom="0dp"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="80"
+                    android:gravity="start" >
+                
+                    <Spinner android:spinnerMode="dropdown" 
+                        	 android:layout_width="fill_parent"
+                    		 android:layout_height="wrap_content"
+                    		 android:entries="@array/gradearray"
+                    		  android:hint="@string/grade"
+                    		   android:id="@+id/studentgrade"
+                    		   android:background="@drawable/textviewback"
+										                    		   
+                    		 />
+               <!--  <EditText
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                   android:background="@drawable/textviewback"
+                    android:hint="@string/grade"
+                    android:id="@+id/studentgrade"
+                    android:inputType="text" /> -->
+                </LinearLayout>
+            </LinearLayout>
+            
+            
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="100" >
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="20"
+                    android:gravity="end" >
+
+                    <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="match_parent"
+                        android:text="@string/school" 
+                        android:textSize="18sp"
+                        android:paddingStart="15dp"
+                        android:paddingTop="10dp"
+                        android:paddingEnd="0dp"
+                        android:paddingBottom="0dp"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="80"
+                    android:gravity="start" >
+                
+                <EditText
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                   android:background="@drawable/textviewback"
+                    android:hint="@string/school"
+                    android:id="@+id/studentschool"
+                    android:inputType="text" />
+                </LinearLayout>
+            </LinearLayout>
+            
+            
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="100" >
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="20"
+                    android:gravity="end" >
+
+                    <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="match_parent"
+                        android:text="@string/participants" 
+                        android:textSize="18sp"
+                        android:paddingStart="15dp"
+                        android:paddingTop="10dp"
+                        android:paddingEnd="0dp"
+                        android:paddingBottom="0dp"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="80"
+                    android:gravity="start" >
+                
+                <EditText
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                   android:background="@drawable/textviewback"
+                    android:hint="@string/participants"
+                    android:inputType="textMultiLine" 
+                    android:minLines="4"
+                    android:id="@+id/participants"
+                    />
+                </LinearLayout>
+            </LinearLayout>
+            <LinearLayout android:layout_width="fill_parent"
+                	android:layout_height="wrap_content"
+                	android:orientation="horizontal"
+                	android:gravity="center_horizontal"
+                	android:background="@drawable/textviewback"
+                	>
+                <TextView android:text="@string/date" android:textSize="18sp"
+                    	android:layout_width="wrap_content"
+                    	android:layout_height="wrap_content" 
+                    	android:layout_gravity="center_vertical|end"/>
+                <DatePicker android:calendarViewShown="false"
+                    	android:spinnersShown="true"
+                    	android:background="@drawable/textviewback"
+                    	 android:id="@+id/date"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"/>
+                
+            </LinearLayout>
+            
+            
+        </LinearLayout>
+    </ScrollView>
+			<LinearLayout android:layout_width="fill_parent"
+                	android:layout_height="wrap_content"
+                	android:orientation="horizontal"
+                	android:gravity="center_horizontal"
+                	android:background="@drawable/titleback"
+                	android:id="@+id/nextbuttonlayout"
+                	android:layout_alignParentBottom="true">
+                <Button android:text="@string/next"
+                    	android:layout_width="wrap_content"
+                    	android:id="@+id/nextbutton"
+                    	android:layout_height="wrap_content"
+                    	android:background="@drawable/mybutton"/>
+                
+            </LinearLayout>
+</RelativeLayout>
