@@ -30,7 +30,6 @@
         android:layout_height="fill_parent"
         android:layout_above="@+id/nextbuttonlayout"
         android:layout_below="@+id/header"
-        
         android:baselineAligned="false"
         android:orientation="horizontal"
         android:weightSum="100" >
@@ -39,37 +38,40 @@
             android:layout_width="0dp"
             android:layout_height="fill_parent"
             android:layout_weight="40"
-            android:orientation="vertical"
-            android:background="@drawable/textviewback" >
+            android:background="@drawable/textviewback"
+            android:orientation="vertical" >
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal" 
-                android:weightSum="100">
+                android:orientation="horizontal"
+                android:weightSum="100" >
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="start"
+                    android:layout_weight="50"
                     android:gravity="start"
-                    android:text="@string/areataskheader"
-                    android:layout_weight="50"/>
+                    android:text="@string/areataskheader" />
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="end"
-                    android:gravity="end"
                     android:layout_weight="50"
-                    android:text="@string/ready"/>
-                
+                    android:gravity="end"
+                    android:text="@string/ready" />
+
+               
             </LinearLayout>
 
-            <ListView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="40" >
-            </ListView>
+           <ListView
+                    android:id="@+id/instructionalAreasList"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" 
+                   >
+                </ListView>
         </LinearLayout>
 
         <LinearLayout
@@ -106,6 +108,26 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/rowback"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Task that is difficult for the student" />
+
+                <TextView
+                    android:id="@+id/taskname"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/textviewback"
+                    android:text="Task Name"
+                    android:textColor="@android:color/darker_gray" />
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>

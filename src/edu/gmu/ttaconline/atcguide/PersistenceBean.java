@@ -1,11 +1,14 @@
 package edu.gmu.ttaconline.atcguide;
 
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 
 import edu.gmu.ttaconline.atcguide.FeedReaderContract.FeedEntry;
+import edu.gmu.ttaconline.atcguide.FeedReaderContract.IntentStore;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
@@ -105,9 +108,71 @@ public class PersistenceBean {
 	}
 
 	public static void persistInstructionalAreas(String studentId,
-			ArrayList<String> selectedInstructionalAreas, Context context)
-	{
-		
-		
+			ArrayList<String> selectedInstructionalAreas, Context context) {
+
 	}
+
+	public static boolean persistIntent(String studentId, Intent intent,
+			Context context) {
+		boolean result = false;
+		String intentDescription = null;
+
+		FeedReaderDbHelper mDbHelper = new FeedReaderDbHelper(context);
+		SQLiteDatabase db = mDbHelper.getWritableDatabase();
+		try {
+			intentDescription = intent.toUri(0);
+		} catch (Exception unknown) {
+			Log.e("ATGUIDE", unknown.getMessage());
+		}
+		ContentValues values = new ContentValues();
+		values.put(IntentStore.COLUMN_NAME_ID, studentId);
+		values.put(IntentStore.COLUMN_NAME_INTENT, intentDescription);
+		long rows = 0;
+		try {
+			rows = db.insertWithOnConflict(IntentStore.TABLE_NAME, null,
+					values, SQLiteDatabase.CONFLICT_REPLACE);
+			result = true;
+		} catch (SQLException e) {
+			Log.e("ATGUIDE", "SQLException: " + e.getMessage());
+			result = false;
+		} catch (Exception e) {
+			Log.e("ATGUIDE", "Other Exception: " + e.getMessage());
+			result = false;
+		}
+		db.close();
+		if (rows > 0) {
+			Toast.makeText(context, "" + rows + " inserted", Toast.LENGTH_SHORT)
+					.show();
+		}
+		return result;
+	}
+
+	public static Intent getExistingIntent(String studentId, Context context) {
+		Intent requiredIntent = null;
+		int records = 0;
+		FeedReaderDbHelper mDbHelper = new FeedReaderDbHelper(context);
+		SQLiteDatabase db = mDbHelper.getWritableDatabase();
+
+		// ContentValues values = new ContentValues();
+		String intentDescription = null;
+		Cursor cursor = db.query(IntentStore.TABLE_NAME,
+				new String[] { IntentStore.COLUMN_NAME_INTENT },
+				IntentStore.COLUMN_NAME_ID + " like " + "'" + studentId + "'",
+				null, null, null, null);
+		while (cursor.moveToNext()) {
+			intentDescription = cursor.getString(0);
+			records++;
+		}
+
+		try {
+			requiredIntent = Intent.parseUri(intentDescription, 0);
+		} catch (URISyntaxException e) {
+			Log.e("ATGUIDE", e.getMessage());
+		}
+		
+		Toast.makeText(context,"Retrieved: "+records+" records" ,Toast.LENGTH_SHORT).show();
+		return requiredIntent;
+
+	}
+
 }

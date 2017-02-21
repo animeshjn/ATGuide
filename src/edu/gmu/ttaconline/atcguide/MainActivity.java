@@ -177,9 +177,7 @@ public class MainActivity extends Activity {
 					Toast.makeText(context, "preview report",
 							Toast.LENGTH_SHORT).show();
 					break;
-					
 				case R.id.deleterecordbutton:
-			
 					Toast.makeText(context,"Cannot delete sample data", Toast.LENGTH_SHORT).show();
 					
 				}

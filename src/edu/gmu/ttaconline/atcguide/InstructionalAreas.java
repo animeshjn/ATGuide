@@ -1,6 +1,9 @@
 package edu.gmu.ttaconline.atcguide;
 
 import java.util.ArrayList;
+
+import com.commonsware.cwac.merge.MergeAdapter;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -24,6 +27,7 @@ public class InstructionalAreas extends Activity {
 	Context context;
 	ArrayList<String> selectedInstructionalAreas= new ArrayList<String>();
 	CheckBoxBean instructionalCheck;
+	MergeAdapter merge = new MergeAdapter();
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);

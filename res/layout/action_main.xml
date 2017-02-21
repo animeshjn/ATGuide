@@ -26,15 +26,7 @@ android:weightSum="100"
        android:textStyle="bold"
        android:layout_weight="97"
        />
-    <ImageButton
-        android:id="@+id/deleterecordbutton"
-        android:layout_width="wrap_content"
-        android:background="@drawable/actionbarbackground"
-        android:layout_height="match_parent"
-        android:contentDescription="Delete"
-       android:src="@drawable/ic_action_delete"
-    	android:layout_weight="1"
-       />
+    
         <ImageButton
         android:id="@+id/helpbutton"
         android:layout_width="wrap_content"

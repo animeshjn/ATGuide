@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
 
     <!--
         Base application theme, dependent on API level. This theme is replaced
@@ -17,10 +17,17 @@
 
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
         <item name="android:checkboxStyle">@style/custom_CheckBoxStyle</item>
+         <item name="android:listViewStyle">@style/ListFont</item>
+         
     </style>
 
     <style name="custom_CheckBoxStyle" parent="@android:style/Widget.CompoundButton.CheckBox">
         <item name="android:button">@drawable/custom_checkbox</item>
     </style>
-
+	<style name="ListFont" parent="@android:style/Widget.ListView">
+    <item name="android:textColor">#FF000000</item>
+    
+    <item name="android:typeface">sans</item>
+	</style>
+	
 </resources>

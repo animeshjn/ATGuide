@@ -1,7 +1,6 @@
 package edu.gmu.ttaconline.atcguide;
 
 import android.app.Activity;
-
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,8 +8,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-
 import android.widget.Button;
+import android.widget.DatePicker;
+import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 public class InputForm extends Activity {
@@ -18,12 +19,14 @@ public class InputForm extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
 		context=getApplicationContext();
-		
-		
 		setContentView(R.layout.activity_input_form);
-		
+
+		// case open : or if exists PersistedIntent(currentStudentId)
+		// fill form 
+		// else blank form
+		// case Preview : fillPDF(Intent)
+		// 
 		Button b=(Button)findViewById(R.id.nextbutton);
 		b.setOnClickListener(new Button.OnClickListener() {
 			
@@ -31,23 +34,43 @@ public class InputForm extends Activity {
 			public void onClick(View v) {
 				saveData(v);
 				//nextActivity();
-				
 			}
-
-			
 		});
 		
 	}
 
 	private void saveData(View v) {
 		//TODO save Data
+		Intent intent;
+		//= PersistenceBean.persistInputFormData((ViewGroup) v.getRootView(),context);
+		v=v.getRootView();
+		String studentid = ((EditText) (v.findViewById(R.id.studentid)))
+				.getText().toString();
+		String studentgrade = ((Spinner) (v.findViewById(R.id.studentgrade)))
+				.getSelectedItem().toString();
+		String studentschool = ((EditText) (v.findViewById(R.id.studentschool)))
+				.getText().toString();
+		String studentparticipant = ((EditText) (v
+				.findViewById(R.id.participants))).getText().toString();
+		DatePicker datePicker = (DatePicker) v.findViewById(R.id.date);
+		int day = datePicker.getDayOfMonth();
+		int month = datePicker.getMonth() + 1;
+		int year = datePicker.getYear();
 		
-		
-		
-		Intent i  = PersistenceBean.persistInputFormData((ViewGroup) v.getRootView(),context);
+		@SuppressWarnings("deprecation")
+		java.sql.Date date = new java.sql.Date(year, month, day);
+		intent = new Intent();
+		intent.putExtra("studentid", studentid);
+		intent.putExtra("studentgrade", studentgrade);
+		intent.putExtra("studentparticipant", studentparticipant);
+		intent.putExtra("studentschool", studentschool);
+		intent.putExtra("date", date.toString());
 		Toast.makeText(context, "Data Saved", Toast.LENGTH_SHORT).show();
-		i.setClass(context,IEPGoals.class);
-		startActivity(i);
+		intent.setClass(context,IEPGoals.class);
+		
+		PersistenceBean.persistIntent(intent.getStringExtra("studentid"), intent, context);
+		
+		startActivity(intent);
 		
 	}
 	

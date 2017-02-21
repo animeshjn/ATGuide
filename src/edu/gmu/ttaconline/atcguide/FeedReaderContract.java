@@ -24,4 +24,10 @@ public final class FeedReaderContract {
         public static final String STUDENT = "";
         public static final String COLUMN_NAME_SUBTITLE = "subtitle";
     }
+    public static class IntentStore{
+    	public static final String TABLE_NAME= "intentstore";
+    	public static final String COLUMN_NAME_ID= "studentid";
+    	public static final String COLUMN_NAME_INTENT= "intentstring";
+    	
+    }
 }
