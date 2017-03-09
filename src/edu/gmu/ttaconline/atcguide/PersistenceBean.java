@@ -174,5 +174,20 @@ public class PersistenceBean {
 		return requiredIntent;
 
 	}
+	
+	public static boolean isExistingRecord(String studentId,Context context)
+	{
+		FeedReaderDbHelper mDbHelper = new FeedReaderDbHelper(context);
+		SQLiteDatabase db = mDbHelper.getWritableDatabase();
+		Cursor cursor = db.query(IntentStore.TABLE_NAME,
+				new String[] { IntentStore.COLUMN_NAME_INTENT },
+				IntentStore.COLUMN_NAME_ID + " like " + "'" + studentId + "'",
+				null, null, null, null);
+		if(cursor.getCount()>0)
+		return true;
+		else 
+		return false;
+	}
+	
 
 }

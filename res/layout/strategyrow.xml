@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal" >
+
+    <EditText
+        android:id="@+id/strategyedittext"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.95"
+        android:background="@drawable/tasktextviewback"
+        android:hint=""
+        android:singleLine="true"
+        android:textColor="@android:color/black" />
+
+    <ImageButton
+        android:id="@+id/deletethisstrategy"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="0.05"
+        android:background="@null"
+        android:contentDescription="Delete Strategy"
+        android:scaleType="fitXY"
+        
+        android:src="@drawable/ic_delete_forever" />
+
+</LinearLayout>

@@ -123,6 +123,7 @@
                     		 android:layout_height="wrap_content"
                     		 android:entries="@array/gradearray"
                     		  android:hint="@string/grade"
+                    		  
                     		   android:id="@+id/studentgrade"
                     		   android:background="@drawable/textviewback"
 										                    		   

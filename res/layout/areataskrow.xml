@@ -1,11 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/areatasklistrow"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" 
-    android:background="@drawable/rowback">
-  
-    <TextView android:id="@+id/areatextview" android:layout_width="match_parent" android:layout_height="wrap_content"></TextView>
-	    
+    android:alpha="0.6"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/areatextview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/black"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:text="Please enter a name of task" >
+    </TextView>
 
 </LinearLayout>

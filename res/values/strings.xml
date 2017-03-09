@@ -36,7 +36,7 @@
     <string name="grade12">12th Grade</string>
 
     <string-array name="gradearray">
-        <item>Grade</item>
+        
         <item>@string/preschool</item>
         <item>@string/kindergarten</item>
         <item>@string/grade1</item>
@@ -73,7 +73,7 @@
     <string name="recreationinstr">Recreation, Leisure and Adaptive Play</string>
     <string name="part1">\u25CF  Part 1 \u25CF </string>
     <string name="completetaskform">Complete the following form(s) for each area identified.</string>
-	<string name="instructionalarea">Instructional Area</string>
+	<string name="instructionalarea">Instructional Area: </string>
     <string-array name="list1">
         <item name="listening">@string/listeninginstr</item>
         <item name="reading">@string/readinginstr</item>
@@ -92,10 +92,12 @@
     </string-array>
 
     <string name="title_activity_iepreading">IEPReading</string>
-    <string name="IEPReadingquestion">Does the student have IEP goals or accomodations in the area of reading?</string>
+    <string name="IEPReadingquestion">Does the student have IEP goals or accommodations in the area of reading?</string>
     <string name="printdisability">Does a student with a disability have difficulty reading printed based materials?</string>
     <string name="printalternative">Has the IEP team tested the student to determine if they might benefit from print material in alternative formats (i.e., Large Print, Braille, Electronic Text, Audio)?</string>
     <string name="title_activity_task_form">TaskForm</string>
     <string name="areataskheader">Area/Task</string>
 	<string name="ready">Ready</string>
+	<string name="taskinfo">Briefly list currently being used strategies, accommodations, assistive technology on general education, special education, community, work and home settings.</string>
+	<string name="taskname">Task Name</string>
 </resources>

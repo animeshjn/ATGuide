@@ -48,7 +48,6 @@ public class MainActivity extends Activity {
 		getActionBar().setHomeButtonEnabled(false);
 		View v=getLayoutInflater().inflate(R.layout.action_main,null);
 		v.findViewById(R.id.newrecord).setOnClickListener(new OnClickListener() {
-			
 			@Override
 			public void onClick(View v) {
 				actionNew(v);
@@ -128,7 +127,7 @@ public class MainActivity extends Activity {
 						LayoutParams.WRAP_CONTENT));
 				r.setPadding(0, 0, 0,0);
 				TextView tv = (TextView) r.findViewById(R.id.textView1);
-				tv.setText("Belle Grey, 5th Grade");
+				tv.setText("AA123, 5th Grade");
 				tv.setTag("sample");
 				Button open = (Button) r.findViewById(R.id.open);
 				open.setOnClickListener(clickListener);
@@ -164,7 +163,13 @@ public class MainActivity extends Activity {
 //					startActivity(i);.
 					Toast.makeText(context, "Open ", Toast.LENGTH_SHORT)
 					.show();
+					
+					Intent i = new Intent();
+					i.putExtra("studentid","AA123");
+					i.putExtra("sample",true);
+					
 					break;
+					
 				case R.id.trial1:
 					Toast.makeText(context, "trial1 ", Toast.LENGTH_SHORT)
 							.show();

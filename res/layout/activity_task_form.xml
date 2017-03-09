@@ -23,6 +23,7 @@
             android:background="@drawable/savedformback"
             android:text="@string/part2"
             android:textColor="@android:color/white" />
+        
     </LinearLayout>
 
     <LinearLayout
@@ -37,8 +38,9 @@
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="fill_parent"
-            android:layout_weight="40"
+            android:layout_weight="30"
             android:background="@drawable/textviewback"
+            android:baselineAligned="true"
             android:orientation="vertical" >
 
             <LinearLayout
@@ -62,74 +64,208 @@
                     android:layout_weight="50"
                     android:gravity="end"
                     android:text="@string/ready" />
-
-               
             </LinearLayout>
 
-           <ListView
-                    android:id="@+id/instructionalAreasList"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" 
-                   >
-                </ListView>
+            <ListView
+                android:id="@+id/instructionalAreasList"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+            </ListView>
         </LinearLayout>
 
-        <LinearLayout
+        <ScrollView
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="60"
-            android:orientation="vertical" >
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/textviewback"
-                android:gravity="center_horizontal"
-                android:text="@string/completetaskform" />
-
-            <Space
-                android:layout_width="wrap_content"
-                android:layout_height="10dp" />
+            android:layout_height="match_parent"
+            android:layout_weight="70"
+            android:fillViewport="true" >
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/textviewback"
-                android:gravity="start"
-                android:orientation="horizontal" >
+                android:orientation="vertical"
+                android:weightSum="100" >
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/instructionalarea" />
-
-                <TextView
-                    android:id="@+id/tasktitle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="" />
+                    android:layout_weight="10"
+                    android:gravity="center_horizontal"
+                    android:text="@string/completetaskform" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="10"
+                    android:background="@drawable/taskback"
+                    android:gravity="center_horizontal"
+                    android:orientation="horizontal" >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/instructionalarea"
+                        android:textSize="18sp" />
+
+                    <Space
+                        android:layout_width="5sp"
+                        android:layout_height="wrap_content" />
+
+                    <TextView
+                        android:id="@+id/tasktitle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text=""
+                        android:textSize="18sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="15"
+                    android:background="@drawable/taskback"
+                    android:orientation="vertical" >
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Task that is difficult for the student" />
+
+                    <EditText
+                        android:id="@+id/taskname"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="#E3ECEF"
+                        android:hint="@string/taskname"
+                        android:singleLine="true"
+                        android:textColor="@android:color/black" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="64"
+                    android:background="@drawable/taskback"
+                    android:orientation="vertical" >
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:weightSum="100" >
+                        
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_weight="95"
+                            android:layout_height="wrap_content"
+                            android:text="@string/taskinfo" />
+           				<ImageButton android:src="@drawable/plusstrategy"
+           				    	android:layout_width="0dp"
+           				    	android:background="@null"
+           				    	android:layout_weight="5"
+           				    	android:id="@+id/addstrategy"
+           				    	android:contentDescription="Add new strategy"
+           				    	android:layout_height="match_parent"/>
+                        
+                        </LinearLayout>
+
+                    <ScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" >
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:weightSum="1" 
+                            android:id="@+id/strategylayout">
+                            
+				<LinearLayout android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+                            <EditText
+                                android:id="@+id/strategy0"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="0.95"
+                                android:background="@drawable/tasktextviewback"
+                                android:hint=""
+                                android:singleLine="true"
+                                android:textColor="@android:color/black" />
+                            <ImageButton
+                                android:id="@+id/deletestrategy0"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="0.05"
+                                android:background="@null"
+                                android:scaleType="fitXY"
+                                android:contentDescription="Delete Strategy"
+                                android:src="@drawable/ic_delete_forever" /></LinearLayout>
+					
+				
+                        </LinearLayout>
+                    </ScrollView>
+                </LinearLayout>
+
+                  <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="6"
+                    android:orientation="horizontal" >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                	android:gravity="center_vertical|center_horizontal"
+                	android:layout_gravity="center_vertical"
+                	android:textSize="18sp"
+                        android:text="Are the current soultion(s) working?" />
+
+                    <RadioGroup
+                        android:id="@+id/solutionradiogroup"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal" 
+                        android:layout_gravity="center_vertical">
+
+                        <RadioButton
+                            android:id="@+id/solutionyes"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="true"
+                            android:text="@string/yes" />
+
+                        <RadioButton
+                            android:id="@+id/solutionno"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/no" />
+                    </RadioGroup>
+                   
+                    <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_horizontal" >
+
+                    <Button
+                        
+                        android:id="@+id/addnewtask"
+                        android:background="@drawable/taskbuttons"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="Add new task" />
+					<Space android:layout_height="wrap_content" android:layout_width="10sp"/>
+                    <Button
+                        android:id="@+id/deletetask"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Delete task"
+                        android:background="@drawable/taskbuttons" />
+                </LinearLayout>
+                </LinearLayout>
+
+                
             </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/rowback"
-                android:orientation="vertical" >
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Task that is difficult for the student" />
-
-                <TextView
-                    android:id="@+id/taskname"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/textviewback"
-                    android:text="Task Name"
-                    android:textColor="@android:color/darker_gray" />
-            </LinearLayout>
-        </LinearLayout>
+        </ScrollView>
     </LinearLayout>
 
     <LinearLayout

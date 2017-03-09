@@ -30,25 +30,52 @@ public class IEPGoals extends Activity {
 		//set iep goal
 		//setIepGoal();
 		//set listener
-		setNextListener();//Calls for next activity
+		setNextListener();
+		//Calls for next activity
 		
 	}
 
 	private void setCurrentIntent() {
 		//current intent
-		currentIntent=getIntent();		
+			currentIntent=getIntent();		
+		//OR get Intent from database
+		//if it is already set
+		setSelected();
+		
 	}
-
+	
+	private void setSelected()
+	{
+		if(currentIntent.hasExtra("iepGoal")){
+			iepGoal=currentIntent.getStringExtra("iepgoal");
+			if(iepGoal.equalsIgnoreCase("yes")){
+				RadioButton r= (RadioButton)findViewById(R.id.iepyes);
+				r.setSelected(true);
+			}
+			else
+			{
+				RadioButton r= (RadioButton)findViewById(R.id.iepno);
+				r.setSelected(true);
+			}
+			
+		}
+	}
+	
 	private void persistIEPGoals() {
 	//Persisting IEP Goals to current intent
-	currentIntent.putExtra("iepgoal", iepGoal);	
-	PersistenceBean.persistIEGoals(currentIntent.getStringExtra("studentid"),iepGoal,context);
+	
 		
+			
+		currentIntent.putExtra("iepgoal", iepGoal);	
+	//PersistenceBean.persistIEGoals(currentIntent.getStringExtra("studentid"),iepGoal,context);
+	PersistenceBean.persistIntent(currentIntent.getStringExtra("studentid"), currentIntent, context);
+	
 	}
 
 	private void setNextListener() {
 		
-		 radioIepGroup = (RadioGroup) findViewById(R.id.iep);
+		radioIepGroup = (RadioGroup) findViewById(R.id.iep);
+		
 		Button next = (Button)findViewById(R.id.nextbutton);
 		next.setOnClickListener(new OnClickListener() {
 			
