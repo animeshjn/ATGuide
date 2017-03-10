@@ -2,6 +2,7 @@ package edu.gmu.ttaconline.atcguide;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Task {
@@ -9,8 +10,8 @@ public class Task {
 	int taskid;
 	String areaname;
 	Map<String,String> strategies= new HashMap<String,String>();
-
-
+	public List<String> strategyList=new ArrayList<String>();
+	static int strategyId;
 	public String getTaskname() {
 		return taskname;
 	}

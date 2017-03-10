@@ -63,7 +63,15 @@ public class Area {
 	public void logTasks() {
 		for (Task task : tasks) {
 			Log.d("ATGUIDE", " taskid: " + task.taskid);
-
+			for(String key:task.strategies.keySet())
+			{
+				Log.d("ATGUIDE", " Strategy id "+key+"value " + task.strategies.get(key));
+			}
+//			for (String  strategy : task.strategyList) {
+//				Log.d("ATGUIDE", " Strategy id value " + strategy);
+//			}
+			
+			
 		}
 
 	}
