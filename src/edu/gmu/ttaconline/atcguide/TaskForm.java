@@ -394,9 +394,12 @@ public class TaskForm extends Activity implements Serializable {
 					 
 					  if(t.strategies.keySet().size()>1)
 					  {//Loop through all of them
-						  for (final String key: t.strategies.keySet()){
+						  for (String key: t.strategies.keySet()){
 							  //if(key=="0") continue;
-							  int id= Integer.parseInt(key);
+							  
+							  int i=0;
+							  Toast.makeText(context,t.strategies.keySet().toString()+" in loop "+t.strategies.keySet().size(), Toast.LENGTH_SHORT).show();
+							  final int id= Integer.parseInt(key);
 							  //String text= t.strategies.get(key);
 							  //find that layout
 							  LinearLayout strategies = (LinearLayout)findViewById(R.id.strategylayout);
@@ -405,7 +408,7 @@ public class TaskForm extends Activity implements Serializable {
 							  //get a new row
 							  final LinearLayout row = (LinearLayout) getLayoutInflater()
 										.inflate(R.layout.strategyrow, null);
-								row.setId(strategyRowid++);
+								row.setId(id);
 								EditText strategyText=(EditText)row.findViewById(R.id.strategyedittext);
 								try{strategyText.removeTextChangedListener(watcher[id]);}
 								 catch(Exception e){Log.e(TAG,"Probable Null Pointer"+e.getMessage());}
@@ -413,6 +416,7 @@ public class TaskForm extends Activity implements Serializable {
 								 		strategyText.setText(t.strategies.get(key));
 								 else
 										strategyText.setText("");
+								 
 								watcher[id]=new TextWatcher() {
 									@Override
 									public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -425,7 +429,7 @@ public class TaskForm extends Activity implements Serializable {
 									}
 									@Override
 									public void afterTextChanged(Editable s) {
-										t.strategies.put(key,new String(s.toString()));
+										t.strategies.put(id+"",new String(s.toString()));
 									}
 								};
 								strategyText.addTextChangedListener(watcher[id]);
