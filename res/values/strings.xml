@@ -100,4 +100,6 @@
 	<string name="ready">Ready</string>
 	<string name="taskinfo">Briefly list currently being used strategies, accommodations, assistive technology on general education, special education, community, work and home settings.</string>
 	<string name="taskname">Task Name</string>
+	<string name="AIMCall">Since you selected \"Yes\" to these questions, click \"Yes\" below to go to the AIM-Eligibility app to determine the student\'s eligibility for AIM-VA services.</string>
+	<string name="AIMTitle">AIM-VA Eligibility</string>
 </resources>
