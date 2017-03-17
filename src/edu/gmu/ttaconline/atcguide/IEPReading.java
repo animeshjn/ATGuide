@@ -1,10 +1,16 @@
 package edu.gmu.ttaconline.atcguide;
 
+import java.util.List;
+
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -17,106 +23,143 @@ import android.widget.RadioGroup;
 public class IEPReading extends Activity {
 	Intent currentIntent;
 	Context context;
-	String IEPReading="";
-	String IEPAlt="";
+	String IEPReading = "";
+	String IEPAlt = "";
 	RadioGroup read;
 	RadioGroup iepAlternative;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_iepreading);
-		context=getApplicationContext();
+		context = getApplicationContext();
 		setCurrentIntent();
-		
+
 		setNextListener();
-		
-		
+
 	}
 
-//	public void readData()
-//	{
-//		RadioGroup read=(RadioGroup)findViewById(R.id.read);
-//	}
-	
+	// public void readData()
+	// {
+	// RadioGroup read=(RadioGroup)findViewById(R.id.read);
+	// }
+
 	private void setNextListener() {
-		Button next=(Button)findViewById(R.id.nextbutton);
+		Button next = (Button) findViewById(R.id.nextbutton);
 		next.setOnClickListener(new Button.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-					setRadioValues();
-					
-					currentIntent.putExtra("iepreading",IEPReading);
-					currentIntent.putExtra("iepalt",IEPAlt);
-					Log.d("ATGUIDE", "Alt:"+IEPAlt);
-					Log.d("ATGUIDE", "Reading:"+IEPReading);
-					if(IEPAlt.trim().equalsIgnoreCase("NO")){
-						currentIntent.setClass(context, TaskForm.class);
-						startActivity(currentIntent);
-					}
-					else
-					{
-						//Make Noisy Alert
-						//Call AIM VA Eligibility at http://aimeligibility.com
-						//calling.. 
-						
-						 AlertDialog.Builder builder = new AlertDialog.Builder(
-	                                IEPReading.this);
-	                        builder.setCancelable(true);
-	                        builder.setTitle(getResources().getString(R.string.AIMTitle));
-	                        
-	                        builder.setMessage(getResources().getString(R.string.AIMCall));
-	                        builder.setPositiveButton("Yes",
-	                                new DialogInterface.OnClickListener() {
-	                                    @Override
-	                                    public void onClick(DialogInterface dialog,
-	                                                        int which) {
-	                                        //go to the AIM VA Eligibility at http://aimeligibility.com
-	                                    	
-	                                    }
-	                                });
-	                        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-								
+				setRadioValues();
+
+				currentIntent.putExtra("iepreading", IEPReading);
+				currentIntent.putExtra("iepalt", IEPAlt);
+				Log.d("ATGUIDE", "Alt:" + IEPAlt);
+				Log.d("ATGUIDE", "Reading:" + IEPReading);
+				if (IEPAlt.trim().equalsIgnoreCase("NO")) {
+					currentIntent.setClass(context, TaskForm.class);
+					startActivity(currentIntent);
+				} else {
+					AlertDialog.Builder builder = new AlertDialog.Builder(
+							IEPReading.this);
+					builder.setCancelable(true);
+					builder.setTitle(getResources()
+							.getString(R.string.AIMTitle));
+					builder.setMessage(getResources().getString(
+							R.string.AIMCall));
+					builder.setPositiveButton("Yes",
+							new DialogInterface.OnClickListener() {
 								@Override
-								public void onClick(DialogInterface dialog, int which) {
+								public void onClick(DialogInterface dialog,
+										int which) {
+									// go to the AIM VA Eligibility at
+									// http://aimeligibility.com
+									Uri aimEligible = Uri
+											.parse("http://aimeligibility.com/");
+									try {
+										Intent aimIntent = new Intent(
+												Intent.ACTION_VIEW,
+												aimEligible);
+										aimIntent
+												.setFlags(Intent.URI_INTENT_SCHEME);
+										aimIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+										aimIntent.putExtras(currentIntent);
+										//aimIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+										aimIntent
+										.setFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
+										aimIntent.setDataAndNormalize(aimEligible);
+										PackageManager packageManager = getPackageManager();
+										List<ResolveInfo> activities = packageManager.queryIntentActivities(aimIntent, 0);
+										boolean isIntentSafe = activities.size() > 0;
+//										for (ResolveInfo resolveInfo : activities) {
+//											String currentHomePackage = resolveInfo.activityInfo.packageName;
+//											if(currentHomePackage.contains("aim")&&resolveInfo.activityInfo.applicationInfo.className.contains("Main")){
+//												{Intent intent = new Intent(Intent.ACTION_VIEW,aimEligible);
+//													intent.setData(aimEligible);
+//													intent.putExtras(currentIntent);
+//												intent.setClassName(currentHomePackage, resolveInfo.activityInfo.applicationInfo.className);
+//												startActivity(intent);
+//												}
+//											}
+//												
+//												//startActivity(new Intent(context,(resolveInfo.activityInfo.applicationInfo.className+".class")));
+//										}
+										
+										//if(isIntentSafe)
+										startActivity(aimIntent);
+									} catch (Exception e) {
+										Log.e("ATGUIDE", " " + e.getMessage());
+									}
+								}
+							});
+					builder.setNegativeButton("No",
+							new DialogInterface.OnClickListener() {
+
+								@Override
+								public void onClick(DialogInterface dialog,
+										int which) {
 									// TODO Auto-generated method stub
-									//Say No
-									//Forward to next without verifying eligibility
-									currentIntent.setClass(context, TaskForm.class);
+									// Say No
+									// Forward to next without verifying
+									// eligibility
+									currentIntent.setClass(context,
+											TaskForm.class);
 									startActivity(currentIntent);
 								}
 							});
-	                        builder.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
+					builder.setNeutralButton("Cancel",
+							new DialogInterface.OnClickListener() {
 								@Override
-								public void onClick(DialogInterface dialog, int which) {
+								public void onClick(DialogInterface dialog,
+										int which) {
 									// TODO Auto-generated method stub
-									//Nothing
+									// Nothing
 									dialog.dismiss();
-									
+
 								}
 							});
-	                        
-	                        builder.show();
-						
-					}
+
+					builder.show();
+
+				}
 			}
 		});
-		
+
 	}
 
 	protected void setRadioValues() {
-		 read = (RadioGroup) findViewById(R.id.read);
-		 int selectedId= read.getCheckedRadioButtonId();
-			RadioButton radio = (RadioButton) findViewById(selectedId);
-			IEPReading=(String) radio.getText();
-		iepAlternative=(RadioGroup) findViewById(R.id.iepalternative);
-		RadioButton iepaltradio = (RadioButton) findViewById(iepAlternative.getCheckedRadioButtonId());
-		IEPAlt=(String) iepaltradio.getText();
-	
+		read = (RadioGroup) findViewById(R.id.read);
+		int selectedId = read.getCheckedRadioButtonId();
+		RadioButton radio = (RadioButton) findViewById(selectedId);
+		IEPReading = (String) radio.getText();
+		iepAlternative = (RadioGroup) findViewById(R.id.iepalternative);
+		RadioButton iepaltradio = (RadioButton) findViewById(iepAlternative
+				.getCheckedRadioButtonId());
+		IEPAlt = (String) iepaltradio.getText();
+
 	}
 
-
 	private void setCurrentIntent() {
-		currentIntent=getIntent();
+		currentIntent = getIntent();
 	}
 
 	@Override

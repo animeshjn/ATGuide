@@ -91,8 +91,7 @@ public class PersistenceBean {
 		values.put(FeedEntry.STUDENT_IEPGOAL, iepGoal);
 		SQLiteDatabase db = mDbHelper.getWritableDatabase();
 		try {
-			rows = db.update(FeedEntry.STUDENT, values, ""
-					+ FeedEntry.STUDENT_ID + "='" + studentid + "'", null);
+			rows = db.update(FeedEntry.STUDENT, values, ""+ FeedEntry.STUDENT_ID + "='" + studentid + "'", null);
 
 		} catch (SQLException e) {
 			Log.e("ATGUIDE", "SQLException: " + e.getMessage());
@@ -152,7 +151,6 @@ public class PersistenceBean {
 		int records = 0;
 		FeedReaderDbHelper mDbHelper = new FeedReaderDbHelper(context);
 		SQLiteDatabase db = mDbHelper.getWritableDatabase();
-
 		// ContentValues values = new ContentValues();
 		String intentDescription = null;
 		Cursor cursor = db.query(IntentStore.TABLE_NAME,
