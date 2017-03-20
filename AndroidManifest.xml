@@ -50,6 +50,12 @@
         <activity
             android:name=".IEPReading"
             android:label="@string/title_activity_iepreading" >
+            <intent-filter>
+                  <action android:name="android.intent.action.VIEW" />
+                  <category android:name="android.intent.category.DEFAULT" />
+                  <category android:name="android.intent.category.BROWSABLE" />
+                  <data android:scheme="http" android:host="iepreading.atguide.com"/>
+            </intent-filter>
         </activity>
         <activity
             android:name=".TaskForm"

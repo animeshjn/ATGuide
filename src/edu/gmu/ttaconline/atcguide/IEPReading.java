@@ -19,6 +19,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Toast;
 
 public class IEPReading extends Activity {
 	Intent currentIntent;
@@ -27,16 +28,16 @@ public class IEPReading extends Activity {
 	String IEPAlt = "";
 	RadioGroup read;
 	RadioGroup iepAlternative;
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_iepreading);
 		context = getApplicationContext();
-		setCurrentIntent();
-
+		currentIntent = getIntent();
+		if(currentIntent.getData()!=null&&currentIntent.getData().toString().equals("http://iepreading.atguide.com"))
+			{Toast.makeText(context, "Welcome Back !", Toast.LENGTH_SHORT).show();}
+		//setCurrentIntent();
 		setNextListener();
-
 	}
 
 	// public void readData()
@@ -103,8 +104,8 @@ public class IEPReading extends Activity {
 //												
 //												//startActivity(new Intent(context,(resolveInfo.activityInfo.applicationInfo.className+".class")));
 //										}
-										
 										//if(isIntentSafe)
+										
 										startActivity(aimIntent);
 									} catch (Exception e) {
 										Log.e("ATGUIDE", " " + e.getMessage());
@@ -180,4 +181,28 @@ public class IEPReading extends Activity {
 		}
 		return super.onOptionsItemSelected(item);
 	}
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		// TODO Auto-generated method stub
+	//	outState.pu
+		read = (RadioGroup) findViewById(R.id.read);
+		int selectedId = read.getCheckedRadioButtonId();
+		
+		RadioButton radio = (RadioButton) findViewById(selectedId);
+					read = (RadioGroup) findViewById(R.id.read);
+					
+					IEPReading = (String) radio.getText();
+					iepAlternative = (RadioGroup) findViewById(R.id.iepalternative);
+					RadioButton iepaltradio = (RadioButton) findViewById(iepAlternative
+							.getCheckedRadioButtonId());
+					IEPAlt = (String) iepaltradio.getText();
+		IEPReading = (String) radio.getText();
+		iepAlternative = (RadioGroup) findViewById(R.id.iepalternative);
+		
+		IEPAlt = (String) iepaltradio.getText();
+		super.onSaveInstanceState(outState);
+		
+		
+	}
+	
 }
