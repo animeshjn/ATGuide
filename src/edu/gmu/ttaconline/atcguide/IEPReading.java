@@ -1,5 +1,6 @@
 package edu.gmu.ttaconline.atcguide;
 
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 import android.app.Activity;
@@ -28,16 +29,56 @@ public class IEPReading extends Activity {
 	String IEPAlt = "";
 	RadioGroup read;
 	RadioGroup iepAlternative;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_iepreading);
+		Log.d("ATGUIDE","on create");
 		context = getApplicationContext();
 		currentIntent = getIntent();
-		if(currentIntent.getData()!=null&&currentIntent.getData().toString().equals("http://iepreading.atguide.com"))
-			{Toast.makeText(context, "Welcome Back !", Toast.LENGTH_SHORT).show();}
-		//setCurrentIntent();
+		checkUri();
+		// setCurrentIntent();
 		setNextListener();
+	}
+
+	private void checkUri() {
+		// TODO Auto-generated method stub
+		Uri uri = currentIntent.getData();
+		if (uri != null) {
+			String msgFromUrl = currentIntent.getDataString();
+			try {
+				msgFromUrl = java.net.URLDecoder.decode(msgFromUrl, "UTF-8");
+			} catch (UnsupportedEncodingException e) {
+				e.printStackTrace();
+			}
+		Toast.makeText(context,"Got Uri",Toast.LENGTH_SHORT).show();	
+		}
+	}
+	@Override
+	protected void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+		if (currentIntent.getData() != null
+				&& currentIntent.getData().toString()
+						.contains("http://iepreading.atguide.com")) {
+			Toast.makeText(context, "Welcome Back !", Toast.LENGTH_SHORT)
+					.show();
+		}
+		// Toast.makeText(context,"Restored State", Toast.LENGTH_SHORT).show();
+	}
+
+	@Override
+	protected void onRestoreInstanceState(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onRestoreInstanceState(savedInstanceState);
+		if (currentIntent.getData() != null
+				&& currentIntent.getData().toString()
+						.contains("http://iepreading.atguide.com")) {
+			Toast.makeText(context, "Welcome Back ! (Restore State)",
+					Toast.LENGTH_SHORT).show();
+		}
+		
 	}
 
 	// public void readData()
@@ -78,34 +119,43 @@ public class IEPReading extends Activity {
 											.parse("http://aimeligibility.com/");
 									try {
 										Intent aimIntent = new Intent(
-												Intent.ACTION_VIEW,
-												aimEligible);
+												Intent.ACTION_VIEW, aimEligible);
 										aimIntent
 												.setFlags(Intent.URI_INTENT_SCHEME);
-										aimIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-										aimIntent.putExtras(currentIntent);
-										//aimIntent.addCategory(Intent.CATEGORY_LAUNCHER);
 										aimIntent
-										.setFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
-										aimIntent.setDataAndNormalize(aimEligible);
+												.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+										aimIntent.putExtras(currentIntent);
+										// aimIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+										aimIntent
+												.setFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
+										aimIntent
+												.setDataAndNormalize(aimEligible);
 										PackageManager packageManager = getPackageManager();
-										List<ResolveInfo> activities = packageManager.queryIntentActivities(aimIntent, 0);
-										boolean isIntentSafe = activities.size() > 0;
-//										for (ResolveInfo resolveInfo : activities) {
-//											String currentHomePackage = resolveInfo.activityInfo.packageName;
-//											if(currentHomePackage.contains("aim")&&resolveInfo.activityInfo.applicationInfo.className.contains("Main")){
-//												{Intent intent = new Intent(Intent.ACTION_VIEW,aimEligible);
-//													intent.setData(aimEligible);
-//													intent.putExtras(currentIntent);
-//												intent.setClassName(currentHomePackage, resolveInfo.activityInfo.applicationInfo.className);
-//												startActivity(intent);
-//												}
-//											}
-//												
-//												//startActivity(new Intent(context,(resolveInfo.activityInfo.applicationInfo.className+".class")));
-//										}
-										//if(isIntentSafe)
-										
+										List<ResolveInfo> activities = packageManager
+												.queryIntentActivities(
+														aimIntent, 0);
+										boolean isIntentSafe = activities
+												.size() > 0;
+										// for (ResolveInfo resolveInfo :
+										// activities) {
+										// String currentHomePackage =
+										// resolveInfo.activityInfo.packageName;
+										// if(currentHomePackage.contains("aim")&&resolveInfo.activityInfo.applicationInfo.className.contains("Main")){
+										// {Intent intent = new
+										// Intent(Intent.ACTION_VIEW,aimEligible);
+										// intent.setData(aimEligible);
+										// intent.putExtras(currentIntent);
+										// intent.setClassName(currentHomePackage,
+										// resolveInfo.activityInfo.applicationInfo.className);
+										// startActivity(intent);
+										// }
+										// }
+										//
+										// //startActivity(new
+										// Intent(context,(resolveInfo.activityInfo.applicationInfo.className+".class")));
+										// }
+										// if(isIntentSafe)
+
 										startActivity(aimIntent);
 									} catch (Exception e) {
 										Log.e("ATGUIDE", " " + e.getMessage());
@@ -181,28 +231,28 @@ public class IEPReading extends Activity {
 		}
 		return super.onOptionsItemSelected(item);
 	}
+
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
 		// TODO Auto-generated method stub
-	//	outState.pu
+		// outState.pu
 		read = (RadioGroup) findViewById(R.id.read);
 		int selectedId = read.getCheckedRadioButtonId();
-		
+
 		RadioButton radio = (RadioButton) findViewById(selectedId);
-					read = (RadioGroup) findViewById(R.id.read);
-					
-					IEPReading = (String) radio.getText();
-					iepAlternative = (RadioGroup) findViewById(R.id.iepalternative);
-					RadioButton iepaltradio = (RadioButton) findViewById(iepAlternative
-							.getCheckedRadioButtonId());
-					IEPAlt = (String) iepaltradio.getText();
+		read = (RadioGroup) findViewById(R.id.read);
+
 		IEPReading = (String) radio.getText();
 		iepAlternative = (RadioGroup) findViewById(R.id.iepalternative);
-		
+		RadioButton iepaltradio = (RadioButton) findViewById(iepAlternative
+				.getCheckedRadioButtonId());
+		IEPAlt = (String) iepaltradio.getText();
+		IEPReading = (String) radio.getText();
+		iepAlternative = (RadioGroup) findViewById(R.id.iepalternative);
+
 		IEPAlt = (String) iepaltradio.getText();
 		super.onSaveInstanceState(outState);
-		
-		
+
 	}
-	
+
 }
