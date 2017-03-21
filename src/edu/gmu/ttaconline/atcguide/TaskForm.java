@@ -65,9 +65,11 @@ public class TaskForm extends Activity implements Serializable {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+      try{
         setContentView(R.layout.activity_task_form);
-        currentIntent = getIntent();
+        //get from db
         context = getApplicationContext();
+        currentIntent =	getIntent();//getIntentFromDb();
         inflater = getLayoutInflater();
         placeArea();
         LinearLayout first = (LinearLayout) merge.getItem(0);
@@ -80,11 +82,19 @@ public class TaskForm extends Activity implements Serializable {
         // Fill task form
         //addStrategyListener(R.id.strategy0);// to first strategy
         addPlusButtonListener();
-        setNextListener();
+        setNextListener();}
+      catch(Exception unknown){
+    	  Log.e("ATGUIDE", "Exception "+unknown.getMessage());
+      }
 //        onDeleteFirstStrategy();
     }
 
-    private void setNextListener() {
+    private Intent getIntentFromDb() {
+    	
+		return PersistenceBean.getExistingIntent(getIntent().getStringExtra("studentid"),getApplicationContext());
+	}
+
+	private void setNextListener() {
         Button next = (Button) findViewById(R.id.nextbutton);
         next.setOnClickListener(new OnClickListener() {
             @Override
@@ -241,13 +251,16 @@ public class TaskForm extends Activity implements Serializable {
     }
 
     private void getData() {
-        selectedInstructional = currentIntent
+        try{
+    	selectedInstructional = currentIntent
                 .getCharSequenceArrayListExtra("selectedareas");
         selectedList = new ArrayList<String>();
         for (CharSequence selected : selectedInstructional) {
             selectedList.add((String) selected);
             Log.d(TAG, " " + selected);
         }
+           }catch(Exception e){
+        	}
     }
 
     public Area getAreaById(int id) {

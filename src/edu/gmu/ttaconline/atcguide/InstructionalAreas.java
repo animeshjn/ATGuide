@@ -53,6 +53,7 @@ public class InstructionalAreas extends Activity {
 				currentIntent.putStringArrayListExtra("selectedareas",selectedInstructionalAreas);
 				currentIntent.setClass(context, IEPReading.class);
 				//OVER
+				
 				startActivity(currentIntent);
 				//}
 				//else

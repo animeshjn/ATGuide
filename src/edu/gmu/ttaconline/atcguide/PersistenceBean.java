@@ -113,15 +113,16 @@ public class PersistenceBean {
 
 	public static boolean persistIntent(String studentId, Intent intent,
 			Context context) {
+		
 		boolean result = false;
+		try{
 		String intentDescription = null;
-
 		FeedReaderDbHelper mDbHelper = new FeedReaderDbHelper(context);
 		SQLiteDatabase db = mDbHelper.getWritableDatabase();
 		try {
 			intentDescription = intent.toUri(0);
 		} catch (Exception unknown) {
-			Log.e("ATGUIDE", unknown.getMessage());
+			Log.e("ATGUIDE", "Error persisting intent: "+unknown.getMessage());
 		}
 		ContentValues values = new ContentValues();
 		values.put(IntentStore.COLUMN_NAME_ID, studentId);
@@ -142,40 +143,66 @@ public class PersistenceBean {
 		if (rows > 0) {
 			Toast.makeText(context, "" + rows + " inserted", Toast.LENGTH_SHORT)
 					.show();
+		}}catch(Exception e){
+			Log.e("ATGUIDE", "Error in persisting intent "+e.getStackTrace());
+			
 		}
+		
 		return result;
 	}
 
-	public static Intent getExistingIntent(String studentId, Context context) {
+	public static Intent getExistingIntent(String studentId, Context context){
 		Intent requiredIntent = null;
+		Log.e("ATGUIDE","Searching for persisted intent with student id :"+studentId);
 		int records = 0;
+		Log.d("ATGUIDE", "before Db Helper");
+		
 		FeedReaderDbHelper mDbHelper = new FeedReaderDbHelper(context);
+		Log.d("ATGUIDE", "before getting database");
 		SQLiteDatabase db = mDbHelper.getWritableDatabase();
 		// ContentValues values = new ContentValues();
 		String intentDescription = null;
-		Cursor cursor = db.query(IntentStore.TABLE_NAME,
-				new String[] { IntentStore.COLUMN_NAME_INTENT },
-				IntentStore.COLUMN_NAME_ID + " like " + "'" + studentId + "'",
+		Cursor cursor;
+		
+		try{
+			Log.d("ATGUIDE", "Trying to get cursor");
+			cursor = db.query(IntentStore.TABLE_NAME,
+			new String[] { IntentStore.COLUMN_NAME_INTENT },
+			IntentStore.COLUMN_NAME_ID + " = " + "'" + studentId + "'",
 				null, null, null, null);
-		while (cursor.moveToNext()) {
-			intentDescription = cursor.getString(0);
-			records++;
+		
 		}
-
+		catch(Exception e){
+			Log.e("ATUGUIDE","Error GETTING CURSOR "+e.getMessage());
+			return null;}
+		if(cursor==null){
+			Log.e("ATGUIDE", "Cursor is null ");
+		}
+		int i=0;
+		Log.d("ATGUIDE", "before cursor while ");
+		cursor.moveToFirst();
+		
+			Log.d("ATGUIDE", "While started: "+(i++));
+			intentDescription = cursor.getString(0);
+			Log.d("ATGUIDE", "INTENT DESCRIPTION "+intentDescription);
+			records++;
 		try {
 			requiredIntent = Intent.parseUri(intentDescription, 0);
 		} catch (URISyntaxException e) {
-			Log.e("ATGUIDE", e.getMessage());
+			Log.e("ATGUIDE", "Error parsing intent: "+e.getStackTrace());
 		}
 		
 		Toast.makeText(context,"Retrieved: "+records+" records" ,Toast.LENGTH_SHORT).show();
+		if(requiredIntent == null){
+			Log.e("ATGUIDE", "Required intent is null ");
+		}
+		
 		return requiredIntent;
-
 	}
 	
 	public static boolean isExistingRecord(String studentId,Context context)
 	{
-		FeedReaderDbHelper mDbHelper = new FeedReaderDbHelper(context);
+		FeedReaderDbHelper mDbHelper = new FeedReaderDbHelper(context.getApplicationContext());
 		SQLiteDatabase db = mDbHelper.getWritableDatabase();
 		Cursor cursor = db.query(IntentStore.TABLE_NAME,
 				new String[] { IntentStore.COLUMN_NAME_INTENT },
@@ -186,6 +213,9 @@ public class PersistenceBean {
 		else 
 		return false;
 	}
-	
+	public static void setCurrentId()
+	{
+		
+	}
 
 }
