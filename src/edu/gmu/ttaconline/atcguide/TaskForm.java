@@ -47,6 +47,7 @@ public class TaskForm extends Activity implements Serializable {
     private static final String TAG = "ATGUIDE";
     Intent currentIntent;
     Intent persisted;
+    String studentid;
     Context context;
     TextWatcher watcher[] = new TextWatcher[1000];
     int id = 3000;
@@ -69,29 +70,26 @@ public class TaskForm extends Activity implements Serializable {
         setContentView(R.layout.activity_task_form);
         //get from db
         context = getApplicationContext();
-        currentIntent =	getIntent();//getIntentFromDb();
+        currentIntent =	getIntentFromDb();//getIntent();//getIntentFromDb();
+        currentIntent.setData(null);
         inflater = getLayoutInflater();
         placeArea();
         LinearLayout first = (LinearLayout) merge.getItem(0);
         if (first.getChildAt(0) != null) {
             first.getChildAt(0).callOnClick();
-        } else
+        	}
+        else
             first.callOnClick();
-        // Place task
-        // Generate task form
-        // Fill task form
-        //addStrategyListener(R.id.strategy0);// to first strategy
-        addPlusButtonListener();
-        setNextListener();}
+        	addPlusButtonListener();
+        	setNextListener();
+        }
       catch(Exception unknown){
     	  Log.e("ATGUIDE", "Exception "+unknown.getMessage());
       }
-//        onDeleteFirstStrategy();
     }
 
     private Intent getIntentFromDb() {
-    	
-		return PersistenceBean.getExistingIntent(getIntent().getStringExtra("studentid"),getApplicationContext());
+		return PersistenceBean.getExistingIntent(PersistenceBean.getCurrentId(getApplicationContext()),getApplicationContext());
 	}
 
 	private void setNextListener() {
@@ -236,9 +234,6 @@ public class TaskForm extends Activity implements Serializable {
         });
     }
 
-
-
-
     void onDeleteFirstStrategy() {
         ImageButton deletefirststrategy = (ImageButton) findViewById(R.id.deletestrategy0);
         deletefirststrategy.setOnClickListener(new OnClickListener() {
@@ -252,8 +247,10 @@ public class TaskForm extends Activity implements Serializable {
 
     private void getData() {
         try{
-    	selectedInstructional = currentIntent
-                .getCharSequenceArrayListExtra("selectedareas");
+//    	selectedInstructional = currentIntent
+//                .getCharSequenceArrayListExtra("selectedareas");
+    	selectedInstructional= PersistenceBean.getPersistedAreaList(PersistenceBean.getCurrentId(getApplicationContext()), getApplicationContext());
+    	
         selectedList = new ArrayList<String>();
         for (CharSequence selected : selectedInstructional) {
             selectedList.add((String) selected);
@@ -538,12 +535,14 @@ public class TaskForm extends Activity implements Serializable {
             ((LinearLayout) tv.getParent()).getChildAt(0).setBackgroundColor(
                     Color.CYAN);
     }
+    
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.task_form, menu);
         return true;
     }
+    
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -741,7 +740,6 @@ public class TaskForm extends Activity implements Serializable {
     }
 
     public class addTasklistener implements OnClickListener {
-
         @Override
         public void onClick(View v) {
             // set text

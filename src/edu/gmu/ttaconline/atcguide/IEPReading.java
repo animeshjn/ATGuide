@@ -28,13 +28,14 @@ public class IEPReading extends Activity {
 	String IEPReading = "";
 	String IEPAlt = "";
 	RadioGroup read;
+	String eligibility = "na";
 	RadioGroup iepAlternative;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_iepreading);
-		Log.d("ATGUIDE","on create");
+		Log.d("ATGUIDE", "on create");
 		context = getApplicationContext();
 		currentIntent = getIntent();
 		checkUri();
@@ -52,9 +53,10 @@ public class IEPReading extends Activity {
 			} catch (UnsupportedEncodingException e) {
 				e.printStackTrace();
 			}
-		//Toast.makeText(context,"Got Uri "+msgFromUrl,Toast.LENGTH_SHORT).show();	
+			// Toast.makeText(context,"Got Uri "+msgFromUrl,Toast.LENGTH_SHORT).show();
 		}
 	}
+
 	@Override
 	protected void onResume() {
 		// TODO Auto-generated method stub
@@ -62,21 +64,37 @@ public class IEPReading extends Activity {
 		if (currentIntent.getData() != null
 				&& currentIntent.getData().toString()
 						.contains("http://iepreading.atguide.com")) {
-			Toast.makeText(context, "Welcome Back !", Toast.LENGTH_SHORT)
-					.show();
-			if(currentIntent.getData().toString().equalsIgnoreCase("http://iepreading.atguide.com/yes"))
-			{
+			if (currentIntent.getData().toString()
+					.equalsIgnoreCase("http://iepreading.atguide.com/yes")) {
 				Toast.makeText(context, "Eligible", Toast.LENGTH_SHORT).show();
-				
+				eligibility = "yes";
+				currentIntent.setData(null);
 			}
-			else{Toast.makeText(context, "Not Eligible", Toast.LENGTH_SHORT).show();}
-			
+			else if (currentIntent.getData().toString()
+					.equalsIgnoreCase("http://iepreading.atguide.com/no")) {
+				eligibility = "no";
+				Toast.makeText(context, "Not Eligible", Toast.LENGTH_SHORT)
+						.show();
+				currentIntent.setData(null);
+			} else {
+				eligibility = "na";
+				Toast.makeText(context, "Not Eligible", Toast.LENGTH_SHORT)
+						.show();
+				currentIntent.setData(null);
+			}
+			currentIntent.putExtra("eligibility", eligibility);
+			currentIntent.setData(null);
+			PersistenceBean.persistIntent(currentIntent.getStringExtra("studentid"),currentIntent, context);
+			PersistenceBean.persistCurrentId(currentIntent.getStringExtra("studentid"), context);
+			currentIntent.setClass(context, TaskForm.class);
+			startActivity(currentIntent);
 		}
-		
-		currentIntent=getIntent();
-		
-//		Toast.makeText(context, "Welcome Back !"+currentIntent.getData(), Toast.LENGTH_SHORT)
-//		.show();
+
+		currentIntent = getIntent();
+
+		// Toast.makeText(context, "Welcome Back !"+currentIntent.getData(),
+		// Toast.LENGTH_SHORT)
+		// .show();
 		// Toast.makeText(context,"Restored State", Toast.LENGTH_SHORT).show();
 	}
 
@@ -132,49 +150,55 @@ public class IEPReading extends Activity {
 										Intent aimIntent = new Intent(
 												Intent.ACTION_VIEW, aimEligible);
 										aimIntent
-												.setFlags(Intent.URI_INTENT_SCHEME);
-//										aimIntent
-//												.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-										
+												.addFlags(Intent.URI_INTENT_SCHEME);
+										aimIntent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+										aimIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+										// aimIntent
+										// .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 										aimIntent.putExtras(currentIntent);
 										// aimIntent.addCategory(Intent.CATEGORY_LAUNCHER);
-//										aimIntent
-//												.setFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
-										aimIntent.setFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
-										
-										aimIntent
-												.setDataAndNormalize(aimEligible);
+										// aimIntent
+										// .setFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
+										aimIntent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+										aimIntent.setDataAndNormalize(aimEligible);
 										PackageManager packageManager = getPackageManager();
-										List<ResolveInfo> activities = packageManager
-												.queryIntentActivities(
-														aimIntent, 0);
+										List<ResolveInfo> activities = packageManager.queryIntentActivities(aimIntent, 0);
 										boolean isIntentSafe = activities
 												.size() > 0;
-												boolean installed=false;
-												if(isIntentSafe){
-													for (ResolveInfo resolveInfo : activities) {
-														if(resolveInfo.activityInfo.packageName.contains("aim")){
-															Toast.makeText(context,"found your activity", Toast.LENGTH_SHORT).show();
-															installed=true;
-															 aimIntent.setPackage(resolveInfo.activityInfo.packageName);
-														}
-													}
+										boolean installed = false;
+										if (isIntentSafe) {
+											for (ResolveInfo resolveInfo : activities) {
+												if (resolveInfo.activityInfo.packageName
+														.contains("aim")) {
+													installed = true;
+													aimIntent
+															.setPackage(resolveInfo.activityInfo.packageName);
 												}
-												
-												//store
-												PersistenceBean.persistIntent(aimIntent.getStringExtra("studentid"), currentIntent, context);
-												if(installed)
-												startActivity(aimIntent);
-												else
-													{Toast.makeText(context,"AIM eLigibility not installed", Toast.LENGTH_SHORT).show();
-													//Take to play store
-													aimIntent=new Intent(
-															Intent.ACTION_VIEW, (Uri.parse("market://aimeligibility.com")));
-													aimIntent.putExtras(currentIntent);
-													startActivity(aimIntent);
-													}
-											
-									finish();
+											}
+										}
+
+										// store
+										PersistenceBean.persistIntent(aimIntent
+												.getStringExtra("studentid"),
+												currentIntent, context);
+										PersistenceBean.persistCurrentId(aimIntent
+												.getStringExtra("studentid"), context);
+										if (installed)
+											startActivity(aimIntent);
+										else {
+											Toast.makeText(
+													context,
+													"AIM eLigibility not installed",
+													Toast.LENGTH_SHORT).show();
+											// Take to play store
+											aimIntent = new Intent(
+													Intent.ACTION_VIEW,
+													(Uri.parse("market://aimeligibility.com")));
+											aimIntent.putExtras(currentIntent);
+											startActivity(aimIntent);
+										}
+
+										finish();
 									} catch (Exception e) {
 										Log.e("ATGUIDE", " " + e.getMessage());
 									}
@@ -190,15 +214,20 @@ public class IEPReading extends Activity {
 									// Say No
 									// Forward to next without verifying
 									// eligibility
-									try{
-									currentIntent=getIntent();
-									currentIntent.setClass(context,
-											TaskForm.class);
-									startActivity(currentIntent);
-									}
-									catch(Exception unknown){
-										Log.e("ATGUIDE","EX: "+unknown.getMessage());
-										
+									try {
+										currentIntent = getIntent();
+										currentIntent.setClass(context,
+												TaskForm.class);
+										PersistenceBean.persistIntent(currentIntent
+												.getStringExtra("studentid"),
+												currentIntent, context);
+										PersistenceBean.persistCurrentId(currentIntent
+												.getStringExtra("studentid"), context);
+										startActivity(currentIntent);
+									} catch (Exception unknown) {
+										Log.e("ATGUIDE",
+												"EX: " + unknown.getMessage());
+
 									}
 								}
 							});

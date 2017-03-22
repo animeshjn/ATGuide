@@ -30,4 +30,23 @@ public final class FeedReaderContract {
     	public static final String COLUMN_NAME_INTENT= "intentstring";
     	
     }
+    public static class SelectedArea{
+    	public static final String TABLE_NAME= "SELECTED_AREA";
+    	public static final String COL_ID= "studentid";
+    	public static final String COL_AREA= "area";
+    }
+    public static class TaskStore{
+    	public static final String TABLE_NAME= "TasksAndStrategy";
+    	public static final String COL_STUDENT_ID= "studentid";
+    	public static final String COL_TASK_ID= "taskid";
+    	public static final String COL_AREA_NAME= "areaname";
+    }
+    public static class StrategyStore{
+    	public static final String TABLE_NAME="strategymapping";
+    	public static final String COL_STRATEGY_ID="strategyid";
+    	public static final String COL_STRATEGY_TEXT="strategytext";
+    	public static final String COL_TASKID="taskid";
+    	public static final String COL_STUDENT_ID="studentid";
+    }
+    
 }
