@@ -10,6 +10,8 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.widget.Space;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -19,6 +21,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 
 
@@ -27,6 +30,8 @@ public class InstructionalAreas extends Activity {
 	Context context;
 	ArrayList<String> selectedInstructionalAreas= new ArrayList<String>();
 	CheckBoxBean instructionalCheck;
+	String otherText="";
+	boolean otherSelected=false;
 	MergeAdapter merge = new MergeAdapter();
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -47,13 +52,14 @@ public class InstructionalAreas extends Activity {
 			
 			@Override
 			public void onClick(View v) {
-				
 				//if(isSomethingSelected){
 				PersistenceBean.persistInstructionalAreas(currentIntent.getStringExtra("studentid"),selectedInstructionalAreas, context);
 				currentIntent.putStringArrayListExtra("selectedareas",selectedInstructionalAreas);
+				currentIntent.putExtra("otherSelected", otherSelected);
+				currentIntent.putExtra("othertext", otherText);
 				currentIntent.setClass(context, IEPReading.class);
+				PersistenceBean.persistIntent(currentIntent.getStringExtra("studentid"),currentIntent, context);
 				//OVER
-				
 				startActivity(currentIntent);
 				//}
 				//else
@@ -111,25 +117,38 @@ public class InstructionalAreas extends Activity {
 				View v=(View) buttonView.getParent();
 				
 				EditText other=(EditText)v.findViewById(102456);
-				
+				otherSelected=isChecked;
 				if(isChecked){
-					
+					Toast.makeText(context,"Please enter the name for other instructional area",Toast.LENGTH_SHORT).show();
 					other.setEnabled(true);
 					other.setFocusable(true);
 					other.setFocusableInTouchMode(true);
 					other.setCursorVisible(true);
-					
+					other.addTextChangedListener(new TextWatcher() {
+						@Override
+						public void onTextChanged(CharSequence s, int start, int before, int count) {
+							// TODO Auto-generated method stub
+						}
+						@Override
+						public void beforeTextChanged(CharSequence s, int start, int count,
+								int after) {
+							// TODO Auto-generated method stub
+						}
+
+						@Override
+						public void afterTextChanged(Editable s) {
+							// TODO Auto-generated method stub
+							otherText=new String(s+"");
+						}
+					});
 				}
 				else{
 					other.setEnabled(false);
 					other.setFocusable(false);
 					other.setText("");
 					}
-				
 			}
 		});
-		
-		
 		EditText specify= new EditText(context);
 		specify.setLayoutParams(layoutparams);
 		specify.setEnabled(false);

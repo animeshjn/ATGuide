@@ -136,9 +136,15 @@ public class PersistenceBean {
 	 * Method to persist data from instructional areas activity
 	 * */
 	public static void persistInstructionalAreas(String studentId,
-			ArrayList<String> selectedInstructionalAreas, Context context) {
+
+			
+		ArrayList<String> selectedInstructionalAreas, Context context) {
 		FeedReaderDbHelper mDbHelper = new FeedReaderDbHelper(context);
 		SQLiteDatabase db = mDbHelper.getWritableDatabase();
+		//delete before inserting for uniqueness of values 
+		db.execSQL("DELETE FROM "+SelectedArea.TABLE_NAME+" WHERE "+SelectedArea.COL_ID+" = '"+studentId+"'");
+		
+		
 		for (String area : selectedInstructionalAreas) {
 			ContentValues values = new ContentValues();
 			values.put(SelectedArea.COL_ID, studentId);
@@ -367,13 +373,14 @@ public class PersistenceBean {
 	/**
 	 * Method to persist Area object
 	 * */
-	public static void persistAreaObject(Area area, String studentid,
+	public static void persistAreaObject(ArrayList<Area> areasList, String studentid,
 			Context context) {
 		// Abstract function:=
 		// Get this area object
 		// Persist all its details into one table
 		// get all the associated tasks with this area&&StudentId
 		// For each task: persist(Task);
+		for(Area area: areasList){
 		String areaname = area.getAreaName();
 		int parentid = area.getParentId();
 		ArrayList<Task> tasks = area.getTasks();
@@ -388,6 +395,7 @@ public class PersistenceBean {
 			values.put(AreaStore.COL_AREA_ID, parentid);
 			db.insert(TaskStore.TABLE_NAME, null, values);
 			db.close();
+			
 			Log.d("ATGUIDE", "Inserting into task store on an iterative loop");
 			for (Task task : tasks) {
 				persistTaskObject(task, studentid, context);
@@ -400,7 +408,7 @@ public class PersistenceBean {
 		} catch (Exception e) {
 			Log.e("ATGUIDE", "Exception while persisting current student id");
 		}
-
+		}
 	}
 
 }

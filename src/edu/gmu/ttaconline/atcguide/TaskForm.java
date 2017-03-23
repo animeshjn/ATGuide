@@ -1,41 +1,33 @@
 package edu.gmu.ttaconline.atcguide;
 
 import java.io.Serializable;
+
 import java.util.ArrayList;
-import java.util.Collections;
 
 import com.commonsware.cwac.merge.MergeAdapter;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.ListActivity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
-import android.text.Layout;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.Gravity;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
-import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -77,6 +69,7 @@ public class TaskForm extends Activity implements Serializable {
 			inflater = getLayoutInflater();
 			placeArea();//if it is new
 			//retrieveArea()if it is old
+			
 			LinearLayout first = (LinearLayout) merge.getItem(0);
 			if (first.getChildAt(0) != null) {
 				first.getChildAt(0).callOnClick();
@@ -112,19 +105,12 @@ public class TaskForm extends Activity implements Serializable {
 	 * Sets listener for the click of next button of this view
 	 * */
 	private void setNextListener() {
-
 		Button next = (Button) findViewById(R.id.nextbutton);
 		next.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				for (Area area : areasList) {
-					Log.d(TAG, "New Area and tasks: " + area.getAreaName());
-					area.logTasks();
-					PersistenceBean.persistAreaObject(area, studentid, context);
-				}
-				Toast.makeText(context, "Data Saved",Toast.LENGTH_SHORT).show();
-			}
-		});
+					PersistenceBean.persistAreaObject(areasList, studentid, context);
+					Toast.makeText(context, "Data Saved",Toast.LENGTH_SHORT).show();}});
 	}
 
 	public boolean isStrategyEmpty(View v) {
@@ -317,14 +303,12 @@ public class TaskForm extends Activity implements Serializable {
 	 **/
 	@SuppressLint("InflateParams")
 	private void placeArea() {
-
 		getData();
 		LinearLayout.LayoutParams textViewParams = new LinearLayout.LayoutParams(
 				LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 		ListView instructional = (ListView) findViewById(R.id.instructionalAreasList);
 		for (CharSequence areaText : selectedInstructional) {
-			LinearLayout v = (LinearLayout) inflater.inflate(
-					R.layout.areataskrow, null);
+			LinearLayout v = (LinearLayout) inflater.inflate(R.layout.areataskrow, null);
 			v.setId(id++);
 			TextView area = (TextView) v.findViewById(R.id.areatextview);
 			// area.setBackground(getResources().getDrawable(R.drawable.textviewback));
@@ -611,6 +595,7 @@ public class TaskForm extends Activity implements Serializable {
 	}
 
 	public void onAddNewTask() {
+
 		// AddNewTextView to current area
 		// blank all text views
 		// set ids++
@@ -639,7 +624,7 @@ public class TaskForm extends Activity implements Serializable {
 		t.taskid = tv.getId();
 		areaObject.addTask(t);
 		tv.setOnClickListener(new OnClickListener() {
-			@Override
+			@SuppressLint("InflateParams") @Override
 			public void onClick(View v) {
 				TextView taskview = (TextView) v;
 				CharSequence taskviewText = taskview.getText();
