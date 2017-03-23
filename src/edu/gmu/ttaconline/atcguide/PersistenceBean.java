@@ -4,9 +4,12 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Set;
 
+import edu.gmu.ttaconline.atcguide.FeedReaderContract.AreaStore;
 import edu.gmu.ttaconline.atcguide.FeedReaderContract.FeedEntry;
 import edu.gmu.ttaconline.atcguide.FeedReaderContract.IntentStore;
 import edu.gmu.ttaconline.atcguide.FeedReaderContract.SelectedArea;
+import edu.gmu.ttaconline.atcguide.FeedReaderContract.StrategyStore;
+import edu.gmu.ttaconline.atcguide.FeedReaderContract.TaskStore;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -133,8 +136,7 @@ public class PersistenceBean {
 	 * Method to persist data from instructional areas activity
 	 * */
 	public static void persistInstructionalAreas(String studentId,
-			ArrayList<String> selectedInstructionalAreas, Context context)
-	{
+			ArrayList<String> selectedInstructionalAreas, Context context) {
 		FeedReaderDbHelper mDbHelper = new FeedReaderDbHelper(context);
 		SQLiteDatabase db = mDbHelper.getWritableDatabase();
 		for (String area : selectedInstructionalAreas) {
@@ -190,10 +192,10 @@ public class PersistenceBean {
 		try {
 			Log.d("ATGUIDE", "Retrieving cursor from DB");
 
-			cursor = db.query(SelectedArea.TABLE_NAME,
+			cursor = db.query(true,SelectedArea.TABLE_NAME,
 					new String[] { SelectedArea.COL_AREA }, SelectedArea.COL_ID
 							+ " = " + "'" + studentid + "'", null, null, null,
-					null);
+					null, null);
 			if (cursor != null) {
 				cursor.moveToFirst();
 				while (!cursor.isAfterLast()) {
@@ -216,7 +218,7 @@ public class PersistenceBean {
 	 * */
 	public static Intent getExistingIntent(String studentId, Context context) {
 		Intent requiredIntent = null;
-		Log.e("ATGUIDE", "Searching for persisted intent with student id :"
+		Log.i("ATGUIDE", "Searching for persisted intent with student id :"
 				+ studentId);
 		int records = 0;
 		Log.d("ATGUIDE", "before Db Helper");
@@ -287,15 +289,15 @@ public class PersistenceBean {
 	 * */
 	public static void persistCurrentId(String studentId, Context context) {
 
-		try{
-		FeedReaderDbHelper mDbHelper = new FeedReaderDbHelper(context);
-		SQLiteDatabase db = mDbHelper.getWritableDatabase();
+		try {
+			FeedReaderDbHelper mDbHelper = new FeedReaderDbHelper(context);
+			SQLiteDatabase db = mDbHelper.getWritableDatabase();
 			ContentValues values = new ContentValues();
 			values.put(SelectedArea.COL_ID, studentId);
+			db.execSQL("DELETE FROM CURRENT_DATA");
 			db.insert("CURRENT_DATA", null, values);
-		db.close();
-		}
-		catch(Exception e){
+			db.close();
+		} catch (Exception e) {
 			Log.e("ATGUIDE", "Exception while persisting current student id");
 		}
 	}
@@ -303,43 +305,102 @@ public class PersistenceBean {
 	/**
 	 * Retrieves current running student id from the database
 	 * */
-	public static String getCurrentId(Context context){
-		//Requires: current application context
-		//Effects: Returns the current running id of this student
-		
+	public static String getCurrentId(Context context) {
+
+		// Requires: current application context
+		// Effects: Returns the current running id of this student
+
 		FeedReaderDbHelper mDbHelper = new FeedReaderDbHelper(context);
-		String currentId=null;
+		String currentId = null;
 		SQLiteDatabase db = mDbHelper.getWritableDatabase();
 		Cursor cursor;
 		try {
 			Log.d("ATGUIDE", "Trying to get current id cursor");
 			cursor = db.rawQuery("select * from CURRENT_DATA", null);
 			cursor.moveToFirst();
-			currentId=cursor.getString(0);
-	}catch(Exception e ){
-		Log.e("ATGUIDE", "Error retrieving the current id");
-	}
+			currentId = cursor.getString(0);
+		} catch (Exception e) {
+			Log.e("ATGUIDE", "Error retrieving the current id");
+		}
 		return currentId;
 	}
-	
-	public static void persistTaskObject(Task task,Context context){
-		int taskid= task.taskid;
-		String name= task.getTaskname();
-		String areaName=task.getAreaname();
-		Set<String> StrategyKeys=task.strategies.keySet();
-		//studentid, taskid
-		try{
+
+	/**
+	 * Method to persist task object
+	 * */
+	public static void persistTaskObject(Task task, String studentid,
+			Context context) {
+		int taskid = task.taskid;
+		String taskName = task.getTaskname();
+		String areaName = task.getAreaname();
+
+		Set<String> StrategyKeys = task.strategies.keySet();
+		// studentid, taskid
+		try {
+			Log.d("ATGUIDE", "Inserting into task store");
 			FeedReaderDbHelper mDbHelper = new FeedReaderDbHelper(context);
 			SQLiteDatabase db = mDbHelper.getWritableDatabase();
-				ContentValues values = new ContentValues();
-			//	values.put(SelectedArea.COL_ID, studentId);
-				db.insert("CURRENT_DATA", null, values);
-				db.close();
+			ContentValues values = new ContentValues();
+			//REMOVE PREVIOUS TASKS
+			values.put(TaskStore.COL_TASK_ID, taskid);
+			values.put(TaskStore.COL_STUDENT_ID, studentid);
+			values.put(TaskStore.COL_TASK_NAME, taskName);
+			values.put(TaskStore.COL_AREA_NAME, areaName);
+			db.insert(TaskStore.TABLE_NAME, null, values);
+			Log.d("ATGUIDE",
+					"Inserting into strategy store on an iterative loop");
+			for (String key : StrategyKeys) {
+				// Loop Through all the strategies
+				values = new ContentValues();
+				values.put(StrategyStore.COL_STUDENT_ID, studentid);
+				values.put(StrategyStore.COL_TASKID, taskid);
+				values.put(StrategyStore.COL_STRATEGY_ID, key);
+				values.put(StrategyStore.COL_STRATEGY_TEXT,
+						task.strategies.get(key));
+				db.insert(StrategyStore.TABLE_NAME, null, values);
 			}
-			catch(Exception e){
-				Log.e("ATGUIDE", "Exception while persisting current student id");
-			}
-		
-		
+			db.close();
+		} catch (Exception e) {
+			Log.e("ATGUIDE", "Exception while persisting current student id");
+		}
 	}
+	/**
+	 * Method to persist Area object
+	 * */
+	public static void persistAreaObject(Area area, String studentid,
+			Context context) {
+		// Abstract function:=
+		// Get this area object
+		// Persist all its details into one table
+		// get all the associated tasks with this area&&StudentId
+		// For each task: persist(Task);
+		String areaname = area.getAreaName();
+		int parentid = area.getParentId();
+		ArrayList<Task> tasks = area.getTasks();
+		try {
+			Log.d("ATGUIDE", "Inserting into task store");
+			FeedReaderDbHelper mDbHelper = new FeedReaderDbHelper(context);
+			SQLiteDatabase db = mDbHelper.getWritableDatabase();
+			db.execSQL("DELETE FROM "+TaskStore.TABLE_NAME+" WHERE "+TaskStore.COL_STUDENT_ID+" = '"+studentid+"' AND "+TaskStore.COL_AREA_ID+"= '"+parentid+"'");
+			ContentValues values = new ContentValues();
+			values.put(AreaStore.COL_AREA_NAME, areaname);
+			values.put(AreaStore.COL_STUDENT_ID, studentid);
+			values.put(AreaStore.COL_AREA_ID, parentid);
+			db.insert(TaskStore.TABLE_NAME, null, values);
+			db.close();
+			Log.d("ATGUIDE", "Inserting into task store on an iterative loop");
+			for (Task task : tasks) {
+				persistTaskObject(task, studentid, context);
+			}
+			// for(String key:StrategyKeys){
+			// //Loop Through all the strategies
+			//
+			// }
+			db.close();
+		} catch (Exception e) {
+			Log.e("ATGUIDE", "Exception while persisting current student id");
+		}
+
+	}
+
 }

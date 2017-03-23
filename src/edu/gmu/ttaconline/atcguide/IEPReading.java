@@ -69,8 +69,7 @@ public class IEPReading extends Activity {
 				Toast.makeText(context, "Eligible", Toast.LENGTH_SHORT).show();
 				eligibility = "yes";
 				currentIntent.setData(null);
-			}
-			else if (currentIntent.getData().toString()
+			} else if (currentIntent.getData().toString()
 					.equalsIgnoreCase("http://iepreading.atguide.com/no")) {
 				eligibility = "no";
 				Toast.makeText(context, "Not Eligible", Toast.LENGTH_SHORT)
@@ -84,8 +83,11 @@ public class IEPReading extends Activity {
 			}
 			currentIntent.putExtra("eligibility", eligibility);
 			currentIntent.setData(null);
-			PersistenceBean.persistIntent(currentIntent.getStringExtra("studentid"),currentIntent, context);
-			PersistenceBean.persistCurrentId(currentIntent.getStringExtra("studentid"), context);
+			PersistenceBean.persistIntent(
+					currentIntent.getStringExtra("studentid"), currentIntent,
+					context);
+			PersistenceBean.persistCurrentId(
+					currentIntent.getStringExtra("studentid"), context);
 			currentIntent.setClass(context, TaskForm.class);
 			startActivity(currentIntent);
 		}
@@ -128,6 +130,11 @@ public class IEPReading extends Activity {
 				Log.d("ATGUIDE", "Reading:" + IEPReading);
 				if (IEPAlt.trim().equalsIgnoreCase("NO")) {
 					currentIntent.setClass(context, TaskForm.class);
+					PersistenceBean.persistIntent(
+							currentIntent.getStringExtra("studentid"),
+							currentIntent, context);
+					PersistenceBean.persistCurrentId(
+							currentIntent.getStringExtra("studentid"), context);
 					startActivity(currentIntent);
 				} else {
 					AlertDialog.Builder builder = new AlertDialog.Builder(
@@ -151,18 +158,24 @@ public class IEPReading extends Activity {
 												Intent.ACTION_VIEW, aimEligible);
 										aimIntent
 												.addFlags(Intent.URI_INTENT_SCHEME);
-										aimIntent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
-										aimIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+										aimIntent
+												.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+										aimIntent
+												.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 										// aimIntent
 										// .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 										aimIntent.putExtras(currentIntent);
 										// aimIntent.addCategory(Intent.CATEGORY_LAUNCHER);
 										// aimIntent
 										// .setFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
-										aimIntent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
-										aimIntent.setDataAndNormalize(aimEligible);
+										aimIntent
+												.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+										aimIntent
+												.setDataAndNormalize(aimEligible);
 										PackageManager packageManager = getPackageManager();
-										List<ResolveInfo> activities = packageManager.queryIntentActivities(aimIntent, 0);
+										List<ResolveInfo> activities = packageManager
+												.queryIntentActivities(
+														aimIntent, 0);
 										boolean isIntentSafe = activities
 												.size() > 0;
 										boolean installed = false;
@@ -181,8 +194,10 @@ public class IEPReading extends Activity {
 										PersistenceBean.persistIntent(aimIntent
 												.getStringExtra("studentid"),
 												currentIntent, context);
-										PersistenceBean.persistCurrentId(aimIntent
-												.getStringExtra("studentid"), context);
+										PersistenceBean.persistCurrentId(
+												aimIntent
+														.getStringExtra("studentid"),
+												context);
 										if (installed)
 											startActivity(aimIntent);
 										else {
@@ -196,6 +211,7 @@ public class IEPReading extends Activity {
 													(Uri.parse("market://aimeligibility.com")));
 											aimIntent.putExtras(currentIntent);
 											startActivity(aimIntent);
+
 										}
 
 										finish();
@@ -218,11 +234,14 @@ public class IEPReading extends Activity {
 										currentIntent = getIntent();
 										currentIntent.setClass(context,
 												TaskForm.class);
-										PersistenceBean.persistIntent(currentIntent
-												.getStringExtra("studentid"),
+										PersistenceBean.persistIntent(
+												currentIntent
+														.getStringExtra("studentid"),
 												currentIntent, context);
-										PersistenceBean.persistCurrentId(currentIntent
-												.getStringExtra("studentid"), context);
+										PersistenceBean.persistCurrentId(
+												currentIntent
+														.getStringExtra("studentid"),
+												context);
 										startActivity(currentIntent);
 									} catch (Exception unknown) {
 										Log.e("ATGUIDE",

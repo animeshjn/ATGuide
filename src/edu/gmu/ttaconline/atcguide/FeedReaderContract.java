@@ -38,8 +38,10 @@ public final class FeedReaderContract {
     public static class TaskStore{
     	public static final String TABLE_NAME= "TasksAndStrategy";
     	public static final String COL_STUDENT_ID= "studentid";
+    	public static final String COL_AREA_ID="areaid";
     	public static final String COL_TASK_ID= "taskid";
     	public static final String COL_AREA_NAME= "areaname";
+    	public static final String COL_TASK_NAME="taskname";
     }
     public static class StrategyStore{
     	public static final String TABLE_NAME="strategymapping";
@@ -48,5 +50,11 @@ public final class FeedReaderContract {
     	public static final String COL_TASKID="taskid";
     	public static final String COL_STUDENT_ID="studentid";
     }
-    
+   public static class AreaStore{
+	   public static final String TABLE_NAME="areastore";
+	   public static final String COL_STUDENT_ID="studentid";
+	   public static final String COL_AREA_ID="areaid";
+	   public static final String COL_AREA_NAME="areaname";
+   }
+   
 }
