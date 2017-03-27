@@ -83,11 +83,6 @@ public class IEPReading extends Activity {
 			}
 			currentIntent.putExtra("eligibility", eligibility);
 			currentIntent.setData(null);
-			PersistenceBean.persistIntent(
-					currentIntent.getStringExtra("studentid"), currentIntent,
-					context);
-			PersistenceBean.persistCurrentId(
-					currentIntent.getStringExtra("studentid"), context);
 			currentIntent.setClass(context, TaskForm.class);
 			startActivity(currentIntent);
 		}
@@ -246,10 +241,10 @@ public class IEPReading extends Activity {
 									} catch (Exception unknown) {
 										Log.e("ATGUIDE",
 												"EX: " + unknown.getMessage());
-
-									}
+										}
 								}
 							});
+					
 					builder.setNeutralButton("Cancel",
 							new DialogInterface.OnClickListener() {
 								@Override
@@ -258,16 +253,12 @@ public class IEPReading extends Activity {
 									// TODO Auto-generated method stub
 									// Nothing
 									dialog.dismiss();
-
 								}
 							});
-
 					builder.show();
-
 				}
 			}
 		});
-
 	}
 
 	protected void setRadioValues() {
@@ -293,6 +284,7 @@ public class IEPReading extends Activity {
 		return true;
 	}
 
+	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// Handle action bar item clicks here. The action bar will
@@ -305,24 +297,23 @@ public class IEPReading extends Activity {
 		return super.onOptionsItemSelected(item);
 	}
 
+	
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
 		// TODO Auto-generated method stub
 		// outState.pu
 		read = (RadioGroup) findViewById(R.id.read);
 		int selectedId = read.getCheckedRadioButtonId();
-
 		RadioButton radio = (RadioButton) findViewById(selectedId);
 		read = (RadioGroup) findViewById(R.id.read);
-
 		IEPReading = (String) radio.getText();
+		
 		iepAlternative = (RadioGroup) findViewById(R.id.iepalternative);
 		RadioButton iepaltradio = (RadioButton) findViewById(iepAlternative
 				.getCheckedRadioButtonId());
 		IEPAlt = (String) iepaltradio.getText();
 		IEPReading = (String) radio.getText();
 		iepAlternative = (RadioGroup) findViewById(R.id.iepalternative);
-
 		IEPAlt = (String) iepaltradio.getText();
 		super.onSaveInstanceState(outState);
 

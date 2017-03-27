@@ -1,7 +1,6 @@
 package edu.gmu.ttaconline.atcguide;
 
 import java.io.Serializable;
-
 import java.util.ArrayList;
 
 import com.commonsware.cwac.merge.MergeAdapter;
@@ -28,6 +27,8 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.ListView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -445,25 +446,22 @@ public class TaskForm extends Activity implements Serializable {
 							// add accordingly
 						}
 					}
-
+					
 					watcher[0] = new TextWatcher() {
 						@Override
 						public void onTextChanged(CharSequence s, int start,
 								int before, int count) {
 						}
-
 						@Override
 						public void beforeTextChanged(CharSequence s,
 								int start, int count, int after) {
 						}
-
 						@Override
 						public void afterTextChanged(Editable s) {
 							t.strategies.remove("0");
 							t.strategies.put("0", new String(s.toString()));
 						}
 					};
-
 					strategy.addTextChangedListener(watcher[0]);
 					((TextView) findViewById(R.id.tasktitle)).setText(areaText);
 					EditText taskname = (EditText) findViewById(R.id.taskname);
@@ -484,6 +482,7 @@ public class TaskForm extends Activity implements Serializable {
 
 						@Override
 						public void afterTextChanged(Editable s) {
+
 							// TODO Auto-generated method stub
 							try {
 								// Toast.makeText(context, "Text Changed",
@@ -498,7 +497,19 @@ public class TaskForm extends Activity implements Serializable {
 							}
 						}
 					});
-
+					RadioGroup solutions=(RadioGroup)findViewById(R.id.solutionradiogroup);
+					solutions.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+						@Override
+						public void onCheckedChanged(RadioGroup group, int checkedId) {
+							 RadioButton checkedSolution = (RadioButton)group.findViewById(checkedId);
+							 boolean isChecked = checkedSolution.isChecked();
+							if(isChecked&&(checkedId==R.id.solutionyes))	
+							 t.solutions=true;
+							else
+								t.solutions=false;
+							
+						}
+					});
 				}
 			});
 
@@ -521,6 +532,7 @@ public class TaskForm extends Activity implements Serializable {
 						// title.addTextChangedListener(taskWatcher);
 						Button addTask = (Button) findViewById(R.id.addnewtask);
 						addTask.setOnClickListener(new View.OnClickListener() {
+
 							@Override
 							public void onClick(View v) {
 								Toast.makeText(context,
@@ -622,6 +634,19 @@ public class TaskForm extends Activity implements Serializable {
 		final Task t = new Task();
 		t.setTaskname(tv.getText().toString());
 		t.taskid = tv.getId();
+		RadioGroup solutions=(RadioGroup)findViewById(R.id.solutionradiogroup);
+		solutions.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+			@Override
+			public void onCheckedChanged(RadioGroup group, int checkedId) {
+				 RadioButton checkedSolution = (RadioButton)group.findViewById(checkedId);
+				 boolean isChecked = checkedSolution.isChecked();
+				if(isChecked&&(checkedId==R.id.solutionyes))	
+				 t.solutions=true;
+				else
+					t.solutions=false;
+				
+			}
+		});
 		areaObject.addTask(t);
 		tv.setOnClickListener(new OnClickListener() {
 			@SuppressLint("InflateParams") @Override
@@ -668,10 +693,8 @@ public class TaskForm extends Activity implements Serializable {
 														// them
 					strategyLayout.removeAllViews(); // instead of finding and
 														// removing text
-
 					// change listeners, just start over for every click
 					// improved efficiency O(n)
-
 					int i = -1;
 					// for each of the strategy in the task object
 					for (final String key : t.strategies.keySet()) {
@@ -728,7 +751,6 @@ public class TaskForm extends Activity implements Serializable {
 									t.strategies.remove(id + "");
 									Toast.makeText(context, "Strategy deleted",
 											Toast.LENGTH_SHORT).show();
-
 								} else
 									Toast.makeText(
 											context,
@@ -745,12 +767,10 @@ public class TaskForm extends Activity implements Serializable {
 					public void onTextChanged(CharSequence s, int start,
 							int before, int count) {
 					}
-
 					@Override
 					public void beforeTextChanged(CharSequence s, int start,
 							int count, int after) {
 					}
-
 					@Override
 					public void afterTextChanged(Editable s) {
 						t.strategies.remove("0");
@@ -800,7 +820,6 @@ public class TaskForm extends Activity implements Serializable {
 		// ADD EMPTY VIEW TO THIS
 		parent.addView(tv);
 		tv.callOnClick();
-		// Thats it
 	}
 
 	public class addTasklistener implements OnClickListener {

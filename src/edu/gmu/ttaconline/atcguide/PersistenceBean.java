@@ -294,7 +294,6 @@ public class PersistenceBean {
 	 * Persists current student id
 	 * */
 	public static void persistCurrentId(String studentId, Context context) {
-
 		try {
 			FeedReaderDbHelper mDbHelper = new FeedReaderDbHelper(context);
 			SQLiteDatabase db = mDbHelper.getWritableDatabase();
@@ -307,12 +306,10 @@ public class PersistenceBean {
 			Log.e("ATGUIDE", "Exception while persisting current student id");
 		}
 	}
-
 	/**
 	 * Retrieves current running student id from the database
 	 * */
 	public static String getCurrentId(Context context) {
-
 		// Requires: current application context
 		// Effects: Returns the current running id of this student
 
@@ -330,7 +327,6 @@ public class PersistenceBean {
 		}
 		return currentId;
 	}
-
 	/**
 	 * Method to persist task object
 	 * */
@@ -339,7 +335,12 @@ public class PersistenceBean {
 		int taskid = task.taskid;
 		String taskName = task.getTaskname();
 		String areaName = task.getAreaname();
-
+		String solution=null;
+		if(task.solutions){
+			solution="yes";
+		}
+		else
+			solution="no";
 		Set<String> StrategyKeys = task.strategies.keySet();
 		// studentid, taskid
 		try {
@@ -352,6 +353,7 @@ public class PersistenceBean {
 			values.put(TaskStore.COL_STUDENT_ID, studentid);
 			values.put(TaskStore.COL_TASK_NAME, taskName);
 			values.put(TaskStore.COL_AREA_NAME, areaName);
+			values.put(TaskStore.COL_SOLUTION, solution);
 			db.insert(TaskStore.TABLE_NAME, null, values);
 			Log.d("ATGUIDE",
 					"Inserting into strategy store on an iterative loop");
@@ -395,7 +397,6 @@ public class PersistenceBean {
 			values.put(AreaStore.COL_AREA_ID, parentid);
 			db.insert(TaskStore.TABLE_NAME, null, values);
 			db.close();
-			
 			Log.d("ATGUIDE", "Inserting into task store on an iterative loop");
 			for (Task task : tasks) {
 				persistTaskObject(task, studentid, context);
@@ -411,4 +412,75 @@ public class PersistenceBean {
 		}
 	}
 
+	public ArrayList<Area> getPersistedAreaObjects(String studentid, Context context){
+		ArrayList<Area> areaObjList=new ArrayList<Area>();
+		//TODO Find all area for this student Id
+		//get all area objects 
+		//contents:
+		// For each task: persist(Task);
+				{
+				String areaname = null;
+				int parentid = 0;
+				String taskname;
+				int taskid;
+				boolean solutions;
+				try {
+					Log.d("ATGUIDE", "Inserting into task store");
+					FeedReaderDbHelper mDbHelper = new FeedReaderDbHelper(context);
+					SQLiteDatabase db = mDbHelper.getWritableDatabase();
+					//db.execSQL("DELETE FROM "+TaskStore.TABLE_NAME+" WHERE "+TaskStore.COL_STUDENT_ID+" = '"+studentid+"' AND "+TaskStore.COL_AREA_ID+"= '"+parentid+"'");
+					Cursor cursor=db.rawQuery("SELECT * FROM "+AreaStore.TABLE_NAME+" WHERE "+AreaStore.COL_STUDENT_ID+" = '"+studentid+"'",null);
+					cursor.moveToFirst();
+					while(!cursor.isAfterLast()){
+						//For each area
+						Area area= new Area();
+						area.setAreaName(cursor.getString(cursor.getColumnIndex(AreaStore.COL_AREA_NAME)));
+						area.setParentId(Integer.parseInt(cursor.getString(cursor.getColumnIndex(AreaStore.COL_AREA_ID))));
+						area.tasks=null;//getPersistedTasks(Area, StudentId, context); 
+						areaObjList.add(area);
+						cursor.moveToNext();
+					}
+
+					
+					db.close();
+					Log.d("ATGUIDE", "Inserting into task store on an iterative loop");
+					}catch(Exception e){
+					//Log.e()	
+					}
+				}
+		return null;
+	}
+	
+	public static ArrayList<Task> getPersistedTasks(Area area, String studentid, Context context)
+	{
+		ArrayList<Task> tasks= new ArrayList<Task>();
+		try {
+			Log.d("ATGUIDE", "Inserting into task store");
+			FeedReaderDbHelper mDbHelper = new FeedReaderDbHelper(context);
+			SQLiteDatabase db = mDbHelper.getWritableDatabase();
+			//db.execSQL("DELETE FROM "+TaskStore.TABLE_NAME+" WHERE "+TaskStore.COL_STUDENT_ID+" = '"+studentid+"' AND "+TaskStore.COL_AREA_ID+"= '"+parentid+"'");
+			String sql="SELECT * FROM "+TaskStore.TABLE_NAME+" WHERE "+TaskStore.COL_STUDENT_ID+" = '"+studentid+"' AND "+TaskStore.COL_AREA_ID+" = '"+area.getParentId()+"'";
+			Cursor cursor=db.rawQuery(sql,null);
+			cursor.moveToFirst();
+			while(!cursor.isAfterLast()){
+				//For each area
+				Task currentTask= new Task();
+				currentTask.areaname=area.getAreaName();
+				currentTask.taskname=cursor.getString(cursor.getColumnIndex(TaskStore.COL_TASK_NAME));
+				currentTask.taskid=Integer.parseInt(cursor.getString(cursor.getColumnIndex(TaskStore.COL_TASK_ID)));
+				if((cursor.getString(cursor.getColumnIndex(TaskStore.COL_SOLUTION))).contains("yes"))
+						currentTask.solutions=true;
+				else
+						currentTask.solutions=false;
+						cursor.moveToNext();
+			}
+			db.close();
+			Log.d("ATGUIDE", "Inserting into task store on an iterative loop");
+			}catch(Exception e){
+			//Log.e()	
+			}
+		return null;
+		
+	}
+	
 }

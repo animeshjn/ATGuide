@@ -18,7 +18,7 @@ public class FeedReaderDbHelper extends SQLiteOpenHelper {
 	// If you change the database schema, you must increment the database
 	// version.
 	
-	public static final int DATABASE_VERSION = 15;
+	public static final int DATABASE_VERSION = 16;
 	
 	public static final String DATABASE_NAME = "Student.db";
 	
@@ -42,7 +42,7 @@ public class FeedReaderDbHelper extends SQLiteOpenHelper {
 			+ SelectedArea.COL_AREA + " TEXT)";
 	
 	private static final String SQL_CREATE_TASK="CREATE TABLE "+TaskStore.TABLE_NAME+"("+TaskStore.COL_STUDENT_ID+" TEXT,"+TaskStore.COL_TASK_ID+" TEXT,"
-			+ ""+TaskStore.COL_TASK_NAME+" TEXT, "+TaskStore.COL_AREA_NAME+","+TaskStore.COL_AREA_ID+" TEXT)";
+			+ ""+TaskStore.COL_TASK_NAME+" TEXT, "+TaskStore.COL_AREA_NAME+","+TaskStore.COL_AREA_ID+" TEXT,"+TaskStore.COL_SOLUTION+" TEXT)";
 
 	public static final String SQL_CREATE_STRATEGY="CREATE TABLE "+StrategyStore.TABLE_NAME+"("+StrategyStore.COL_STUDENT_ID+" TEXT,"
 			+StrategyStore.COL_STRATEGY_ID+" TEXT,"+StrategyStore.COL_STRATEGY_TEXT+" TEXT,"+StrategyStore.COL_TASKID+" TEXT)";
@@ -67,6 +67,8 @@ public class FeedReaderDbHelper extends SQLiteOpenHelper {
 	private static final String SQL_DELETE_STRATEGY="DROP TABLE IF EXISTS "+StrategyStore.TABLE_NAME;
 	
 	private static final String SQL_DELETE_AREA="DROP TABLE IF EXISTS "+AreaStore.TABLE_NAME;
+	
+	
 	
 	public FeedReaderDbHelper(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);

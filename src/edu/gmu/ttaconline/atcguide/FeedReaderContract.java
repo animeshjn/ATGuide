@@ -7,6 +7,7 @@ public final class FeedReaderContract {
     // make the constructor private.
     private FeedReaderContract() {}
     public static int id=1000;
+    
     /* Inner class that defines the table contents */
     public static class FeedEntry  {
         public static final String STUDENT = "student";
@@ -35,6 +36,7 @@ public final class FeedReaderContract {
     	public static final String COL_ID= "studentid";
     	public static final String COL_AREA= "area";
     }
+    
     public static class TaskStore{
     	public static final String TABLE_NAME= "TasksAndStrategy";
     	public static final String COL_STUDENT_ID= "studentid";
@@ -42,19 +44,26 @@ public final class FeedReaderContract {
     	public static final String COL_TASK_ID= "taskid";
     	public static final String COL_AREA_NAME= "areaname";
     	public static final String COL_TASK_NAME="taskname";
+    	public static final String COL_SOLUTION="solution";
     }
+    
     public static class StrategyStore{
+    	
     	public static final String TABLE_NAME="strategymapping";
     	public static final String COL_STRATEGY_ID="strategyid";
     	public static final String COL_STRATEGY_TEXT="strategytext";
     	public static final String COL_TASKID="taskid";
     	public static final String COL_STUDENT_ID="studentid";
+    
     }
    public static class AreaStore{
+	   
 	   public static final String TABLE_NAME="areastore";
 	   public static final String COL_STUDENT_ID="studentid";
 	   public static final String COL_AREA_ID="areaid";
 	   public static final String COL_AREA_NAME="areaname";
+   
    }
+   
    
 }
