@@ -18,7 +18,7 @@ public class FeedReaderDbHelper extends SQLiteOpenHelper {
 	// If you change the database schema, you must increment the database
 	// version.
 	
-	public static final int DATABASE_VERSION = 16;
+	public static final int DATABASE_VERSION = 17;
 	
 	public static final String DATABASE_NAME = "Student.db";
 	
@@ -49,7 +49,7 @@ public class FeedReaderDbHelper extends SQLiteOpenHelper {
 	
 	public static final String SQL_CREATE_AREA="CREATE TABLE "
 			+ AreaStore.TABLE_NAME + "(" + AreaStore.COL_AREA_ID + " TEXT,"
-			+ AreaStore.COL_STUDENT_ID + " TEXT)";
+			+ AreaStore.COL_STUDENT_ID + " TEXT,"+AreaStore.COL_AREA_NAME+" TEXT)";
 	
 	private static final String SQL_DELETE_ENTRIES = "DROP TABLE IF EXISTS "
 			+ FeedEntry.STUDENT;

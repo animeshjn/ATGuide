@@ -78,6 +78,7 @@ public class TaskForm extends Activity implements Serializable {
 				first.callOnClick();
 			addPlusButtonListener();
 			setNextListener();
+			setLogListener();
 		} catch (Exception unknown) {
 			Log.e("ATGUIDE", "Exception " + unknown.getMessage());
 		}
@@ -110,8 +111,30 @@ public class TaskForm extends Activity implements Serializable {
 		next.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
+					Log.d("ATGUIDE", "AREALIST SIZE"+areasList.size());
 					PersistenceBean.persistAreaObject(areasList, studentid, context);
-					Toast.makeText(context, "Data Saved",Toast.LENGTH_SHORT).show();}});
+					Toast.makeText(context, "Data Saved",Toast.LENGTH_SHORT).show();
+			}});
+					
+	}
+	
+	private void setLogListener(){
+		
+		Button log = (Button) findViewById(R.id.logbutton);
+		log.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+					Toast.makeText(context, "Logging on LogCat",Toast.LENGTH_SHORT).show();
+					//Display DATA
+					Log.d("ATGUIDE", "AREALIST SIZE before retrieving"+areasList.size());
+					ArrayList<Area> persistedarea=PersistenceBean.getPersistedAreaObjects(studentid, context);
+					Log.d("ATGUIDE", "starting looop areacount: "+persistedarea.size());
+					for (Area area : persistedarea) {
+						ATGuideLogger.LogIt(area);
+						area.logTasks();
+					}
+			}});
+		
 	}
 
 	public boolean isStrategyEmpty(View v) {

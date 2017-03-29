@@ -284,6 +284,12 @@
             android:layout_height="wrap_content"
             android:background="@drawable/mybutton"
             android:text="@string/next" />
+        <Button
+            android:id="@+id/logbutton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/mybutton"
+            android:text="Log" />
     </LinearLayout>
 
 </RelativeLayout>
