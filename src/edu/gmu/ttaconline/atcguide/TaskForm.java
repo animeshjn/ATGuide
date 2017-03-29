@@ -114,6 +114,8 @@ public class TaskForm extends Activity implements Serializable {
 					Log.d("ATGUIDE", "AREALIST SIZE"+areasList.size());
 					PersistenceBean.persistAreaObject(areasList, studentid, context);
 					Toast.makeText(context, "Data Saved",Toast.LENGTH_SHORT).show();
+					Toast.makeText(context, "Opening Your Form ...",Toast.LENGTH_SHORT).show();
+					PDFLogic.generatePDF(context);
 			}});
 					
 	}
