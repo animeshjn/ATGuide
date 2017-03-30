@@ -1,9 +1,13 @@
 package edu.gmu.ttaconline.atcguide;
 
+import java.util.Date;
+import java.util.GregorianCalendar;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -57,14 +61,15 @@ public class InputForm extends Activity {
 		int month = datePicker.getMonth() + 1;
 		int year = datePicker.getYear();
 		
-		@SuppressWarnings("deprecation")
-		java.sql.Date date = new java.sql.Date(year, month, day);
+		//Date date = new java.util.Date(year, month, day);
+		String date=month+"-"+day+"-"+year;
 		intent = new Intent();
 		intent.putExtra("studentid", studentid);
 		intent.putExtra("studentgrade", studentgrade);
 		intent.putExtra("studentparticipant", studentparticipant);
 		intent.putExtra("studentschool", studentschool);
 		intent.putExtra("date", date.toString());
+		Log.d(PDFLogic.LOG_TAG, "Date: "+date);
 		Toast.makeText(context, "Data Saved", Toast.LENGTH_SHORT).show();
 		intent.setClass(context,IEPGoals.class);
 		

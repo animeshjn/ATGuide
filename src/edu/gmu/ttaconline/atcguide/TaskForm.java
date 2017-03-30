@@ -55,7 +55,7 @@ public class TaskForm extends Activity implements Serializable {
 	TextWatcher taskWatcher;
 	Area currentSelection = null;
 	TextView currentText;
-
+	Activity activity;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 
@@ -63,6 +63,7 @@ public class TaskForm extends Activity implements Serializable {
 		try {
 			setContentView(R.layout.activity_task_form);
 			// get from db
+			activity=this;
 			context = getApplicationContext();
 			currentIntent = getIntentFromDb();// getIntent();//getIntentFromDb();
 			studentid = currentIntent.getStringExtra("studentid");
@@ -115,7 +116,8 @@ public class TaskForm extends Activity implements Serializable {
 					PersistenceBean.persistAreaObject(areasList, studentid, context);
 					Toast.makeText(context, "Data Saved",Toast.LENGTH_SHORT).show();
 					Toast.makeText(context, "Opening Your Form ...",Toast.LENGTH_SHORT).show();
-					PDFLogic.generatePDF(context);
+					PDFLogic.generatePDF(activity);
+					
 			}});
 					
 	}

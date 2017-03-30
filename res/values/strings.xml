@@ -36,7 +36,6 @@
     <string name="grade12">12th Grade</string>
 
     <string-array name="gradearray">
-        
         <item>@string/preschool</item>
         <item>@string/kindergarten</item>
         <item>@string/grade1</item>
@@ -73,7 +72,8 @@
     <string name="recreationinstr">Recreation, Leisure and Adaptive Play</string>
     <string name="part1">\u25CF  Part 1 \u25CF </string>
     <string name="completetaskform">Complete the following form(s) for each area identified.</string>
-	<string name="instructionalarea">Instructional Area: </string>
+    <string name="instructionalarea">Instructional Area: </string>
+
     <string-array name="list1">
         <item name="listening">@string/listeninginstr</item>
         <item name="reading">@string/readinginstr</item>
@@ -97,9 +97,11 @@
     <string name="printalternative">Has the IEP team tested the student to determine if they might benefit from print material in alternative formats (i.e., Large Print, Braille, Electronic Text, Audio)?</string>
     <string name="title_activity_task_form">TaskForm</string>
     <string name="areataskheader">Area/Task</string>
-	<string name="ready">Ready</string>
-	<string name="taskinfo">Briefly list currently being used strategies, accommodations, assistive technology on general education, special education, community, work and home settings.</string>
-	<string name="taskname">Task Name</string>
-	<string name="AIMCall">Since you selected \"Yes\" to these questions, click \"Yes\" below to go to the AIM-Eligibility app to determine the student\'s eligibility for AIM-VA services.</string>
-	<string name="AIMTitle">AIM-VA Eligibility</string>
+    <string name="ready">Ready</string>
+    <string name="taskinfo">Briefly list currently being used strategies, accommodations, assistive technology on general education, special education, community, work and home settings.</string>
+    <string name="taskname">Task Name</string>
+    <string name="AIMCall">Since you selected \"Yes\" to these questions, click \"Yes\" below to go to the AIM-Eligibility app to determine the student\'s eligibility for AIM-VA services.</string>
+    <string name="AIMTitle">AIM-VA Eligibility</string>
+    <string name="title_activity_waiting">Waiting</string>
+
 </resources>

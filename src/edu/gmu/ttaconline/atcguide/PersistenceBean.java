@@ -102,6 +102,7 @@ public class PersistenceBean {
 		intent.putExtra("studentparticipant", studentparticipant);
 		intent.putExtra("studentschool", studentschool);
 		intent.putExtra("date", date.toString());
+		Log.d("ATGUIDE", "date " +date.toString());
 
 		return intent;
 	}

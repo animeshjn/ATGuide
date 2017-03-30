@@ -167,7 +167,6 @@ public class MainActivity extends Activity {
 					Intent i = new Intent();
 					i.putExtra("studentid","AA123");
 					i.putExtra("sample",true);
-					
 					break;
 					
 				case R.id.trial1:
