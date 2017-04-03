@@ -53,7 +53,7 @@ public class MainActivity extends Activity {
 				actionNew(v);
 			}
 		});
-		v.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT,android.widget.LinearLayout.LayoutParams.MATCH_PARENT));
+		v.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
 		getActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
 		getActionBar().setCustomView(v);
         

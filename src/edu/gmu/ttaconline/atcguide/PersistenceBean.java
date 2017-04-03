@@ -212,7 +212,7 @@ public class PersistenceBean {
 				}
 
 			}
-
+	db.close();
 		} catch (Exception e) {
 			Log.e("ATUGUIDE",
 					"Error in retrieving persisted area list " + e.getMessage());
@@ -271,7 +271,7 @@ public class PersistenceBean {
 		if (requiredIntent == null) {
 			Log.e("ATGUIDE", "Required intent is null ");
 		}
-
+		db.close();
 		return requiredIntent;
 	}
 
@@ -327,6 +327,7 @@ public class PersistenceBean {
 		} catch (Exception e) {
 			Log.e("ATGUIDE", "Error retrieving the current id");
 		}
+		db.close();
 		return currentId;
 	}
 	/**

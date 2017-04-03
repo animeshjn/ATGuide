@@ -332,7 +332,7 @@ public class TaskForm extends Activity implements Serializable {
 	@SuppressLint("InflateParams")
 	private void placeArea() {
 		getData();
-		LinearLayout.LayoutParams textViewParams = new LinearLayout.LayoutParams(
+		LayoutParams textViewParams = new LayoutParams(
 				LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 		ListView instructional = (ListView) findViewById(R.id.instructionalAreasList);
 		for (CharSequence areaText : selectedInstructional) {
@@ -541,7 +541,7 @@ public class TaskForm extends Activity implements Serializable {
 			});
 
 			v.addView(task);
-			area.setOnClickListener(new View.OnClickListener() {
+			area.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
 					try {
@@ -558,7 +558,7 @@ public class TaskForm extends Activity implements Serializable {
 						// findViewById(R.id.taskname);
 						// title.addTextChangedListener(taskWatcher);
 						Button addTask = (Button) findViewById(R.id.addnewtask);
-						addTask.setOnClickListener(new View.OnClickListener() {
+						addTask.setOnClickListener(new OnClickListener() {
 
 							@Override
 							public void onClick(View v) {
@@ -652,7 +652,7 @@ public class TaskForm extends Activity implements Serializable {
 		CharSequence areaText = area.getText();
 		((TextView) findViewById(R.id.tasktitle)).setText(areaText);
 		TextView tv = new TextView(context);
-		tv.setLayoutParams(new LinearLayout.LayoutParams(
+		tv.setLayoutParams(new LayoutParams(
 				LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
 		tv.setId(id++);
 		tv.setTextColor(Color.BLACK);
