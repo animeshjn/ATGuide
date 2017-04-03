@@ -76,7 +76,7 @@ public class TaskForm extends Activity implements Serializable {
 			if (first.getChildAt(0) != null) {
 				first.getChildAt(0).callOnClick();
 			} else
-				first.callOnClick();
+			first.callOnClick();
 			addPlusButtonListener();
 			setNextListener();
 			setLogListener();
@@ -88,6 +88,7 @@ public class TaskForm extends Activity implements Serializable {
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
 		// TODO Auto-generated method stub
+	
 		super.onSaveInstanceState(outState);
 		
 	}

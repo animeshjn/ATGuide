@@ -17,6 +17,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -33,6 +34,7 @@ public class InstructionalAreas extends Activity {
 	ArrayList<String> selectedInstructionalAreas= new ArrayList<String>();
 	CheckBoxBean instructionalCheck;
 	String otherText="";
+	boolean isSample=false;
 	boolean otherSelected=false;
 	MergeAdapter merge = new MergeAdapter();
 	@Override
@@ -47,6 +49,7 @@ public class InstructionalAreas extends Activity {
 
 	}
 
+	
 	private void setNextListener() {
 		
 		Button next= (Button) findViewById(R.id.nextbutton);
@@ -55,14 +58,18 @@ public class InstructionalAreas extends Activity {
 			@Override
 			public void onClick(View v) {
 				//if(isSomethingSelected){
+				if(otherSelected){
+					selectedInstructionalAreas.add(""+otherText);
+				}
+				
 				PersistenceBean.persistInstructionalAreas(currentIntent.getStringExtra("studentid"),selectedInstructionalAreas, context);
 				currentIntent.putStringArrayListExtra("selectedareas",selectedInstructionalAreas);
 				currentIntent.putExtra("otherSelected", otherSelected);
 				currentIntent.putExtra("othertext", otherText);
 				currentIntent.setClass(context, IEPReading.class);
 				PersistenceBean.persistIntent(currentIntent.getStringExtra("studentid"),currentIntent, context);
-				//OVER
 				startActivity(currentIntent);
+				
 				//}
 				//else
 				//errorDialog()
@@ -75,6 +82,14 @@ public class InstructionalAreas extends Activity {
 		
 	}
 
+	/**
+	 * 
+	 * @param instructionalAreas List of areas to be checked
+	 */
+	public void CheckValuesFromPersistence(ArrayList<String> instructionalAreas){
+		
+		
+	}
 	private void setInstuctionalAreas() {
 		Log.d("ATGUIDE", "Instructional areas");
 		
@@ -115,14 +130,16 @@ public class InstructionalAreas extends Activity {
 			
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-				
 				View v=(View) buttonView.getParent();
-				
 				EditText other=(EditText)v.findViewById(102456);
 				otherSelected=isChecked;
+				//other.setBackgroundColor(0);
 				if(isChecked){
 					Toast.makeText(context,"Please enter the name for other instructional area",Toast.LENGTH_SHORT).show();
 					other.setEnabled(true);
+					other.requestFocus();
+					InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+					imm.showSoftInput(other, InputMethodManager.SHOW_FORCED);
 					other.setFocusable(true);
 					other.setFocusableInTouchMode(true);
 					other.setCursorVisible(true);
@@ -136,7 +153,6 @@ public class InstructionalAreas extends Activity {
 								int after) {
 							// TODO Auto-generated method stub
 						}
-
 						@Override
 						public void afterTextChanged(Editable s) {
 							// TODO Auto-generated method stub

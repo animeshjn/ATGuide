@@ -119,6 +119,7 @@ public class MainActivity extends Activity {
 		private void fillStudentData(LayoutInflater inflater, View mainFragment) {
 			TableLayout allStudentsTable = (TableLayout) mainFragment
 					.findViewById(R.id.studentData);
+			
 			if (allStudentsTable != null) {
 				TableRow r = (TableRow) inflater.inflate(R.layout.row, null);
 				// r.setLayoutParams(new LayoutParams(
@@ -137,7 +138,6 @@ public class MainActivity extends Activity {
 				trial2.setOnClickListener(clickListener);
 				Button preview = (Button) r.findViewById(R.id.preview);
 				preview.setOnClickListener(clickListener);
-				
 				Button delete =(Button)r.findViewById(R.id.deleterecordbutton);
 				delete.setOnClickListener(clickListener);
 				allStudentsTable.addView(r);
@@ -157,29 +157,32 @@ public class MainActivity extends Activity {
 			public void onClick(View v) {
 				switch (v.getId()) {
 				case R.id.open:
-//					Intent i = new Intent(context,
-//							StudentInformationActivity.class);
-//					i.putExtra("loadSampData", true);
-//					startActivity(i);.
-					Toast.makeText(context, "Open ", Toast.LENGTH_SHORT)
-					.show();
 					
-					Intent i = new Intent();
+					Intent i = new Intent(context,
+							InputForm.class);
+					i.putExtra("open", true);
 					i.putExtra("studentid","AA123");
+					//if(sample)
 					i.putExtra("sample",true);
+					startActivity(i);
+					Toast.makeText(context, "Opening Sample Data ", Toast.LENGTH_SHORT).show();
+					//Intent i = new Intent();
+					
 					break;
 					
 				case R.id.trial1:
-					Toast.makeText(context, "trial1 ", Toast.LENGTH_SHORT)
-							.show();
+					Toast.makeText(context, "trial1 ", Toast.LENGTH_SHORT).show();
+					
 					break;
 				case R.id.trial2:
 					Toast.makeText(context, "trial2 ", Toast.LENGTH_SHORT)
 							.show();
+					
 					break;
 				case R.id.preview:
 					Toast.makeText(context, "preview report",
 							Toast.LENGTH_SHORT).show();
+					
 					break;
 				case R.id.deleterecordbutton:
 					Toast.makeText(context,"Cannot delete sample data", Toast.LENGTH_SHORT).show();

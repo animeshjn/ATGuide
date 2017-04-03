@@ -109,7 +109,7 @@ public static void generatePDF(Activity activity){
         		form1.setField("positioning", "On");
         	else if(areaname.contains("computer"))
         		form1.setField("computer", "On");
-        	else if(areaname.contains("Environmental"))
+        	else if(areaname.toLowerCase().contains("environment"))
         		form1.setField("environment", "On");
         	else if(areaname.contains("other"))
         		form1.setField("other", "On");
@@ -132,6 +132,8 @@ public static void generatePDF(Activity activity){
 		Intent pdfIntent = new Intent(Intent.ACTION_VIEW);
 		pdfIntent.setDataAndType(readpath, "application/pdf");
 		pdfIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		pdfIntent.setFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+		pdfIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
 		activity.startActivity(pdfIntent);
 
 		//open the form from assets

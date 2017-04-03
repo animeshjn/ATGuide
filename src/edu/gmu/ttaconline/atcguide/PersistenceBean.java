@@ -453,6 +453,13 @@ public class PersistenceBean {
 		return areaObjList;
 	}
 	
+	/**
+	 * To return all the persisted tasks that belong to particular area
+	 * @param area
+	 * @param studentid
+	 * @param context
+	 * @return list of persisted tasks
+	 */
 	public static ArrayList<Task> getPersistedTasks(Area area, String studentid, Context context)
 	{
 		ArrayList<Task> tasks= new ArrayList<Task>();
@@ -512,4 +519,27 @@ public class PersistenceBean {
 		return strategyMap;
 	} 
 	
+	public static ArrayList<String> getStudentList(Context context){
+		ArrayList<String> studentList=  new ArrayList<String>();
+			
+		FeedReaderDbHelper mDbHelper = new FeedReaderDbHelper(context);
+		SQLiteDatabase db = mDbHelper.getWritableDatabase();
+		//db.execSQL("DELETE FROM "+TaskStore.TABLE_NAME+" WHERE "+TaskStore.COL_STUDENT_ID+" = '"+studentid+"' AND "+TaskStore.COL_AREA_ID+"= '"+parentid+"'");
+			try{
+			String sql="SELECT DISTINCT "+FeedEntry.STUDENT_ID+" FROM "+FeedEntry.STUDENT;
+			Cursor cursor=db.rawQuery(sql,null);
+			cursor.moveToFirst();
+			Log.d("ATGUIDE", "Retrieving all ids");
+			while(!cursor.isAfterLast())
+			{
+				studentList.add(cursor.getString(cursor.getColumnIndex(FeedEntry.STUDENT_ID)));
+			}
+			}catch(SQLException sqlE ){
+				Log.e("ATGUIDE","Exception in db query "+sqlE);
+			}catch (Exception unknown) {
+				Log.e("ATGUIDE","Unknown exception in retriveing all student id "+unknown);
+			}
+//			studentList.add(object)
+		return studentList;
+	}
 }
