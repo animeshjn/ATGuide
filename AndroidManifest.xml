@@ -37,6 +37,11 @@
                     android:scheme="host" />
             </intent-filter>
         </activity>
+        
+        <service
+            android:name=".PDFLogic"
+            android:exported="false"/>
+        
         <activity
             android:name=".InputForm"
             android:label="@string/title_activity_input_form"

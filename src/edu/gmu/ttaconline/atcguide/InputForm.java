@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -46,6 +47,10 @@ public class InputForm extends Activity {
 		// fill form
 		if (isSample)
 			fillSampleData();
+		if(currentIntent.getBooleanExtra("open", false))
+		{	currentIntent =PersistenceBean.getExistingIntent(currentIntent.getStringExtra("studentid"), context);
+			fillDataFromIntent();
+		}
 		// else blank form
 		// case Preview : fillPDF(Intent)
 		Button b = (Button) findViewById(R.id.nextbutton);
@@ -53,9 +58,20 @@ public class InputForm extends Activity {
 			@Override
 			public void onClick(View v) {
 				saveData(v);
-				
 			}
 		});
+	}
+
+	private void fillDataFromIntent() {
+		
+		studentid =currentIntent.getStringExtra("studentid");
+		studentgrade=currentIntent.getStringExtra("studentgrade");
+		studentschool = currentIntent.getStringExtra("studentschool");
+		studentparticipant = currentIntent.getStringExtra("studentparticipant");
+		day = 31;
+		month = 0;
+		year = 2017;
+		setFormData();
 	}
 
 	/**
@@ -69,13 +85,17 @@ public class InputForm extends Activity {
 	 * @param studentid
 	 * 
 	 */
-	private void setFormData(String studentid, String studentschool,
-			String studentparticipant, int day, int month, int year) {
+	private void setFormData() {
 		EditText sid = ((EditText) findViewById(R.id.studentid));
 		sid.setText(studentid);
-
 		Spinner studentgrade = ((Spinner) (findViewById(R.id.studentgrade)));
-		studentgrade.setSelection(6);
+		int i=0;
+		for(String grades:getResources().getStringArray(R.array.gradearray)){
+				if(grades.equalsIgnoreCase(this.studentgrade))
+					break;
+			i++;
+		}
+		studentgrade.setSelection(i);
 		EditText school = ((EditText) (findViewById(R.id.studentschool)));
 		school.setText(studentschool);
 		EditText participant = ((EditText) (findViewById(R.id.participants)));
@@ -99,20 +119,20 @@ public class InputForm extends Activity {
 		year = 2017;
 		Toast.makeText(context, "Loading Sample Data", Toast.LENGTH_SHORT)
 				.show();
-		setFormData(studentid, studentschool, studentparticipant, day, month,
-				year);
+		setFormData();
 	}
 
+	
 	/**
 	 * Save Data from the view v
 	 * 
-	 * @param view
-	 *            of the current input form
+	 * @param view of current form
+	 *            
 	 */
 	private void saveData(View v) {
 		// TODO save Data
 		Intent intent;
-		// = PersistenceBean.persistInputFormData((ViewGroup)
+		 //PersistenceBean.persistInputFormData((ViewGroup)v, context);
 		// v.getRootView(),context);
 		v = v.getRootView();
 		String studentid = ((EditText) (v.findViewById(R.id.studentid)))
@@ -136,7 +156,6 @@ public class InputForm extends Activity {
 		intent.putExtra("studentschool", studentschool);
 		intent.putExtra("date", date.toString());
 		Log.d(PDFLogic.LOG_TAG, "Date: " + date);
-		
 		intent.setClass(context, IEPGoals.class);
 		if(!isSample){
 		PersistenceBean.persistIntent(intent.getStringExtra("studentid"),

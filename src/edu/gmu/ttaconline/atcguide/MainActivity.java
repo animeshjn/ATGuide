@@ -6,6 +6,8 @@ package edu.gmu.ttaconline.atcguide;
 
 
 
+import java.util.ArrayList;
+
 import edu.gmu.ttaconline.atcguide.R;
 import android.app.ActionBar;
 import android.app.Activity;
@@ -53,10 +55,10 @@ public class MainActivity extends Activity {
 				actionNew(v);
 			}
 		});
+		
 		v.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
 		getActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
 		getActionBar().setCustomView(v);
-        
 		setContentView(R.layout.activity_main);
         if (savedInstanceState == null) {
             getFragmentManager().beginTransaction()
@@ -64,21 +66,18 @@ public class MainActivity extends Activity {
                     .commit();
         }
     }
-
     public void actionNew(View v)
     {
     	Intent i= new Intent(context,InputForm.class );
     	Toast.makeText(context, "Enter student data", Toast.LENGTH_SHORT).show();
     	startActivity(i);
     }
-    
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -93,15 +92,12 @@ public class MainActivity extends Activity {
         }
         return super.onOptionsItemSelected(item);
     }
-
     /**
      * A placeholder fragment containing a simple view.
      */
     public static class PlaceholderFragment extends Fragment {
-
         public PlaceholderFragment() {
         }
-
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                 Bundle savedInstanceState) {
@@ -119,8 +115,10 @@ public class MainActivity extends Activity {
 		private void fillStudentData(LayoutInflater inflater, View mainFragment) {
 			TableLayout allStudentsTable = (TableLayout) mainFragment
 					.findViewById(R.id.studentData);
-			
+			ArrayList<String> studentList=PersistenceBean.getStudentList(context);
+							
 			if (allStudentsTable != null) {
+				for (String studentid : studentList) {
 				TableRow r = (TableRow) inflater.inflate(R.layout.row, null);
 				// r.setLayoutParams(new LayoutParams(
 				// LayoutParams.MATCH_PARENT,LayoutParams.WRAP_CONTENT));
@@ -128,10 +126,10 @@ public class MainActivity extends Activity {
 						LayoutParams.WRAP_CONTENT));
 				r.setPadding(0, 0, 0,0);
 				TextView tv = (TextView) r.findViewById(R.id.textView1);
-				tv.setText("AA123, 5th Grade");
-				tv.setTag("sample");
+				tv.setText(studentid);
 				Button open = (Button) r.findViewById(R.id.open);
 				open.setOnClickListener(clickListener);
+				open.setTag(studentid);
 				Button trial1 = (Button) r.findViewById(R.id.trial1);
 				trial1.setOnClickListener(clickListener);
 				Button trial2 = (Button) r.findViewById(R.id.trial2);
@@ -147,7 +145,7 @@ public class MainActivity extends Activity {
 				//x.setX(100);
 				//x.setY(100);
 				//x.setBackgroundColor(Color.RED);
-
+				}
 			}
 		}
 
@@ -155,38 +153,33 @@ public class MainActivity extends Activity {
 
 			@Override
 			public void onClick(View v) {
+				String tag=(String)v.getTag();
 				switch (v.getId()) {
 				case R.id.open:
-					
 					Intent i = new Intent(context,
 							InputForm.class);
 					i.putExtra("open", true);
-					i.putExtra("studentid","AA123");
+					if(tag!=null)
+					i.putExtra("studentid",tag);
 					//if(sample)
-					i.putExtra("sample",true);
+					//i.putExtra("sample",true);
 					startActivity(i);
-					Toast.makeText(context, "Opening Sample Data ", Toast.LENGTH_SHORT).show();
+					//Toast.makeText(context, "Opening Sample Data ", Toast.LENGTH_SHORT).show();
 					//Intent i = new Intent();
-					
 					break;
-					
 				case R.id.trial1:
 					Toast.makeText(context, "trial1 ", Toast.LENGTH_SHORT).show();
-					
 					break;
 				case R.id.trial2:
 					Toast.makeText(context, "trial2 ", Toast.LENGTH_SHORT)
 							.show();
-					
 					break;
 				case R.id.preview:
 					Toast.makeText(context, "preview report",
 							Toast.LENGTH_SHORT).show();
-					
 					break;
 				case R.id.deleterecordbutton:
 					Toast.makeText(context,"Cannot delete sample data", Toast.LENGTH_SHORT).show();
-					
 				}
 			}
 

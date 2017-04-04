@@ -56,6 +56,8 @@ public class TaskForm extends Activity implements Serializable {
 	Area currentSelection = null;
 	TextView currentText;
 	Activity activity;
+	
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 
@@ -114,10 +116,20 @@ public class TaskForm extends Activity implements Serializable {
 			@Override
 			public void onClick(View v) {
 					Log.d("ATGUIDE", "AREALIST SIZE"+areasList.size());
+					
+					Toast.makeText(context, "Please Wait",Toast.LENGTH_SHORT).show();
 					PersistenceBean.persistAreaObject(areasList, studentid, context);
-					Toast.makeText(context, "Data Saved",Toast.LENGTH_SHORT).show();
-					Toast.makeText(context, "Opening Your Form ...",Toast.LENGTH_SHORT).show();
-					PDFLogic.generatePDF(activity);
+					//setContentView(layoutResID);
+					PDFLogic.activity=activity;
+					//Intent pdfService= new Intent(activity.getApplicationContext(),PDFLogic.class);
+					currentIntent.setClass(context, PDFLogic.class);
+					currentIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+					currentIntent.setFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+					//Intent pdfService= new Intent(getApplicationContext(),PDFLogic.class);
+					android.widget.ProgressBar bar = new android.widget.ProgressBar(getApplicationContext());
+					bar.setIndeterminate(true);
+					
+					startService(currentIntent);
 					
 			}});
 					
@@ -861,5 +873,7 @@ public class TaskForm extends Activity implements Serializable {
 
 		}
 	}
-
+	
+	
+	
 }

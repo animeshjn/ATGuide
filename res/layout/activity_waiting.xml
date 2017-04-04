@@ -8,13 +8,15 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="edu.gmu.ttaconline.atcguide.Waiting" >
 
-<ImageView
+<ProgressBar
+    android:id="@+id/progress_horizontal"
+    android:indeterminateOnly="true"
+    android:minHeight="24dip"
+    android:maxHeight="24dip" 
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_alignParentTop="true"
     android:layout_centerHorizontal="true"
-    android:layout_marginTop="152dp"
-    android:contentDescription="processing"
-    android:src="@drawable/processing" />
+    android:layout_centerVertical="true"
+    />
    
 </RelativeLayout>

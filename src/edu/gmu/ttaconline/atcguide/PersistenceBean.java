@@ -167,13 +167,13 @@ public class PersistenceBean {
 			String intentDescription = null;
 			FeedReaderDbHelper mDbHelper = new FeedReaderDbHelper(context);
 			SQLiteDatabase db = mDbHelper.getWritableDatabase();
+			db.execSQL("DELETE FROM "+IntentStore.TABLE_NAME+" WHERE "+IntentStore.COLUMN_NAME_ID+" = '"+studentId+"'");
 			intentDescription = intent.toUri(0);
 			ContentValues values = new ContentValues();
 			values.put(IntentStore.COLUMN_NAME_ID, studentId);
 			values.put(IntentStore.COLUMN_NAME_INTENT, intentDescription);
 			long rows = 0;
-			rows = db.insertWithOnConflict(IntentStore.TABLE_NAME, null,
-					values, SQLiteDatabase.CONFLICT_REPLACE);
+			rows = db.insert(IntentStore.TABLE_NAME, null,values);
 			db.close();
 			if (rows > 0) {
 				Toast.makeText(context, "" + rows + " inserted",
@@ -526,19 +526,21 @@ public class PersistenceBean {
 		SQLiteDatabase db = mDbHelper.getWritableDatabase();
 		//db.execSQL("DELETE FROM "+TaskStore.TABLE_NAME+" WHERE "+TaskStore.COL_STUDENT_ID+" = '"+studentid+"' AND "+TaskStore.COL_AREA_ID+"= '"+parentid+"'");
 			try{
-			String sql="SELECT DISTINCT "+FeedEntry.STUDENT_ID+" FROM "+FeedEntry.STUDENT;
+			String sql="SELECT DISTINCT "+IntentStore.COLUMN_NAME_ID+" FROM "+IntentStore.TABLE_NAME;
 			Cursor cursor=db.rawQuery(sql,null);
 			cursor.moveToFirst();
-			Log.d("ATGUIDE", "Retrieving all ids");
+			Log.d("ATGUIDE", "Retrieving all ids: Records Count:"+cursor.getCount());
+			Log.d("ATGUIDE", "Persisted student id"+PersistenceBean.getCurrentId(context));
 			while(!cursor.isAfterLast())
 			{
 				studentList.add(cursor.getString(cursor.getColumnIndex(FeedEntry.STUDENT_ID)));
+				cursor.moveToNext();
 			}
 			}catch(SQLException sqlE ){
 				Log.e("ATGUIDE","Exception in db query "+sqlE);
 			}catch (Exception unknown) {
 				Log.e("ATGUIDE","Unknown exception in retriveing all student id "+unknown);
-			}
+			}finally{db.close();}
 //			studentList.add(object)
 		return studentList;
 	}
