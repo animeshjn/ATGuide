@@ -351,7 +351,8 @@ public class PersistenceBean {
 			Log.d("ATGUIDE", "Inserting into task store");
 			FeedReaderDbHelper mDbHelper = new FeedReaderDbHelper(context);
 			SQLiteDatabase db = mDbHelper.getWritableDatabase();
-			db.execSQL("DELETE FROM "+TaskStore.TABLE_NAME+" WHERE "+TaskStore.COL_STUDENT_ID+" = '"+studentid+"' AND "+TaskStore.COL_TASK_ID+" = '"+taskid+"'");
+			db.execSQL("DELETE FROM "+TaskStore.TABLE_NAME+" WHERE "+TaskStore.COL_STUDENT_ID+" = '"+studentid+"' AND "+TaskStore.COL_TASK_ID+" = '"+taskid+"'"
+					+ " AND "+TaskStore.COL_AREA_ID+"= '"+areaId+"'");
 			ContentValues values = new ContentValues();
 			//REMOVE PREVIOUS TASKS
 			values.put(TaskStore.COL_TASK_ID, taskid);

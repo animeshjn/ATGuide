@@ -33,6 +33,17 @@ public class Task {
 		this.taskname = taskname;
 	}
 
+	
+	public void copyTask(Task task){
+		this.taskid=task.taskid;
+		this.solutions=task.solutions;
+		this.areaname=task.areaname;
+		this.strategies=task.strategies;
+		this.strategyList=task.strategyList;
+		this.strategyId=task.strategyId;
+		
+	}
+	
 	/**
 	 * retrieve the area name of this task
 	 * @return Area name to which this task belongs

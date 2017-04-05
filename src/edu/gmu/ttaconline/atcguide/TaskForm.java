@@ -58,6 +58,7 @@ public class TaskForm extends Activity implements Serializable {
 	Activity activity;
 	
 	
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 
@@ -388,7 +389,7 @@ public class TaskForm extends Activity implements Serializable {
 					TextView area = (TextView) parent.getChildAt(0);
 					CharSequence areaText = area.getText();
 					Area areaobj = getAreaById(area.getId());
-					final Task t = areaobj.getTaskById(v.getId());
+					Task t = areaobj.getTaskById(v.getId());
 					t.setTaskname(taskviewText.toString());
 					// TODO: CODE HERE TO ADD STRATEGIES
 					LinearLayout strategyLayout = (LinearLayout) findViewById(R.id.strategylayout);
@@ -452,6 +453,11 @@ public class TaskForm extends Activity implements Serializable {
 
 								@Override
 								public void afterTextChanged(Editable s) {
+									View v1=(View)findViewById(clickedId);
+									LinearLayout parent = (LinearLayout) v1.getParent();
+									TextView area = (TextView) parent.getChildAt(0);
+									Area areaobj = getAreaById(area.getId());
+									Task t = areaobj.getTaskById(clickedId);
 									t.strategies.remove(id + "");
 									t.strategies.put(id + "",
 											new String(s.toString()));
@@ -471,6 +477,11 @@ public class TaskForm extends Activity implements Serializable {
 												.removeView(row
 														.findViewById(row
 																.getId()));
+										View v1=(View)findViewById(clickedId);
+										LinearLayout parent = (LinearLayout) v1.getParent();
+										TextView area = (TextView) parent.getChildAt(0);
+										Area areaobj = getAreaById(area.getId());
+										Task t = areaobj.getTaskById(clickedId);
 										t.strategies.remove(id + "");
 										Toast.makeText(context,
 												"Strategy deleted",
@@ -498,6 +509,11 @@ public class TaskForm extends Activity implements Serializable {
 						}
 						@Override
 						public void afterTextChanged(Editable s) {
+							View v1=(View)findViewById(clickedId);
+							LinearLayout parent = (LinearLayout) v1.getParent();
+							TextView area = (TextView) parent.getChildAt(0);
+							Area areaobj = getAreaById(area.getId());
+							Task t = areaobj.getTaskById(clickedId);
 							t.strategies.remove("0");
 							t.strategies.put("0", new String(s.toString()));
 						}
@@ -508,7 +524,8 @@ public class TaskForm extends Activity implements Serializable {
 					taskname.setText(taskviewText);
 					// taskname.callOnClick();
 					taskname.requestFocus();
-					taskname.addTextChangedListener(new TextWatcher() {
+					taskname.removeTextChangedListener(taskWatcher);
+					taskWatcher= new TextWatcher() {
 						@Override
 						public void onTextChanged(CharSequence s, int start,
 								int before, int count) {
@@ -519,16 +536,19 @@ public class TaskForm extends Activity implements Serializable {
 								int start, int count, int after) {
 							// TODO Auto-generated method stub
 						}
-
 						@Override
 						public void afterTextChanged(Editable s) {
-
 							// TODO Auto-generated method stub
 							try {
 								// Toast.makeText(context, "Text Changed",
 								// Toast.LENGTH_SHORT).show();
 								TextView task = (TextView) findViewById(clickedId);
 								task.setText(s);
+								View v1=(View)findViewById(clickedId);
+								LinearLayout parent = (LinearLayout) v1.getParent();
+								TextView area = (TextView) parent.getChildAt(0);
+								Area areaobj = getAreaById(area.getId());
+								Task t = areaobj.getTaskById(clickedId);
 								t.setTaskname(s.toString());
 								// Toast.makeText(context, "Editable text:"+s,
 								// Toast.LENGTH_SHORT).show();
@@ -536,23 +556,27 @@ public class TaskForm extends Activity implements Serializable {
 								Log.e(TAG, "ex: " + e.getMessage());
 							}
 						}
-					});
+					};
+					taskname.addTextChangedListener(taskWatcher);
 					RadioGroup solutions=(RadioGroup)findViewById(R.id.solutionradiogroup);
 					solutions.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
 						@Override
 						public void onCheckedChanged(RadioGroup group, int checkedId) {
 							 RadioButton checkedSolution = (RadioButton)group.findViewById(checkedId);
 							 boolean isChecked = checkedSolution.isChecked();
-							if(isChecked&&(checkedId==R.id.solutionyes))	
+								View v1=(View)findViewById(clickedId);
+								LinearLayout parent = (LinearLayout) v1.getParent();
+								TextView area = (TextView) parent.getChildAt(0);
+								Area areaobj = getAreaById(area.getId());
+								Task t = areaobj.getTaskById(clickedId);
+							 if(isChecked&&(checkedId==R.id.solutionyes))	
 							 t.solutions=true;
 							else
 								t.solutions=false;
-							
 						}
 					});
 				}
 			});
-
 			v.addView(task);
 			area.setOnClickListener(new OnClickListener() {
 				@Override
@@ -572,7 +596,6 @@ public class TaskForm extends Activity implements Serializable {
 						// title.addTextChangedListener(taskWatcher);
 						Button addTask = (Button) findViewById(R.id.addnewtask);
 						addTask.setOnClickListener(new OnClickListener() {
-
 							@Override
 							public void onClick(View v) {
 								Toast.makeText(context,
@@ -586,7 +609,6 @@ public class TaskForm extends Activity implements Serializable {
 					}
 				}
 			});
-
 			merge.addView(v);
 			merge.setActive(v, true);
 		}
@@ -598,12 +620,10 @@ public class TaskForm extends Activity implements Serializable {
 		// context);
 		// Log.d("ATGUIDE","here: "+persisted.getStringExtra("studentid"));
 	}
-
 	public void clickThisArea(int currentId) {
 		View v = findViewById(currentId);
 		v.callOnClick();
 	}
-
 	public void highlightThis(View tv) {
 		ListView lv = (ListView) findViewById(R.id.instructionalAreasList);
 		MergeAdapter m = (MergeAdapter) lv.getAdapter();
@@ -620,13 +640,11 @@ public class TaskForm extends Activity implements Serializable {
 				}
 			}
 		}
-
 		tv.setBackground(getResources().getDrawable(R.drawable.highlighted));
 		if (tv.getParent() instanceof LinearLayout)
 			((LinearLayout) tv.getParent()).getChildAt(0).setBackgroundColor(
 					Color.CYAN);
 	}
-
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
@@ -688,6 +706,7 @@ public class TaskForm extends Activity implements Serializable {
 			}
 		});
 		areaObject.addTask(t);
+		//On click listener of the task
 		tv.setOnClickListener(new OnClickListener() {
 			@SuppressLint("InflateParams") @Override
 			public void onClick(View v) {
@@ -699,11 +718,16 @@ public class TaskForm extends Activity implements Serializable {
 				LinearLayout parent = (LinearLayout) v.getParent();
 				TextView area = (TextView) parent.getChildAt(0);
 				CharSequence areaText = area.getText();
+				//Area Object is already created and is in the area list
 				Area areaobj = getAreaById(area.getId());
-				final Task t = areaobj.getTaskById(v.getId());
+				//Create task for this 
+				Task t = areaobj.getTaskById(v.getId());//? what if task not present
+				Task t1 = new Task();
+				t1.copyTask(t);
 				t.setTaskname(taskviewText.toString());
 				// TODO: CODE HERE TO ADD STRATEGIES
 				LinearLayout strategyLayout = (LinearLayout) findViewById(R.id.strategylayout);
+				//Remove All views
 				strategyLayout.removeAllViews();
 				final LinearLayout row0 = (LinearLayout) getLayoutInflater()
 						.inflate(R.layout.strategyrow, null);
@@ -770,11 +794,18 @@ public class TaskForm extends Activity implements Serializable {
 
 							@Override
 							public void afterTextChanged(Editable s) {
+								View v= (View)findViewById(clickedId);
+								LinearLayout parent = (LinearLayout) v.getParent();
+								TextView area = (TextView) parent.getChildAt(0);
+								Area areaObj=getAreaById(area.getId());
+								Task t=areaObj.getTaskById(clickedId);
+								
 								t.strategies.remove(id + "");
 								t.strategies.put(id + "",
 										new String(s.toString()));
 							}
 						};
+						//Strategy Text
 						strategyText.addTextChangedListener(watcher[id]);
 						((LinearLayout) findViewById(R.id.strategylayout))
 								.addView(row);
@@ -788,6 +819,12 @@ public class TaskForm extends Activity implements Serializable {
 									((LinearLayout) findViewById(R.id.strategylayout))
 											.removeView(row.findViewById(row
 													.getId()));
+									View v1= (View)findViewById(clickedId);
+									LinearLayout parent = (LinearLayout) v1.getParent();
+									TextView area = (TextView) parent.getChildAt(0);
+									Area areaObj=getAreaById(area.getId());
+									Task t=areaObj.getTaskById(clickedId);
+									
 									t.strategies.remove(id + "");
 									Toast.makeText(context, "Strategy deleted",
 											Toast.LENGTH_SHORT).show();
@@ -802,6 +839,7 @@ public class TaskForm extends Activity implements Serializable {
 					}
 				}
 
+				//First strategy 
 				watcher[0] = new TextWatcher() {
 					@Override
 					public void onTextChanged(CharSequence s, int start,
@@ -813,11 +851,16 @@ public class TaskForm extends Activity implements Serializable {
 					}
 					@Override
 					public void afterTextChanged(Editable s) {
+						View v1= (View)findViewById(clickedId);
+						LinearLayout parent = (LinearLayout) v1.getParent();
+						TextView area = (TextView) parent.getChildAt(0);
+						Area areaObj=getAreaById(area.getId());
+						Task t=areaObj.getTaskById(clickedId);
 						t.strategies.remove("0");
 						t.strategies.put("0", new String(s.toString()));
 					}
 				};
-
+				//Add listener to first strategy
 				strategy.addTextChangedListener(watcher[0]);
 				((TextView) findViewById(R.id.tasktitle)).setText(areaText);
 				EditText taskname = (EditText) findViewById(R.id.taskname);
@@ -844,7 +887,12 @@ public class TaskForm extends Activity implements Serializable {
 							// Toast.LENGTH_SHORT).show();
 							TextView task = (TextView) findViewById(clickedId);
 							task.setText(s);
-							t.setTaskname(s.toString());
+							View v1= (View)findViewById(clickedId);
+							LinearLayout parent = (LinearLayout) v1.getParent();
+							TextView area = (TextView) parent.getChildAt(0);
+							Area areaObj=getAreaById(area.getId());
+							Task t=areaObj.getTaskById(clickedId);
+							t.setTaskname(task.getText().toString());
 							// Toast.makeText(context, "Editable text:"+s,
 							// Toast.LENGTH_SHORT).show();
 						} catch (Exception e) {
@@ -861,7 +909,6 @@ public class TaskForm extends Activity implements Serializable {
 		parent.addView(tv);
 		tv.callOnClick();
 	}
-
 	public class addTasklistener implements OnClickListener {
 		@Override
 		public void onClick(View v) {
@@ -873,7 +920,5 @@ public class TaskForm extends Activity implements Serializable {
 
 		}
 	}
-	
-	
 	
 }
