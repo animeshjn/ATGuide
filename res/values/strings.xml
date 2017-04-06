@@ -103,5 +103,7 @@
     <string name="AIMCall">Since you selected \"Yes\" to these questions, click \"Yes\" below to go to the AIM-Eligibility app to determine the student\'s eligibility for AIM-VA services.</string>
     <string name="AIMTitle">AIM-VA Eligibility</string>
     <string name="title_activity_waiting">Waiting</string>
-
+    <string name="title_activity_first_trial">FirstTrial</string>
+	<string name="trial1nav">There have been changes in the student\'s functional or academic performance, or current strategies are NOT adequate and could require new assistive technology or a change in current AT (devices or services) provided.</string>
+	<string name="adequatesolution">Current strategies are adequate and documented in student\'s IEP.</string>
 </resources>

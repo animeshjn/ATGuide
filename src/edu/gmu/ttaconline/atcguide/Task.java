@@ -13,7 +13,7 @@ public class Task {
 	//Instances
 	String taskname;
 	int taskid;
-	boolean solutions;
+	boolean solutions=true;
 	String areaname;
 	Map<String,String> strategies= new HashMap<String,String>();
 	public List<String> strategyList=new ArrayList<String>();

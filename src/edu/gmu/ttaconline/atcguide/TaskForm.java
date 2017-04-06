@@ -16,11 +16,13 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -48,9 +50,13 @@ public class TaskForm extends Activity implements Serializable {
 	ArrayList<Integer> areaIds = new ArrayList<Integer>();
 	int clickedId = id;
 	LayoutInflater inflater;
+	boolean trial1=false;
+	
 	ArrayList<CharSequence> selectedInstructional;
 	ArrayList<String> selectedList;
+	ArrayList<String> trial1TextList=new ArrayList<String>();
 	ArrayList<Area> areasList = new ArrayList<Area>();
+	ArrayList<Area> trial1List=new ArrayList<Area>();;
 	MergeAdapter merge = new MergeAdapter();
 	TextWatcher taskWatcher;
 	Area currentSelection = null;
@@ -74,7 +80,6 @@ public class TaskForm extends Activity implements Serializable {
 			inflater = getLayoutInflater();
 			placeArea();//if it is new
 			//retrieveArea()if it is old
-			
 			LinearLayout first = (LinearLayout) merge.getItem(0);
 			if (first.getChildAt(0) != null) {
 				first.getChildAt(0).callOnClick();
@@ -83,11 +88,42 @@ public class TaskForm extends Activity implements Serializable {
 			addPlusButtonListener();
 			setNextListener();
 			setLogListener();
+			validateSolutions();
 		} catch (Exception unknown) {
 			Log.e("ATGUIDE", "Exception " + unknown.getMessage());
 		}
 	}
 
+	/**
+	 * Checks if first trial is required for any tasks, identifies the tasks for first trial 
+	 */
+	private void validateSolutions() {
+		//Abstract function:
+		//Get all area 
+		//Get each task 
+		//Add the solution not working to separate list 
+		// save the list
+		
+		//For all selected / persisted Area
+		trial1=false;
+		for (Area checkArea: areasList){
+			//For each task in this area
+			for(Task task:checkArea.tasks)
+			{
+				//If any of the strategies in current task are not working
+				if(!task.solutions){trial1List.add(checkArea);
+				trial1TextList.add(""+checkArea.getAreaName());
+				trial1=true;
+				}
+			}
+		
+		}
+		
+	}
+
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onSaveInstanceState(android.os.Bundle)
+	 */
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
 		// TODO Auto-generated method stub
@@ -95,6 +131,9 @@ public class TaskForm extends Activity implements Serializable {
 		super.onSaveInstanceState(outState);
 		
 	}
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onBackPressed()
+	 */
 	@Override
     public void onBackPressed(){
         //Save Data
@@ -102,6 +141,10 @@ public class TaskForm extends Activity implements Serializable {
 		super.onBackPressed();
     }
 	
+	/**
+	 * 
+	 * @return Intent fetched from database
+	 */
 	private Intent getIntentFromDb() {
 		return PersistenceBean.getExistingIntent(
 				PersistenceBean.getCurrentId(getApplicationContext()),
@@ -118,20 +161,90 @@ public class TaskForm extends Activity implements Serializable {
 			public void onClick(View v) {
 					Log.d("ATGUIDE", "AREALIST SIZE"+areasList.size());
 					
-					Toast.makeText(context, "Please Wait",Toast.LENGTH_SHORT).show();
 					PersistenceBean.persistAreaObject(areasList, studentid, context);
+					PersistenceBean.persistIntent(currentIntent.getStringExtra("studentid"), currentIntent, context);
+					
+					validateSolutions();
+					if(trial1)
+					{
+						//Alert About trial 1 
+						AlertDialog.Builder info = new AlertDialog.Builder(activity);
+					
+//						TextView agreement = new TextView(context);
+//						agreement.setText(getResources().getString(R.string.trial1nav).toString());
+//						agreement.setTextSize(18);
+//						agreement.setPadding(10, 10, 10, 10);
+//						agreement.setGravity(Gravity.CENTER_HORIZONTAL);
+//						
+						info.setMessage(getResources().getString(R.string.trial1nav).toString());
+						//info.setView(agreement);
+						info.setCancelable(true);
+						info.setPositiveButton("Ok",
+								new DialogInterface.OnClickListener() {
+									public void onClick(DialogInterface dialog, int id) {
+										//FWD to trial 1 
+										currentIntent.putExtra("trial1",trial1);
+										currentIntent.setClass(context, FirstTrial.class);
+										PersistenceBean.persistAreaObject(trial1List, "trial1"+studentid, context);
+										PersistenceBean.persistInstructionalAreas("trial1"+studentid,trial1TextList, context);
+										startActivity(currentIntent);
+										
+										
+									}
+								});
+						info.setNeutralButton("Cancel",
+								new DialogInterface.OnClickListener() {
+									public void onClick(DialogInterface dialog, int id) {
+										dialog.cancel(); 
+									}
+								});
+						 AlertDialog infoAlert = info.create();
+						 infoAlert.setCanceledOnTouchOutside(false);
+						 infoAlert.setCancelable(false);
+						 infoAlert.show();
+						 
+					}
+					else{
+						AlertDialog.Builder info = new AlertDialog.Builder(activity);
+					
+//					TextView agreement = new TextView(context);
+//					agreement.setText(getResources().getString(R.string.trial1nav).toString());
+//					agreement.setTextSize(18);
+//					agreement.setPadding(10, 10, 10, 10);
+//					agreement.setGravity(Gravity.CENTER_HORIZONTAL);
+//					
+					info.setMessage(getResources().getString(R.string.adequatesolution).toString());
+					//info.setView(agreement);
+					info.setCancelable(true);
+					info.setPositiveButton("OK",
+							new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog, int id) {
+									Toast.makeText(context, "Please Wait", Toast.LENGTH_SHORT).show();
+									PDFLogic.activity=activity;
+									//Intent pdfService= new Intent(activity.getApplicationContext(),PDFLogic.class);
+									currentIntent.setClass(context, PDFLogic.class);
+									currentIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+									currentIntent.setFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+									//Intent pdfService= new Intent(getApplicationContext(),PDFLogic.class);
+									android.widget.ProgressBar bar = new android.widget.ProgressBar(getApplicationContext());
+									bar.setIndeterminate(true);
+									bar.bringToFront();
+									startService(currentIntent);
+								}
+							});
+					info.setNeutralButton("Cancel",
+							new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog, int id) {
+									dialog.cancel(); 
+								}
+							});
+					 AlertDialog infoAlert = info.create();
+					 infoAlert.setCanceledOnTouchOutside(false);
+					 infoAlert.setCancelable(false);
+					 infoAlert.show();
 					//setContentView(layoutResID);
-					PDFLogic.activity=activity;
-					//Intent pdfService= new Intent(activity.getApplicationContext(),PDFLogic.class);
-					currentIntent.setClass(context, PDFLogic.class);
-					currentIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-					currentIntent.setFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
-					//Intent pdfService= new Intent(getApplicationContext(),PDFLogic.class);
-					android.widget.ProgressBar bar = new android.widget.ProgressBar(getApplicationContext());
-					bar.setIndeterminate(true);
 					
-					startService(currentIntent);
-					
+					}
 			}});
 					
 	}
@@ -142,7 +255,7 @@ public class TaskForm extends Activity implements Serializable {
 		log.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-					Toast.makeText(context, "Logging on LogCat",Toast.LENGTH_SHORT).show();
+					Toast.makeText(context, "Data Logged on Console",Toast.LENGTH_SHORT).show();
 					//Display DATA
 					Log.d("ATGUIDE", "AREALIST SIZE before retrieving"+areasList.size());
 					ArrayList<Area> persistedarea=PersistenceBean.getPersistedAreaObjects(studentid, context);
@@ -155,6 +268,11 @@ public class TaskForm extends Activity implements Serializable {
 		
 	}
 
+	/**
+	 * Used to check if there is an empty strategy, used to avoid adding strategy in case of empty strategy 
+	 * @param current form view
+	 * @return true if any of the strategy is empty
+	 */
 	public boolean isStrategyEmpty(View v) {
 		LinearLayout main = (LinearLayout) findViewById(R.id.strategylayout);
 		for (int i = 0; i < main.getChildCount(); i++) {
@@ -570,9 +688,15 @@ public class TaskForm extends Activity implements Serializable {
 								Area areaobj = getAreaById(area.getId());
 								Task t = areaobj.getTaskById(clickedId);
 							 if(isChecked&&(checkedId==R.id.solutionyes))	
-							 t.solutions=true;
-							else
-								t.solutions=false;
+							 {t.solutions=true;
+							 Toast.makeText(context,"checked",Toast.LENGTH_SHORT).show();
+							 
+							 }
+							else if(isChecked&&(checkedId==R.id.solutionno))
+								{t.solutions=false;
+								Toast.makeText(context,"UN Checked",Toast.LENGTH_SHORT).show();
+								}
+							 
 						}
 					});
 				}
@@ -917,8 +1041,6 @@ public class TaskForm extends Activity implements Serializable {
 			et.setText(((TextView) v).getText());
 			// strategies
 			currentText = (TextView) v;
-
 		}
 	}
-	
 }

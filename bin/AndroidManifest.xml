@@ -37,11 +37,11 @@
                     android:scheme="host" />
             </intent-filter>
         </activity>
-        
+
         <service
             android:name=".PDFLogic"
-            android:exported="false"/>
-        
+            android:exported="false" />
+
         <activity
             android:name=".InputForm"
             android:label="@string/title_activity_input_form"
@@ -83,6 +83,10 @@
         <activity
             android:name=".Waiting"
             android:label="@string/title_activity_waiting" >
+        </activity>
+        <activity
+            android:name=".FirstTrial"
+            android:label="@string/title_activity_first_trial" >
         </activity>
     </application>
 
