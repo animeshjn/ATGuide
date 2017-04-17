@@ -68,9 +68,9 @@ public class InputForm extends Activity {
 		studentgrade=currentIntent.getStringExtra("studentgrade");
 		studentschool = currentIntent.getStringExtra("studentschool");
 		studentparticipant = currentIntent.getStringExtra("studentparticipant");
-		day = 31;
-		month = 0;
-		year = 2017;
+		day = currentIntent.getIntExtra("day",31);
+		month = currentIntent.getIntExtra("month",1);
+		year = currentIntent.getIntExtra("year",2017);
 		setFormData();
 	}
 
@@ -155,6 +155,9 @@ public class InputForm extends Activity {
 		intent.putExtra("studentparticipant", studentparticipant);
 		intent.putExtra("studentschool", studentschool);
 		intent.putExtra("date", date.toString());
+		intent.putExtra("day", day);
+		intent.putExtra("month", month);
+		intent.putExtra("year", year);
 		Log.d(PDFLogic.LOG_TAG, "Date: " + date);
 		intent.setClass(context, IEPGoals.class);
 		if(!isSample){
