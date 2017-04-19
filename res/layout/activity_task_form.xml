@@ -124,12 +124,10 @@
                     android:layout_weight="15"
                     android:background="@drawable/taskback"
                     android:orientation="vertical" >
-
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Task that is difficult for the student" />
-
                     <EditText
                         android:id="@+id/taskname"
                         android:layout_width="match_parent"
@@ -139,7 +137,6 @@
                         android:singleLine="true"
                         android:textColor="@android:color/black" />
                 </LinearLayout>
-
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

@@ -1,6 +1,7 @@
 package edu.gmu.ttaconline.atcguide;
 
 import java.io.Serializable;
+
 import java.util.ArrayList;
 
 import com.commonsware.cwac.merge.MergeAdapter;
@@ -16,13 +17,11 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -162,6 +161,7 @@ public class TaskForm extends Activity implements Serializable {
 					Log.d("ATGUIDE", "AREALIST SIZE"+areasList.size());
 					
 					PersistenceBean.persistAreaObject(areasList, studentid, context);
+					Log.d("ATGUIDE","student id on next persist"+studentid);
 					PersistenceBean.persistIntent(currentIntent.getStringExtra("studentid"), currentIntent, context);
 					
 					validateSolutions();
@@ -170,14 +170,7 @@ public class TaskForm extends Activity implements Serializable {
 						//Alert About trial 1 
 						AlertDialog.Builder info = new AlertDialog.Builder(activity);
 					
-//						TextView agreement = new TextView(context);
-//						agreement.setText(getResources().getString(R.string.trial1nav).toString());
-//						agreement.setTextSize(18);
-//						agreement.setPadding(10, 10, 10, 10);
-//						agreement.setGravity(Gravity.CENTER_HORIZONTAL);
-//						
 						info.setMessage(getResources().getString(R.string.trial1nav).toString());
-						//info.setView(agreement);
 						info.setCancelable(true);
 						info.setPositiveButton("Ok",
 								new DialogInterface.OnClickListener() {
@@ -186,10 +179,9 @@ public class TaskForm extends Activity implements Serializable {
 										currentIntent.putExtra("trial1",trial1);
 										currentIntent.setClass(context, FirstTrial.class);
 										PersistenceBean.persistAreaObject(trial1List, "trial1"+studentid, context);
+										Log.d("ATGUIDE","student id on next persist"+studentid);
 										PersistenceBean.persistInstructionalAreas("trial1"+studentid,trial1TextList, context);
 										startActivity(currentIntent);
-										
-										
 									}
 								});
 						info.setNeutralButton("Cancel",
@@ -202,19 +194,10 @@ public class TaskForm extends Activity implements Serializable {
 						 infoAlert.setCanceledOnTouchOutside(false);
 						 infoAlert.setCancelable(false);
 						 infoAlert.show();
-						 
 					}
 					else{
 						AlertDialog.Builder info = new AlertDialog.Builder(activity);
-					
-//					TextView agreement = new TextView(context);
-//					agreement.setText(getResources().getString(R.string.trial1nav).toString());
-//					agreement.setTextSize(18);
-//					agreement.setPadding(10, 10, 10, 10);
-//					agreement.setGravity(Gravity.CENTER_HORIZONTAL);
-//					
 					info.setMessage(getResources().getString(R.string.adequatesolution).toString());
-					//info.setView(agreement);
 					info.setCancelable(true);
 					info.setPositiveButton("OK",
 							new DialogInterface.OnClickListener() {
@@ -496,6 +479,7 @@ public class TaskForm extends Activity implements Serializable {
 			task.setPadding(15, 0, 0, 0);
 			task.setTextColor(Color.BLACK);
 			task.setOnClickListener(new OnClickListener() {
+
 				@Override
 				public void onClick(View v) {
 					TextView taskview = (TextView) v;
@@ -677,6 +661,14 @@ public class TaskForm extends Activity implements Serializable {
 					};
 					taskname.addTextChangedListener(taskWatcher);
 					RadioGroup solutions=(RadioGroup)findViewById(R.id.solutionradiogroup);
+					if(t.solutions){
+						((RadioButton)solutions.findViewById(R.id.solutionyes)).setChecked(true);
+					}
+					else
+					{
+						((RadioButton)solutions.findViewById(R.id.solutionno)).setChecked(true);
+						
+					}
 					solutions.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
 						@Override
 						public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -817,6 +809,13 @@ public class TaskForm extends Activity implements Serializable {
 		t.setTaskname(tv.getText().toString());
 		t.taskid = tv.getId();
 		RadioGroup solutions=(RadioGroup)findViewById(R.id.solutionradiogroup);
+		if(t.solutions){
+			((RadioButton)solutions.findViewById(R.id.solutionyes)).setChecked(true);
+		}
+		else
+		{
+			((RadioButton)solutions.findViewById(R.id.solutionno)).setChecked(true);
+		}
 		solutions.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
 			@Override
 			public void onCheckedChanged(RadioGroup group, int checkedId) {

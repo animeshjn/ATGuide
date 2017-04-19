@@ -25,12 +25,13 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 /**
+ * ORM for ATGuide application
  * Java bean to persist data to the SQLite DB. Storing details of current intent
  * and retrieving all previous values utilizing the helper and contract classes
  * This class is the part of the ATGUIDE application built for KIHD, CEHD, GMU.
  * Spring 2017
  * 
- * @author Animesh Jain
+ * @author Animesh Jain | Java programmer -CEHD GMU |MS CS class of 2018 
  * */
 public class PersistenceBean {
 
