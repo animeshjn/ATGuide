@@ -80,21 +80,21 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:orientation="vertical"
                 android:weightSum="100" >
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="10"
+                    android:layout_weight="5"
                     android:gravity="center_horizontal"
                     android:text="@string/completetaskform" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="10"
+                    android:layout_weight="5"
                     android:background="@drawable/taskback"
                     android:gravity="center_horizontal"
                     android:orientation="horizontal" >
@@ -120,7 +120,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="15"
+                    android:layout_weight="10"
                     android:background="@drawable/taskback"
                     android:orientation="horizontal" >
 
@@ -147,9 +147,11 @@
                     android:orientation="horizontal" >
 
                     <ImageButton
+                        android:id="@+id/addat"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" 
-                        android:src="@drawable/plusstrategy"/>
+                        android:src="@drawable/plusstrategy"
+                        android:contentDescription="add at"/>
 
                     <TextView
                         android:id="@+id/at"
@@ -235,7 +237,6 @@
                     android:layout_weight="6"
                     android:background="@drawable/rowback"
                     android:orientation="horizontal" >
-
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -255,13 +256,15 @@
                             android:id="@+id/solutionyes"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:checked="true"
+                            android:checked="false"
+                            
                             android:text="@string/yes" />
 
                         <RadioButton
                             android:id="@+id/solutionno"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:checked="false"
                             android:text="@string/no" />
                     </RadioGroup>
 
@@ -276,7 +279,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:background="@drawable/taskbuttons"
-                            android:text="Add new task" />
+                            android:text="Add new AT" />
 
                         <Space
                             android:layout_width="10sp"
@@ -287,7 +290,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:background="@drawable/taskbuttons"
-                            android:text="Delete task" />
+                            android:text="Delete AT" />
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>

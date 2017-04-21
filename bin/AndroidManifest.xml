@@ -88,6 +88,10 @@
             android:name=".FirstTrial"
             android:label="@string/title_activity_first_trial" >
         </activity>
+        <activity
+            android:name=".AT_List"
+            android:label="@string/title_activity_at__list" >
+        </activity>
     </application>
 
 </manifest>

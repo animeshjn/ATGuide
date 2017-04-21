@@ -105,6 +105,81 @@
     <string name="AIMTitle">AIM-VA Eligibility</string>
     <string name="title_activity_waiting">Waiting</string>
     <string name="title_activity_first_trial">FirstTrial</string>
-	<string name="trial1nav">There have been changes in the student\'s functional or academic performance, or current strategies are NOT adequate and could require new assistive technology or a change in current AT (devices or services) provided.</string>
-	<string name="adequatesolution">Current strategies are adequate and documented in student\'s IEP.</string>
+    <string name="trial1nav">There have been changes in the student\'s functional or academic performance, or current strategies are NOT adequate and could require new assistive technology or a change in current AT (devices or services) provided.</string>
+    <string name="adequatesolution">Current strategies are adequate and documented in student\'s IEP.</string>
+    <string name="title_activity_at__list">AT_List</string>
+	
+	<string name="reading">Reading</string>
+	<string name="writing">Writing</string>
+	<string name="spelling">Spelling</string>
+	<string name="math">Math</string>
+	<string name="Listening">Listening</string>
+	
+	<string-array name="atareas">
+	    <item>@string/reading</item>
+	    <item>@string/writing</item>
+	    <item>@string/math</item>
+	    <item>@string/Listening</item>
+	</string-array>
+	<string-array name ="readSolutions">
+	    <item>Page fluffers (e.g. foam paperclipped to pages to separate them)</item>
+	    <item>Slant boards and book holders for positioning books</item>
+	    <item>Color Overlays</item>
+	    <item>Tracking strategies (e.g reading window, bar magnifier)</item>
+	    <item>Speaking spellchecker or dictionary as a word recognition aid (e.g. Franklin Talking Dictionary)</item>
+	    <item>Reading Pen (e.g. Personal Reading Assistant, Quicktionary II)</item>
+	    <item>Audio-taped books (e.g. books-on-tape from Recordings for the Blind and Dyslexic, commercial audio books)</item>
+	    <item>Electronic books (e.g. teacher made, Bookshare)</item>
+	    <item>Portable reading system for digital audio books (e.g. ClassMate)</item>
+	    <item>Computer with graphic-based word processor (e.g. Writing with Symbols, Pix Writer)</item>
+	    <item>Computer with talking word processing software (e.g. Write:Outloud, IntelliTalk)</item>
+	    <item>Computer with word prediction software (e.g. Co:Writer, WordQ)</item>
+	    <item>Scanner and computer with form filling software to create electronic worksheets</item>
+	    <item>Computer with graphic word processor (e.g. Writing with Symbols, Pix Writer)</item>
+	    <item>Computer with text enlargement software (e.g. ZoomText)</item>
+	    <item>Computer with text reading software (e.g. Read:OutLoud, ReadPlease, Talk-to-Me)</item>
+	    <item>Computer-based advanced reading aids (e.g. Kerzweil 3000, WYNN)</item>
+	    <item>Solutions for converting text into alternative format (e.g. scanner with OCR software, Braille translation software, Braille printer)</item>
+	</string-array>
+<string-array name="writeSolutions">
+    <item>Pencil grip or other adapted writing aids</item>
+    <item>Adapted paper (e.g. bold line, raised line. different spacing, secured to desk, paper stabilizers)</item>
+    <item>Slant board</item>
+    <item>Personal dry erase board</item>
+    <item>Non-slip writing surface (e.g. Dycem)</item>
+    <item>Tape recorder for dictated responses and notetaking</item>
+    <item>Portable word processor</item>
+    <item>Notetaking device (e.g. Braille, adapted tape recorder, Smartboard, Notetaker)</item>
+    <item>Computer with word processing software with spell and grammar checks (e.g. Microsoft Word)</item>
+    <item>Computer with word processing software and outlining/webbing software (e.g. Inspiration, Kidspiration, DraftBuilder</item>
+    <item>Computer with graphic-based word processor (e.g. Writing with Symbols, Pix Writer)</item>
+    <item>Computer with talking word processing software (e.g. Write:OutLoud, IntelliTalk)</item>
+    <item>Computer with word prediction software (e.g. Co:Writer, WordQ)</item>
+    <item>Scanner and computer with form filling software to create electronic worksheets</item>
+</string-array>
+<string-array name= "spellingSolutions" >
+    <item>Personal dry erase board for practice</item>
+    <item>Tape recorder with difficult to spell words recorded</item>
+    <item>Hand-held spellchecker without auditory output (e.g. Franklin)</item>
+    <item >Hand-held spellchecker with auditory output (e.g. Franklin Talking Dictionary)</item>
+    <item >Portable word processor with built-in spellchecker (e.g. Neo, The Writer)</item>
+    <item>Computer with word processing software with spell check feature (e.g. Microsoft Word)</item>
+    <item>Computer with talking word processing software containing speaking spell check (e.g. Write:OutLoud)</item>
+    <item>Computer with word prediction software, (e.g. Co:Writer, WordQ)</item>
+</string-array>
+<string-array name= "mathSolutions" >
+    <item>Modified paper (e.g. bold line, enlarged, raised line, graph paper etc.)</item>
+    <item>Talking calculator with speech output</item>
+    <item>Calculator with large print display</item>
+    <item>Calculator with large keypad</item>
+    <item>Calculator with embossed output</item>
+    <item>Computer based on-screen calculator</item>
+    <item>Electronic math worksheet software with adaptive input and output as needed (e.g. MathPad, MathPad by Voice, Study)</item>
+    <item>Graphing calculator software (e.g. Accessible Graphing Calculator)</item>
+    <item>Virtual Math Manipulatives</item>
+    <item>Online math activities (e.g. http://illuminations.nctm.org)</item>
+    <item>Adapted measuring devices (e.g. devices with speech output, large print display, or tactile output)</item>
+</string-array>
+
+
 </resources>
