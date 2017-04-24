@@ -15,6 +15,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.TextView;
@@ -51,17 +52,12 @@ public class AT_List extends DialogFragment {
 						public boolean onChildClick(ExpandableListView parent,
 								View v, int groupPosition, int childPosition,
 								long id) {
-
-							String s = (String) ((TextView) firstTrail
-									.findViewById(R.id.at)).getText();
-							
-							s += ""
-									+ listDataChild.get(
-											listDataHeader.get(groupPosition))
-											.get(childPosition);
-							s += ";";
-							((TextView) firstTrail
-									.findViewById(R.id.at)).setText(s);
+							String s;
+							s = listDataChild.get(
+									listDataHeader.get(groupPosition)).get(
+									childPosition);
+							((EditText) firstTrail.findViewById(R.id.at))
+									.setText(s);
 							// ((TextView)group.findViewById(R.id.at)).setText(listDataChild.get(
 							// listDataHeader.get(groupPosition)).get(
 							// childPosition));
@@ -83,29 +79,24 @@ public class AT_List extends DialogFragment {
 		try {
 			listDataHeader = new ArrayList<String>();
 			listDataChild = new HashMap<String, List<String>>();
-
 			String headers[] = getResources().getStringArray(R.array.atareas);
 			// Adding child data
 			for (String header : headers) {
 				listDataHeader.add(header);
 			}
-
 			// Adding child data
 			List<String> read = new ArrayList<String>();
 			String readAt[] = getResources().getStringArray(
 					R.array.readSolutions);
-
 			for (String solution : readAt) {
 				read.add(solution);
 			}
-
 			List<String> writing = new ArrayList<String>();
 			String writingSol[] = getResources().getStringArray(
 					R.array.writeSolutions);
 			for (String sol : writingSol) {
 				writing.add(sol);
 			}
-
 			List<String> math = new ArrayList<String>();
 			String mathSol[] = getResources().getStringArray(
 					R.array.mathSolutions);
@@ -121,7 +112,7 @@ public class AT_List extends DialogFragment {
 			listDataChild.put(listDataHeader.get(1), writing);
 			listDataChild.put(listDataHeader.get(2), math);
 			listDataChild.put(listDataHeader.get(3), listen);
-			
+
 		} catch (Exception e) {
 			Log.e("DEMO", "Exception in prepareData() " + e);
 		}

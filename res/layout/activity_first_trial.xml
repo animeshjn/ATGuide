@@ -54,7 +54,7 @@
                     android:layout_gravity="start"
                     android:layout_weight="50"
                     android:gravity="start"
-                    android:text="@string/areataskheader" />
+                    android:text="@string/areataskatheader" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -149,17 +149,19 @@
                     <ImageButton
                         android:id="@+id/addat"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" 
-                        android:src="@drawable/plusstrategy"
-                        android:contentDescription="add at"/>
+                        android:layout_height="wrap_content"
+                        android:background="@android:color/transparent"
+                        android:contentDescription="add at"
+                        android:src="@drawable/plusstrategy" 
+                        android:layout_gravity="center_vertical"/>
 
-                    <TextView
+                    <EditText
                         android:id="@+id/at"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="#E3ECEF"
                         android:hint="@string/assistivetech"
-                        android:singleLine="true"
+                        android:lines="3"
                         android:textColor="@android:color/black" />
                 </LinearLayout>
 
@@ -173,118 +175,73 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:weightSum="100" >
+                        android:orientation="vertical" >
 
                         <TextView
-                            android:layout_width="0dp"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_weight="95"
-                            android:text="@string/taskinfo" />
+                            android:labelFor="@+id/participants"
+                            android:text="@string/participants" />
 
-                        <ImageButton
-                            android:id="@+id/addstrategy"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="5"
-                            android:background="@null"
-                            android:contentDescription="Add new strategy"
-                            android:src="@drawable/plusstrategy" />
+                        <EditText
+                            android:id="@+id/participants"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="text" />
                     </LinearLayout>
 
-                    <ScrollView
+                    <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" >
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical" >
 
-                        <LinearLayout
-                            android:id="@+id/strategylayout"
-                            android:layout_width="match_parent"
+                        <TextView
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:weightSum="1" >
+                            android:text="@string/when" />
 
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="horizontal" >
-
-                                <EditText
-                                    android:id="@+id/strategy0"
-                                    android:layout_width="0dp"
-                                    android:layout_height="wrap_content"
-                                    android:layout_weight="0.95"
-                                    android:background="@drawable/tasktextviewback"
-                                    android:hint=""
-                                    android:singleLine="true"
-                                    android:textColor="@android:color/black" />
-
-                                <ImageButton
-                                    android:id="@+id/deletestrategy0"
-                                    android:layout_width="0dp"
-                                    android:layout_height="match_parent"
-                                    android:layout_weight="0.05"
-                                    android:background="@null"
-                                    android:contentDescription="Delete Strategy"
-                                    android:scaleType="fitXY"
-                                    android:src="@drawable/ic_delete_forever" />
-                            </LinearLayout>
-                        </LinearLayout>
-                    </ScrollView>
+                        <EditText android:inputType="none" 
+                            android:hint="completion date"
+                            android:id="@+id/date"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/textviewback"
+                            android:focusable="false"
+                            
+                             />
+                    </LinearLayout>
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/buttonsandviewlayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="6"
                     android:background="@drawable/rowback"
                     android:orientation="horizontal" >
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:gravity="center_vertical|center_horizontal"
-                        android:text="Are the current soultion(s) working?"
-                        android:textSize="18sp" />
 
-                    <RadioGroup
-                        android:id="@+id/solutionradiogroup"
+                    <LinearLayout
+                        android:id="@+id/radiolayout"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
+                        android:background="@drawable/rowback"
                         android:orientation="horizontal" >
-
-                        <RadioButton
-                            android:id="@+id/solutionyes"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:checked="false"
-                            
-                            android:text="@string/yes" />
-
-                        <RadioButton
-                            android:id="@+id/solutionno"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:checked="false"
-                            android:text="@string/no" />
-                    </RadioGroup>
+                    </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center_horizontal"
                         android:orientation="horizontal" >
-
                         <Button
                             android:id="@+id/addnewtask"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:background="@drawable/taskbuttons"
                             android:text="Add new AT" />
-
                         <Space
                             android:layout_width="10sp"
                             android:layout_height="wrap_content" />
-
                         <Button
                             android:id="@+id/deletetask"
                             android:layout_width="wrap_content"
@@ -313,12 +270,6 @@
             android:background="@drawable/mybutton"
             android:text="@string/next" />
 
-        <Button
-            android:id="@+id/logbutton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/mybutton"
-            android:text="Log" />
     </LinearLayout>
 
 </RelativeLayout>

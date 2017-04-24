@@ -62,7 +62,10 @@
         <activity
             android:name=".IEPReading"
             android:label="@string/title_activity_iepreading"
-            android:launchMode="singleTask" >
+            android:launchMode="singleTask"
+            android:screenOrientation="landscape"
+            
+              >
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -82,15 +85,20 @@
         </activity>
         <activity
             android:name=".Waiting"
-            android:label="@string/title_activity_waiting" >
+            android:label="@string/title_activity_waiting"
+            android:windowSoftInputMode="adjustPan" >
         </activity>
         <activity
             android:name=".FirstTrial"
-            android:label="@string/title_activity_first_trial" >
+            android:label="@string/title_activity_first_trial" 
+             android:screenOrientation="landscape"
+             android:windowSoftInputMode="adjustPan" >
         </activity>
         <activity
             android:name=".AT_List"
-            android:label="@string/title_activity_at__list" >
+            android:label="@string/title_activity_at__list" 
+             android:screenOrientation="landscape"
+             android:windowSoftInputMode="adjustPan" >
         </activity>
     </application>
 

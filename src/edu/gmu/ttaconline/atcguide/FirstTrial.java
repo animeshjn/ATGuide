@@ -1,16 +1,16 @@
 package edu.gmu.ttaconline.atcguide;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Currency;
+import java.util.Calendar;
+import java.util.Locale;
 
 import com.commonsware.cwac.merge.MergeAdapter;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.Fragment;
-import android.app.FragmentManager;
+import android.app.DatePickerDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -19,6 +19,9 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -33,7 +36,7 @@ import android.widget.Toast;
  * @author animesh jain
  * 
  */
-public class FirstTrial extends FragmentActivity{
+public class FirstTrial extends FragmentActivity {
 	/*
 	 * Overview: Type inheriting from activity for the first trial of the AT
 	 * trials
@@ -41,20 +44,22 @@ public class FirstTrial extends FragmentActivity{
 	/* Instance variables */
 	ArrayList<Area> areaList;// Store the lists of all areas
 	ArrayList<String> trial1Texts = new ArrayList<String>();// store text only
-
+	Calendar myCalendar = Calendar.getInstance();
+	EditText datePick;
 	MergeAdapter merge = new MergeAdapter();
 	Context context;// store current context
 	LayoutInflater inflater;// store the layout inflator to inflate rows
 	int id = 1001;// default id
 	static int clickedId = 9999;// current clicked id
 	private ArrayList<CharSequence> selectedInstructional; // list of selected
-	android.support.v4.app.FragmentManager fragmentManager=getSupportFragmentManager();
+	android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
 	Activity activity;
+
 	// areas
 	/* Methods */
 	// Control start point
 	/**
-	 *@see android.app.Activity#onCreate(android.os.Bundle)
+	 * @see android.app.Activity#onCreate(android.os.Bundle)
 	 */
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -65,36 +70,42 @@ public class FirstTrial extends FragmentActivity{
 				+ PersistenceBean.getCurrentId(context), context);
 		inflater = getLayoutInflater();
 		placeArea();
-		activity=this;
-		
+		activity = this;
+		datePick = (EditText) findViewById(R.id.date);
 		setATListener();
+		setDatePickListener();
 	}
+
+	/**
+	 * Set Listener for Assistive technology. Select the listener
+	 */
 	private void setATListener() {
-		ImageButton add= (ImageButton)findViewById(R.id.addat);
+		ImageButton add = (ImageButton) findViewById(R.id.addat);
 		add.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-			AT_List atlist= new AT_List();
-			atlist.setFirstTrail(activity);
-			atlist.show(fragmentManager, "AT List");
-			
+				AT_List atlist = new AT_List();
+				atlist.setFirstTrail(activity);
+				atlist.show(fragmentManager, "AT List");
 			}
 		});
-		
+
 	}
+
 	/**
 	 * Place all areas in the view
 	 */
 	@SuppressLint("InflateParams")
 	private void placeArea() {
 		// Modifies: this view
-		/*Effects: places the area, task and AT on the left panels & sets their
+		/*
+		 * Effects: places the area, task and AT on the left panels & sets their
 		 * respective listeners
 		 */
 		try {
 			// Initializing data
 			getData();
-			//Set params
+			// Set params
 			LayoutParams textViewParams = new LayoutParams(
 					LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 			// The list view on left side
@@ -114,11 +125,11 @@ public class FirstTrial extends FragmentActivity{
 						.setTextAlignment(TextView.TEXT_ALIGNMENT_TEXT_START);
 				areaTextView.setLayoutParams(textViewParams);
 				areaTextView.setId(area.parentId);
-				
+
 				// Set onClick listener to the area name
 				// append current task for 1st trial
 				for (Task task : area.tasks) {
-					//If solutions aren't working 
+					// If solutions aren't working
 					if (!task.solutions) {
 						LinearLayout taskLayout = new LinearLayout(context);
 						taskLayout.setOrientation(LinearLayout.VERTICAL);
@@ -128,23 +139,24 @@ public class FirstTrial extends FragmentActivity{
 						taskLayout.setTag(area.getAreaName());
 						tasktextView.setLayoutParams(textViewParams);
 						tasktextView.setId(task.taskid);
-						tasktextView.setTextColor(Color.DKGRAY);
-						tasktextView.setPadding(5, 0,0,0);
-						TextView assistiveTech=new TextView(context);
-						assistiveTech.setPadding(10, 0, 0, 0);
+						tasktextView.setTextColor(Color.BLACK);
+						tasktextView.setPadding(15, 0, 0, 0);
+						TextView assistiveTech = new TextView(context);
+						assistiveTech.setPadding(25, 0, 0, 0);
 						assistiveTech.setText("Choose AT");
-						assistiveTech.setTextColor(Color.DKGRAY);
-						//assistiveTech.setTextAlignment();
+						assistiveTech.setTextColor(Color.BLACK);
+						assistiveTech.setOnClickListener(getATListener());
+						// assistiveTech.setTextAlignment();
 						taskLayout.addView(tasktextView);
 						taskLayout.addView(assistiveTech);
 						areaRow.addView(taskLayout);
-												
+
 					}
 				}
 
 				// Linear layout task
 				// append Assistive technology to this task
-				
+
 				merge.addView(areaRow);
 			}
 			instructional.setAdapter(merge);
@@ -154,6 +166,10 @@ public class FirstTrial extends FragmentActivity{
 		}
 	}
 
+	/**
+	 * Get Data from intent and the persistence layer.
+	 * 
+	 */
 	private void getData() {
 		try {
 			// selectedInstructional = currentIntent
@@ -169,24 +185,119 @@ public class FirstTrial extends FragmentActivity{
 		}
 	}
 
+	public void setDatePickListener() {
+
+		final DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
+
+			@Override
+			public void onDateSet(DatePicker view, int year, int monthOfYear,
+					int dayOfMonth) {
+				// TODO Auto-generated method stub
+				myCalendar.set(Calendar.YEAR, year);
+				myCalendar.set(Calendar.MONTH, monthOfYear);
+				myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+				updateLabel();
+			}
+
+		};
+
+		datePick.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				DatePickerDialog dialog = new DatePickerDialog(FirstTrial.this,
+						date, myCalendar.get(Calendar.YEAR), myCalendar
+								.get(Calendar.MONTH), myCalendar
+								.get(Calendar.DAY_OF_MONTH));
+				dialog.getDatePicker().setSpinnersShown(true);
+				dialog.getDatePicker().setCalendarViewShown(false);
+				dialog.show();
+			}
+		});
+	}
+
+	private void updateLabel() {
+		String myFormat = "MM/dd/yy"; // In which you need put here
+		SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
+		datePick.setText(sdf.format(myCalendar.getTime()));
+	}
+
+	public OnClickListener getATListener() {
+		OnClickListener atL= new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				TextView taskview = (TextView) v;
+				CharSequence taskviewText = taskview.getText();
+				clickedId = v.getId();
+				LinearLayout parent = (LinearLayout) v.getParent();
+				TextView area = (TextView) parent.getChildAt(0);
+				CharSequence areaText = area.getText();
+				
+			}
+		};
+		
+		return atL;
+		
+	}
+	
+	public void highlightThis(View tv) {
+		ListView lv = (ListView) findViewById(R.id.instructionalAreasList);
+		MergeAdapter m = (MergeAdapter) lv.getAdapter();
+		m.getCount();
+		//
+		for (int c = 0; c <= m.getCount(); c++) {
+			View tt = (View) m.getItem(c);
+			if (tt != null && tt instanceof LinearLayout) {
+				LinearLayout ll = (LinearLayout) tt;
+				ll.setBackgroundResource(0);
+				for (int i = 0; i < ll.getChildCount(); i++) {
+					TextView tc = (TextView) ll.getChildAt(i);
+					tc.setBackgroundResource(0);
+				}
+			}
+		}
+		tv.setBackground(getResources().getDrawable(R.drawable.highlighted));
+		if (tv.getParent() instanceof LinearLayout)
+			((LinearLayout) tv.getParent()).getChildAt(0).setBackgroundColor(
+					Color.CYAN);
+	}
+	
+	/**
+	 * to get area Obj  by name from the list
+	 * @param areaname
+	 * @return
+	 */
+	public Area getAreaByName(CharSequence areaname) {
+		if (areaname != null)
+			for (Area area : areaList) {
+				if (area != null&& area.getAreaName().trim()
+								.equalsIgnoreCase(areaname.toString().trim())) {
+					return area;
+				}
+			}
+		return null;
+	}
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.first_trial, menu);
 		return true;
 	}
-	
+
 	@Override
 	protected void onResume() {
-	Toast.makeText(context,"Resumed",Toast.LENGTH_SHORT).show();
+		Toast.makeText(context, "Resumed", Toast.LENGTH_SHORT).show();
 		super.onResume();
 	}
+
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// Handle action bar item clicks here. The action bar will
 		// automatically handle clicks on the Home/Up button, so long
 		// as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
+
 		if (id == R.id.action_settings) {
 			return true;
 		}

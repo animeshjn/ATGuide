@@ -97,8 +97,10 @@
     <string name="printalternative">Has the IEP team tested the student to determine if they might benefit from print material in alternative formats (i.e., Large Print, Braille, Electronic Text, Audio)?</string>
     <string name="title_activity_task_form">TaskForm</string>
     <string name="areataskheader">Area/Task</string>
+	<string name="areataskatheader">Area/Task/AT</string>
     <string name="ready">Ready</string>
     <string name="taskinfo">Briefly list currently being used strategies, accommodations, assistive technology on general education, special education, community, work and home settings.</string>
+    <string name="when">Trial completed by when</string>
     <string name="taskname">Task Name</string>
     <string name="assistivetech">Assistive Technology</string>
     <string name="AIMCall">Since you selected \"Yes\" to these questions, click \"Yes\" below to go to the AIM-Eligibility app to determine the student\'s eligibility for AIM-VA services.</string>
@@ -108,13 +110,11 @@
     <string name="trial1nav">There have been changes in the student\'s functional or academic performance, or current strategies are NOT adequate and could require new assistive technology or a change in current AT (devices or services) provided.</string>
     <string name="adequatesolution">Current strategies are adequate and documented in student\'s IEP.</string>
     <string name="title_activity_at__list">AT_List</string>
-	
 	<string name="reading">Reading</string>
 	<string name="writing">Writing</string>
 	<string name="spelling">Spelling</string>
 	<string name="math">Math</string>
 	<string name="Listening">Listening</string>
-	
 	<string-array name="atareas">
 	    <item>@string/reading</item>
 	    <item>@string/writing</item>
@@ -122,11 +122,11 @@
 	    <item>@string/Listening</item>
 	</string-array>
 	<string-array name ="readSolutions">
-	    <item>Page fluffers (e.g. foam paperclipped to pages to separate them)</item>
+	    <item>Page fluffers (e.g. foam paper clipped to pages to separate them)</item>
 	    <item>Slant boards and book holders for positioning books</item>
 	    <item>Color Overlays</item>
 	    <item>Tracking strategies (e.g reading window, bar magnifier)</item>
-	    <item>Speaking spellchecker or dictionary as a word recognition aid (e.g. Franklin Talking Dictionary)</item>
+	    <item>Speaking spell checker or dictionary as a word recognition aid (e.g. Franklin Talking Dictionary)</item>
 	    <item>Reading Pen (e.g. Personal Reading Assistant, Quicktionary II)</item>
 	    <item>Audio-taped books (e.g. books-on-tape from Recordings for the Blind and Dyslexic, commercial audio books)</item>
 	    <item>Electronic books (e.g. teacher made, Bookshare)</item>
@@ -147,11 +147,11 @@
     <item>Slant board</item>
     <item>Personal dry erase board</item>
     <item>Non-slip writing surface (e.g. Dycem)</item>
-    <item>Tape recorder for dictated responses and notetaking</item>
+    <item>Tape recorder for dictated responses and note taking</item>
     <item>Portable word processor</item>
     <item>Notetaking device (e.g. Braille, adapted tape recorder, Smartboard, Notetaker)</item>
     <item>Computer with word processing software with spell and grammar checks (e.g. Microsoft Word)</item>
-    <item>Computer with word processing software and outlining/webbing software (e.g. Inspiration, Kidspiration, DraftBuilder</item>
+    <item>Computer with word processing software and outlining/webbing software (e.g. Inspiration, Kidspiration, DraftBuilder)</item>
     <item>Computer with graphic-based word processor (e.g. Writing with Symbols, Pix Writer)</item>
     <item>Computer with talking word processing software (e.g. Write:OutLoud, IntelliTalk)</item>
     <item>Computer with word prediction software (e.g. Co:Writer, WordQ)</item>

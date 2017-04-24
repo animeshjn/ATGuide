@@ -17,11 +17,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class FeedReaderDbHelper extends SQLiteOpenHelper {
 	// If you change the database schema, you must increment the database
 	// version.
-	
-	public static final int DATABASE_VERSION = 18;
-	
+	public static final int DATABASE_VERSION = 19;
 	public static final String DATABASE_NAME = "Student.db";
-	
 	private static final String SQL_CREATE_ENTRIES = "CREATE TABLE "
 			+ FeedEntry.STUDENT + " (" + FeedEntry.STUDENT_ID
 			+ " TEXT PRIMARY KEY," + FeedEntry.STUDENT_GRADE + " TEXT,"
@@ -29,9 +26,7 @@ public class FeedReaderDbHelper extends SQLiteOpenHelper {
 			+ FeedEntry.STUDENT_PARTICIPANTS + " TEXT,"
 			+ FeedEntry.STUDENT_DATE + " TEXT," + ""
 			+ FeedEntry.STUDENT_IEPGOAL + " TEXT)";
-	
 	private static final String SQL_CREATE_CURRENT_ID = "CREATE TABLE CURRENT_DATA (studentid TEXT PRIMARY KEY)";
-	
 	private static final String SQL_CREATE_INTENT_ENTRIES = "CREATE TABLE "
 			+ IntentStore.TABLE_NAME + " (" + IntentStore.COLUMN_NAME_ID
 			+ " TEXT PRIMARY KEY," + IntentStore.COLUMN_NAME_INTENT + " TEXT"
@@ -40,7 +35,6 @@ public class FeedReaderDbHelper extends SQLiteOpenHelper {
 	private static final String SQL_CREATE_AREALIST = "CREATE TABLE "
 			+ SelectedArea.TABLE_NAME + "(" + SelectedArea.COL_ID + " TEXT,"
 			+ SelectedArea.COL_AREA + " TEXT)";
-	
 	private static final String SQL_CREATE_TASK="CREATE TABLE "+TaskStore.TABLE_NAME+"("+TaskStore.COL_STUDENT_ID+" TEXT,"+TaskStore.COL_TASK_ID+" TEXT,"
 			+ ""+TaskStore.COL_TASK_NAME+" TEXT, "+TaskStore.COL_AREA_NAME+","+TaskStore.COL_AREA_ID+" TEXT,"+TaskStore.COL_SOLUTION+" TEXT)";
 

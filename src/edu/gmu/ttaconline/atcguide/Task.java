@@ -18,6 +18,7 @@ public class Task {
 	Map<String,String> strategies= new HashMap<String,String>();
 	public List<String> strategyList=new ArrayList<String>();
 	static int strategyId;
+	public List<String> ats=new ArrayList<String>();
 	//Methods
 	/**
 	 * @return TaskName of this task
