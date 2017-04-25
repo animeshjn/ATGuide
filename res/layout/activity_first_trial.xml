@@ -16,7 +16,6 @@
         android:gravity="end"
         android:orientation="horizontal"
         android:weightSum="100" >
-
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -71,26 +70,22 @@
                 android:layout_height="wrap_content" >
             </ListView>
         </LinearLayout>
-
         <ScrollView
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="70"
             android:fillViewport="true" >
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
                 android:weightSum="100" >
-
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="5"
                     android:gravity="center_horizontal"
                     android:text="@string/completetaskform" />
-
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -98,19 +93,16 @@
                     android:background="@drawable/taskback"
                     android:gravity="center_horizontal"
                     android:orientation="horizontal" >
-
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/instructionalarea"
                         android:textSize="18sp" />
-
                     <Space
                         android:layout_width="5sp"
                         android:layout_height="wrap_content" />
-
                     <TextView
-                        android:id="@+id/tasktitle"
+                        android:id="@+id/areatitle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text=""
@@ -125,13 +117,13 @@
                     android:orientation="horizontal" >
 
                     <TextView
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Task " />
-
+                        android:text="Task" />
+<Space android:layout_width="10dp" android:layout_height="wrap_content"/>
                     <TextView
                         android:id="@+id/taskname"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="#E3ECEF"
                         android:hint="@string/taskname"
@@ -200,7 +192,7 @@
                             android:layout_height="wrap_content"
                             android:text="@string/when" />
 
-                        <EditText android:inputType="none" 
+                        <EditText android:inputType="date" 
                             android:hint="completion date"
                             android:id="@+id/date"
                             android:layout_width="fill_parent"

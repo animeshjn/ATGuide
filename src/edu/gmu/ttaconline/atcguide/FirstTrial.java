@@ -3,6 +3,7 @@ package edu.gmu.ttaconline.atcguide;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
 
 import com.commonsware.cwac.merge.MergeAdapter;
@@ -14,6 +15,8 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -52,6 +55,9 @@ public class FirstTrial extends FragmentActivity {
 	int id = 1001;// default id
 	static int clickedId = 9999;// current clicked id
 	private ArrayList<CharSequence> selectedInstructional; // list of selected
+	TextWatcher _ATNameWatcher,participantsWatcher,trialDateWatcher;
+	
+	
 	android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
 	Activity activity;
 
@@ -97,6 +103,7 @@ public class FirstTrial extends FragmentActivity {
 	 */
 	@SuppressLint("InflateParams")
 	private void placeArea() {
+
 		// Modifies: this view
 		/*
 		 * Effects: places the area, task and AT on the left panels & sets their
@@ -145,12 +152,12 @@ public class FirstTrial extends FragmentActivity {
 						assistiveTech.setPadding(25, 0, 0, 0);
 						assistiveTech.setText("Choose AT");
 						assistiveTech.setTextColor(Color.BLACK);
+						assistiveTech.setId(id++);
 						assistiveTech.setOnClickListener(getATListener());
 						// assistiveTech.setTextAlignment();
 						taskLayout.addView(tasktextView);
 						taskLayout.addView(assistiveTech);
 						areaRow.addView(taskLayout);
-
 					}
 				}
 
@@ -224,23 +231,87 @@ public class FirstTrial extends FragmentActivity {
 	}
 
 	public OnClickListener getATListener() {
-		OnClickListener atL= new OnClickListener() {
+
+		OnClickListener atL = new OnClickListener() {
+
 			@Override
 			public void onClick(View v) {
-				TextView taskview = (TextView) v;
-				CharSequence taskviewText = taskview.getText();
+				EditText atname= (EditText)findViewById(R.id.at);
+				atname.removeTextChangedListener(_ATNameWatcher);
+				TextView aTView = (TextView) v;
+				CharSequence atName = aTView.getText();
 				clickedId = v.getId();
-				LinearLayout parent = (LinearLayout) v.getParent();
+				LinearLayout parent = (LinearLayout) v.getParent().getParent();
 				TextView area = (TextView) parent.getChildAt(0);
 				CharSequence areaText = area.getText();
-				
+				TextView taskView=(TextView)((LinearLayout)v.getParent()).getChildAt(0);
+				//Toast.makeText(context,"Area: "+areaText, Toast.LENGTH_SHORT).show();
+				Area areaobj = getAreaByName(areaText );
+				Task t = areaobj.getTaskById(taskView.getId());
+				if(t.ats.size()==0)
+				{
+					AT at= new AT();
+					at.task=t.taskname;
+					at.ATName=atName.toString();
+					at.instructionalArea=area.getText().toString();
+					at.id=clickedId;
+					setAtToView(at,v);
+					t.ats.add(at);
+				}
+				else
+				{setAtToView(t.ats.get(0),v);}
+				highlightThis(v);
 			}
 		};
-		
+
 		return atL;
+
+	}
+
+	public void setAtToView(AT at, View currentClicked)
+	{
+		((TextView)findViewById(R.id.areatitle)).setText(at.getInstructionalArea());
+		((TextView)findViewById(R.id.taskname)).setText(at.task);
+		((EditText)findViewById(R.id.at)).setText(at.getATName());
+		((EditText)findViewById(R.id.participants)).setText(at.getParticipants());
+		((EditText)findViewById(R.id.date)).setText(at.getFirstTrialDate());
+		setATNameListener(at,currentClicked);
+	}
+	
+	
+	/**
+	 * Listener to the change in AT Name
+	 * @param at
+	 */
+	public void setATNameListener(final AT at, final View currentClicked){
+		EditText atname= (EditText)findViewById(R.id.at);
+		atname.removeTextChangedListener(_ATNameWatcher);
+		
+		_ATNameWatcher=new TextWatcher() {
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
+				at.setATName(s.toString());
+				((TextView)currentClicked).setText(s);
+			}
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count,
+					int after) {
+				
+			}
+			@Override
+			public void afterTextChanged(Editable s) {
+			}
+		};
+
+		atname.addTextChangedListener(_ATNameWatcher);
+		
 		
 	}
 	
+	
+	/**
+	 * @param tv
+	 */
 	public void highlightThis(View tv) {
 		ListView lv = (ListView) findViewById(R.id.instructionalAreasList);
 		MergeAdapter m = (MergeAdapter) lv.getAdapter();
@@ -248,36 +319,47 @@ public class FirstTrial extends FragmentActivity {
 		//
 		for (int c = 0; c <= m.getCount(); c++) {
 			View tt = (View) m.getItem(c);
+			if (tt != null)
+				tt.setBackgroundResource(0);
 			if (tt != null && tt instanceof LinearLayout) {
 				LinearLayout ll = (LinearLayout) tt;
 				ll.setBackgroundResource(0);
 				for (int i = 0; i < ll.getChildCount(); i++) {
-					TextView tc = (TextView) ll.getChildAt(i);
+					View tc = (View) ll.getChildAt(i);
 					tc.setBackgroundResource(0);
+					if(tc instanceof LinearLayout){
+					LinearLayout lnk= (LinearLayout)tc;
+					for (int j = 0; j < lnk.getChildCount(); j++)
+					lnk.getChildAt(j).setBackgroundResource(0);
+					}
 				}
 			}
 		}
+		
 		tv.setBackground(getResources().getDrawable(R.drawable.highlighted));
 		if (tv.getParent() instanceof LinearLayout)
 			((LinearLayout) tv.getParent()).getChildAt(0).setBackgroundColor(
 					Color.CYAN);
 	}
-	
+
 	/**
-	 * to get area Obj  by name from the list
+	 * to get area Obj by name from the list
+	 * 
 	 * @param areaname
 	 * @return
 	 */
 	public Area getAreaByName(CharSequence areaname) {
 		if (areaname != null)
 			for (Area area : areaList) {
-				if (area != null&& area.getAreaName().trim()
+				if (area != null
+						&& area.getAreaName().trim()
 								.equalsIgnoreCase(areaname.toString().trim())) {
 					return area;
 				}
 			}
 		return null;
 	}
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
