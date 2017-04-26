@@ -119,7 +119,8 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Task" />
+                        android:text="Task"
+                       android:textSize="16sp"  />
 <Space android:layout_width="10dp" android:layout_height="wrap_content"/>
                     <TextView
                         android:id="@+id/taskname"
@@ -128,6 +129,8 @@
                         android:background="#E3ECEF"
                         android:hint="@string/taskname"
                         android:singleLine="true"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
                         android:textColor="@android:color/black" />
                 </LinearLayout>
 
@@ -154,6 +157,7 @@
                         android:background="#E3ECEF"
                         android:hint="@string/assistivetech"
                         android:lines="3"
+                        android:inputType="textNoSuggestions"
                         android:textColor="@android:color/black" />
                 </LinearLayout>
 
@@ -226,7 +230,7 @@
                         android:gravity="center_horizontal"
                         android:orientation="horizontal" >
                         <Button
-                            android:id="@+id/addnewtask"
+                            android:id="@+id/addnewat"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:background="@drawable/taskbuttons"
@@ -235,7 +239,7 @@
                             android:layout_width="10sp"
                             android:layout_height="wrap_content" />
                         <Button
-                            android:id="@+id/deletetask"
+                            android:id="@+id/deleteat"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:background="@drawable/taskbuttons"

@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 /**
- * Bean to store single task from a particular area
+ * Bean to store single task from a particular area 
  * */
 public class Task {
 	//Overview: 
@@ -41,7 +41,7 @@ public class Task {
 		this.areaname=task.areaname;
 		this.strategies=task.strategies;
 		this.strategyList=task.strategyList;
-		this.strategyId=task.strategyId;
+		
 		
 	}
 	
@@ -61,6 +61,20 @@ public class Task {
 		this.areaname = areaname;
 	}
 
+	/**
+	 * @param id of the at in this task
+	 * @return AT with the given id in this task
+	 */
+	public AT getATById(int id){
+		
+		for(AT at:ats){
+			if(at.id==id)
+				return at;
+		}
+		return null;
+	}
+	
+	
 //	public void addStrategy(String strategy) {
 //		strategies.add(strategy);
 //	}

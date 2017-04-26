@@ -193,7 +193,8 @@ public class PersistenceBean {
 	 * Method to retrieve persisted area list for this student
 	 * */
 	public static ArrayList<CharSequence> getPersistedAreaList(
-			String studentid, Context context) {
+		
+		String studentid, Context context) {
 		ArrayList<CharSequence> persistedAreas = new ArrayList<CharSequence>();
 		FeedReaderDbHelper mDbHelper = new FeedReaderDbHelper(context);
 		SQLiteDatabase db = mDbHelper.getWritableDatabase();

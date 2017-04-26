@@ -3,7 +3,6 @@ package edu.gmu.ttaconline.atcguide;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 import java.util.Locale;
 
 import com.commonsware.cwac.merge.MergeAdapter;
@@ -13,6 +12,7 @@ import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.text.Editable;
@@ -23,6 +23,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -55,9 +56,7 @@ public class FirstTrial extends FragmentActivity {
 	int id = 1001;// default id
 	static int clickedId = 9999;// current clicked id
 	private ArrayList<CharSequence> selectedInstructional; // list of selected
-	TextWatcher _ATNameWatcher,participantsWatcher,trialDateWatcher;
-	
-	
+	TextWatcher _ATNameWatcher, participantsWatcher, trialDateWatcher;
 	android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
 	Activity activity;
 
@@ -80,6 +79,18 @@ public class FirstTrial extends FragmentActivity {
 		datePick = (EditText) findViewById(R.id.date);
 		setATListener();
 		setDatePickListener();
+		clickFirstItem();
+		
+	}
+
+	private void clickFirstItem() {
+		ListView lv = (ListView) findViewById(R.id.instructionalAreasList);
+		MergeAdapter m = (MergeAdapter) lv.getAdapter();
+		m.getCount();
+		View first = (View) m.getItem(0);
+		if (first != null && first instanceof LinearLayout){
+			((LinearLayout)first).getChildAt(1).callOnClick();
+		} 
 	}
 
 	/**
@@ -147,6 +158,7 @@ public class FirstTrial extends FragmentActivity {
 						tasktextView.setLayoutParams(textViewParams);
 						tasktextView.setId(task.taskid);
 						tasktextView.setTextColor(Color.BLACK);
+						tasktextView.setTypeface(null, Typeface.BOLD);
 						tasktextView.setPadding(15, 0, 0, 0);
 						TextView assistiveTech = new TextView(context);
 						assistiveTech.setPadding(25, 0, 0, 0);
@@ -175,12 +187,9 @@ public class FirstTrial extends FragmentActivity {
 
 	/**
 	 * Get Data from intent and the persistence layer.
-	 * 
 	 */
 	private void getData() {
 		try {
-			// selectedInstructional = currentIntent
-			// .getCharSequenceArrayListExtra("selectedAreas");
 			selectedInstructional = PersistenceBean.getPersistedAreaList(
 					"trial1" + PersistenceBean.getCurrentId(context), context);
 			for (CharSequence cs : selectedInstructional) {
@@ -192,10 +201,11 @@ public class FirstTrial extends FragmentActivity {
 		}
 	}
 
+	/**
+	 *Allows a pop-up calendar on click of EditTextView of the Date 
+	 */
 	public void setDatePickListener() {
-
 		final DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
-
 			@Override
 			public void onDateSet(DatePicker view, int year, int monthOfYear,
 					int dayOfMonth) {
@@ -209,7 +219,6 @@ public class FirstTrial extends FragmentActivity {
 		};
 
 		datePick.setOnClickListener(new View.OnClickListener() {
-
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
@@ -224,92 +233,293 @@ public class FirstTrial extends FragmentActivity {
 		});
 	}
 
+	/**
+	 * Update the date label to the calendar object
+	 */
 	private void updateLabel() {
 		String myFormat = "MM/dd/yy"; // In which you need put here
 		SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
 		datePick.setText(sdf.format(myCalendar.getTime()));
 	}
 
+	/**
+	 * 
+	 * @return OnClickListener for the AT 
+	 */
 	public OnClickListener getATListener() {
 
 		OnClickListener atL = new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
-				EditText atname= (EditText)findViewById(R.id.at);
+				// Remove Previous Listeners if set
+				
+				EditText atname = (EditText) findViewById(R.id.at);
 				atname.removeTextChangedListener(_ATNameWatcher);
+				EditText participantView = (EditText) findViewById(R.id.participants);
+				participantView.removeTextChangedListener(participantsWatcher);
+				EditText dateView = (EditText) findViewById(R.id.date);
+				dateView.removeTextChangedListener(trialDateWatcher);
+				// AT View
 				TextView aTView = (TextView) v;
 				CharSequence atName = aTView.getText();
 				clickedId = v.getId();
+				//Parent
 				LinearLayout parent = (LinearLayout) v.getParent().getParent();
 				TextView area = (TextView) parent.getChildAt(0);
 				CharSequence areaText = area.getText();
-				TextView taskView=(TextView)((LinearLayout)v.getParent()).getChildAt(0);
-				//Toast.makeText(context,"Area: "+areaText, Toast.LENGTH_SHORT).show();
-				Area areaobj = getAreaByName(areaText );
+				TextView taskView = (TextView) ((LinearLayout) v.getParent()).getChildAt(0);
+				Area areaobj = getAreaByName(areaText);
 				Task t = areaobj.getTaskById(taskView.getId());
-				if(t.ats.size()==0)
-				{
-					AT at= new AT();
-					at.task=t.taskname;
-					at.ATName=atName.toString();
-					at.instructionalArea=area.getText().toString();
-					at.id=clickedId;
-					setAtToView(at,v);
+				if (t.ats.size() == 0) {
+					AT at = new AT();
+					at.task = t.taskname;
+					at.ATName = atName.toString();
+					at.instructionalArea = area.getText().toString();
+					at.id = clickedId;
+					setAtToView(at, v);
 					t.ats.add(at);
+				} else {
+					setAtToView(t.getATById(clickedId), v);
 				}
-				else
-				{setAtToView(t.ats.get(0),v);}
 				highlightThis(v);
+				setAddATListener(v);
+				setDeleteATListener(v);
 			}
 		};
-
 		return atL;
+	}
+
+	/**
+	 * 
+	 * Sets the given AT to the view.
+	 * 
+	 * @param at
+	 *            assitive technology object to be set to view
+	 * @param currentClicked
+	 *            view selected on left panel
+	 */
+	public void setAtToView(AT at, View currentClicked) {
+		/*
+		 * Requires : the AT Listener to the change in participants clicked
+		 * view. Modifies: Current view and this. Effects: Sets the given AT to
+		 * the view.
+		 */
+		((TextView) findViewById(R.id.areatitle)).setText(at
+				.getInstructionalArea());
+		((TextView) findViewById(R.id.taskname)).setText(at.task);
+		((EditText) findViewById(R.id.at)).setText(at.getATName());
+		((EditText) findViewById(R.id.participants)).setText(at
+				.getParticipants());
+		((EditText) findViewById(R.id.date)).setText(at.getFirstTrialDate());
+		setATNameListener(at, currentClicked);
+		setPartcipantListener(at);
+		setCompletionDateListener(at);
 
 	}
 
-	public void setAtToView(AT at, View currentClicked)
-	{
-		((TextView)findViewById(R.id.areatitle)).setText(at.getInstructionalArea());
-		((TextView)findViewById(R.id.taskname)).setText(at.task);
-		((EditText)findViewById(R.id.at)).setText(at.getATName());
-		((EditText)findViewById(R.id.participants)).setText(at.getParticipants());
-		((EditText)findViewById(R.id.date)).setText(at.getFirstTrialDate());
-		setATNameListener(at,currentClicked);
-	}
-	
-	
 	/**
 	 * Listener to the change in AT Name
+	 * 
 	 * @param at
+	 *            Assistive Technology type instance
 	 */
-	public void setATNameListener(final AT at, final View currentClicked){
-		EditText atname= (EditText)findViewById(R.id.at);
+	public void setATNameListener(final AT at, final View currentClicked) {
+		EditText atname = (EditText) findViewById(R.id.at);
 		atname.removeTextChangedListener(_ATNameWatcher);
-		
-		_ATNameWatcher=new TextWatcher() {
+		_ATNameWatcher = new TextWatcher() {
 			@Override
-			public void onTextChanged(CharSequence s, int start, int before, int count) {
+			public void onTextChanged(CharSequence s, int start, int before,
+					int count) {
 				at.setATName(s.toString());
-				((TextView)currentClicked).setText(s);
+				((TextView) currentClicked).setText(s);
 			}
+
 			@Override
 			public void beforeTextChanged(CharSequence s, int start, int count,
 					int after) {
-				
+
 			}
+
 			@Override
 			public void afterTextChanged(Editable s) {
 			}
 		};
 
 		atname.addTextChangedListener(_ATNameWatcher);
-		
+	}
+
+	/**
+	 * Listener to the change in participants
+	 * 
+	 * @param at
+	 *            Assistive Technology type instance
+	 * 
+	 */
+	public void setPartcipantListener(final AT at) {
+		/*
+		 * Requires: AT to be binded to the participants. Modifies: this,
+		 * current view and AT. Effects: Listener to the change in participants
+		 */
+		EditText participantView = (EditText) findViewById(R.id.participants);
+		participantView.removeTextChangedListener(participantsWatcher);
+		participantsWatcher = new TextWatcher() {
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before,
+					int count) {
+				// Text Changed , bind to AT
+				at.setParticipants(s.toString());
+			}
+
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count,
+					int after) {
+			}
+
+			@Override
+			public void afterTextChanged(Editable s) {
+			}
+		};
+		participantView.addTextChangedListener(participantsWatcher);
+
+	}
+
+	/**
+	 * Listener to the change in completion date
+	 * 
+	 * @param at
+	 *            Assistive Technology type instance
+	 */
+	public void setCompletionDateListener(final AT at) {
+		/* Requires: AT to be binded to the participants. */
+		/* Modifies: this, current view and AT */
+		/* Effects: Listener to the change in dateview */
+		EditText dateView = (EditText) findViewById(R.id.date);
+		dateView.removeTextChangedListener(trialDateWatcher);
+		trialDateWatcher = new TextWatcher() {
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before,
+					int count) {
+				// Text Changed , bind to AT
+				at.setFirstTrialDate(s.toString());
+			}
+
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count,
+					int after) {
+			}
+
+			@Override
+			public void afterTextChanged(Editable s) {
+			}
+		};
+		dateView.addTextChangedListener(trialDateWatcher);
+
+	}
+	
+	/**
+	 *Sets the Listener to the ADD New AT Button 
+	 */
+	public void setAddATListener(final View op) {
+		try {
+			// TODO: ADD Listener
+			OnClickListener addCLick = new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					// TODO Auto-generated method stub
+					EditText atname = (EditText) findViewById(R.id.at);
+					atname.removeTextChangedListener(_ATNameWatcher);
+					EditText participantView = (EditText) findViewById(R.id.participants);
+					participantView.removeTextChangedListener(participantsWatcher);
+					EditText dateView = (EditText) findViewById(R.id.date);
+					dateView.removeTextChangedListener(trialDateWatcher);
+					LinearLayout taskLayout = (LinearLayout) op.getParent();
+					TextView assistiveTech = new TextView(context);
+					assistiveTech.setPadding(25, 0, 0, 0);
+					assistiveTech.setText("Choose AT");
+					assistiveTech.setTextColor(Color.BLACK);
+					assistiveTech.setId(id++);
+					LinearLayout areaLayout= (LinearLayout)taskLayout.getParent();
+					String areaText=((TextView)areaLayout.getChildAt(0)).getText().toString();
+					Area areaobj = getAreaByName(areaText);
+					Task t = areaobj.getTaskById(taskLayout.getChildAt(0).getId());
+						AT at = new AT();
+						at.task = t.taskname;
+						at.ATName = "Choose AT";
+						at.instructionalArea = areaText;
+						at.id = assistiveTech.getId();
+						
+						t.ats.add(at);
+						setAtToView(at, v);
+					assistiveTech.setOnClickListener(getATListener());
+					Log.d("ATGuide","Area Text: "+areaText);
+					Log.d("ATGuide","Area Text: "+areaText);
+					taskLayout.addView(assistiveTech);
+					assistiveTech.callOnClick();
+				}
+			};
+			((Button)findViewById(R.id.addnewat)).setOnClickListener(addCLick);
+		} catch (ClassCastException e) {
+			Log.e("ATGuide", "" + e);
+		} catch (Exception e) {
+			Log.e("ATGuide", "" + e);
+		}
+	}
+
+	
+	/**
+	 * Deletes the AT from logic and View
+	 * @param op
+	 */
+	public void setDeleteATListener(final View op){
+		//Requires: current selected AT
+		// Modifies: this, current view, area and task
+		//Effects:  Deletes the AT from logic and View
+		try {
+			OnClickListener addCLick = new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					//Remove All listeners
+					EditText atname = (EditText) findViewById(R.id.at);
+					atname.removeTextChangedListener(_ATNameWatcher);
+					EditText participantView = (EditText) findViewById(R.id.participants);
+					participantView.removeTextChangedListener(participantsWatcher);
+					EditText dateView = (EditText) findViewById(R.id.date);
+					dateView.removeTextChangedListener(trialDateWatcher);
+					//Get Layouts
+					LinearLayout taskLayout = (LinearLayout) op.getParent();
+					TextView assistiveTech = (TextView)op;
+					LinearLayout areaLayout= (LinearLayout)taskLayout.getParent();
+					String areaText=((TextView)areaLayout.getChildAt(0)).getText().toString();
+					//If deletion invalid
+					if(taskLayout.getChildCount()<=2){
+						Toast.makeText(context, "At least one AT is required for a task", Toast.LENGTH_SHORT).show();
+					}	
+					else{//getObjects
+					Area areaobj = getAreaByName(areaText);
+					Task t = areaobj.getTaskById(taskLayout.getChildAt(0).getId());
+					//Delete from Logics
+					t.ats.remove(t.getATById(assistiveTech.getId()));
+					//Delete from view
+					taskLayout.removeView(assistiveTech);
+					//Select other AT
+					taskLayout.getChildAt(1).callOnClick();}
+				}
+			};
+			((Button)findViewById(R.id.deleteat)).setOnClickListener(addCLick);
+		} catch (ClassCastException e) {
+			Log.e("ATGuide", "" + e);
+		} catch (Exception e) {
+			Log.e("ATGuide", "" + e);
+		}
 		
 	}
 	
 	
+
 	/**
+	 * Highlights the given view (un-highlights all the other views )
+	 * 
 	 * @param tv
 	 */
 	public void highlightThis(View tv) {
@@ -327,15 +537,15 @@ public class FirstTrial extends FragmentActivity {
 				for (int i = 0; i < ll.getChildCount(); i++) {
 					View tc = (View) ll.getChildAt(i);
 					tc.setBackgroundResource(0);
-					if(tc instanceof LinearLayout){
-					LinearLayout lnk= (LinearLayout)tc;
-					for (int j = 0; j < lnk.getChildCount(); j++)
-					lnk.getChildAt(j).setBackgroundResource(0);
+					if (tc instanceof LinearLayout) {
+						LinearLayout lnk = (LinearLayout) tc;
+						for (int j = 0; j < lnk.getChildCount(); j++)
+							lnk.getChildAt(j).setBackgroundResource(0);
 					}
 				}
 			}
 		}
-		
+
 		tv.setBackground(getResources().getDrawable(R.drawable.highlighted));
 		if (tv.getParent() instanceof LinearLayout)
 			((LinearLayout) tv.getParent()).getChildAt(0).setBackgroundColor(
@@ -343,8 +553,7 @@ public class FirstTrial extends FragmentActivity {
 	}
 
 	/**
-	 * to get area Obj by name from the list
-	 * 
+	 * To get area object by name from the list
 	 * @param areaname
 	 * @return
 	 */
@@ -360,6 +569,7 @@ public class FirstTrial extends FragmentActivity {
 		return null;
 	}
 
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
@@ -369,7 +579,6 @@ public class FirstTrial extends FragmentActivity {
 
 	@Override
 	protected void onResume() {
-		Toast.makeText(context, "Resumed", Toast.LENGTH_SHORT).show();
 		super.onResume();
 	}
 
