@@ -75,15 +75,13 @@ public class InputForm extends Activity {
 	}
 
 	/**
-	 * Set form data
-	 * 
+	 * Set form data from the businessLogic to the view.
 	 * @param year
 	 * @param month
 	 * @param day
 	 * @param studentparticipant
 	 * @param studentschool
 	 * @param studentid
-	 * 
 	 */
 	private void setFormData() {
 		EditText sid = ((EditText) findViewById(R.id.studentid));
@@ -125,9 +123,7 @@ public class InputForm extends Activity {
 	
 	/**
 	 * Save Data from the view v
-	 * 
 	 * @param view of current form
-	 *            
 	 */
 	private void saveData(View v) {
 		// TODO save Data

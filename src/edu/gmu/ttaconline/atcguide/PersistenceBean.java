@@ -489,7 +489,7 @@ public class PersistenceBean {
 				cursor.moveToNext();
 			}
 			db.close();
-			Log.d("ATGUIDE", "task store retrieve");
+			Log.d("ATGUIDE", "task store retrieve successful");
 			}catch(Exception e){
 				Log.e("ATGUIDE","Task Store Error on retrieval "+e);	
 			}
@@ -504,13 +504,10 @@ public class PersistenceBean {
 		try{
 		FeedReaderDbHelper mDbHelper = new FeedReaderDbHelper(context);
 		SQLiteDatabase db = mDbHelper.getWritableDatabase();
-		//db.execSQL("DELETE FROM "+TaskStore.TABLE_NAME+" WHERE "+TaskStore.COL_STUDENT_ID+" = '"+studentid+"' AND "+TaskStore.COL_AREA_ID+"= '"+parentid+"'");
-		
 			String sql="SELECT * FROM "+StrategyStore.TABLE_NAME+" WHERE "+
 						""+StrategyStore.COL_STUDENT_ID+" = '"+studentid+"' AND "+StrategyStore.COL_TASKID+" = '"+taskid+"'";
 			Cursor cursor=db.rawQuery(sql,null);
 			cursor.moveToFirst();
-			Log.d("ATGUIDE","There are "+cursor.getCount()+" records for the task "+taskid);
 			while(!cursor.isAfterLast()){
 			String key=cursor.getString(cursor.getColumnIndex(StrategyStore.COL_STRATEGY_ID));
 			String strategyText=cursor.getString(cursor.getColumnIndex(StrategyStore.COL_STRATEGY_TEXT));
@@ -522,18 +519,21 @@ public class PersistenceBean {
 		return strategyMap;
 	} 
 	
+	/**
+	 * Get List of students in the DB
+	 * 
+	 * @param context
+	 * @return List of students
+	 */
 	public static ArrayList<String> getStudentList(Context context){
+		
 		ArrayList<String> studentList=  new ArrayList<String>();
-			
 		FeedReaderDbHelper mDbHelper = new FeedReaderDbHelper(context);
 		SQLiteDatabase db = mDbHelper.getWritableDatabase();
-		//db.execSQL("DELETE FROM "+TaskStore.TABLE_NAME+" WHERE "+TaskStore.COL_STUDENT_ID+" = '"+studentid+"' AND "+TaskStore.COL_AREA_ID+"= '"+parentid+"'");
-			try{
+		try{
 			String sql="SELECT DISTINCT "+IntentStore.COLUMN_NAME_ID+" FROM "+IntentStore.TABLE_NAME;
 			Cursor cursor=db.rawQuery(sql,null);
 			cursor.moveToFirst();
-			Log.d("ATGUIDE", "Retrieving all ids: Records Count:"+cursor.getCount());
-			Log.d("ATGUIDE", "Persisted student id"+PersistenceBean.getCurrentId(context));
 			while(!cursor.isAfterLast())
 			{
 				studentList.add(cursor.getString(cursor.getColumnIndex(FeedEntry.STUDENT_ID)));

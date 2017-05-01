@@ -87,9 +87,10 @@ public class FirstTrial extends FragmentActivity {
 		ListView lv = (ListView) findViewById(R.id.instructionalAreasList);
 		MergeAdapter m = (MergeAdapter) lv.getAdapter();
 		m.getCount();
-		View first = (View) m.getItem(0);
+		View first = (View) m.getItem(0); //Linear Layout
 		if (first != null && first instanceof LinearLayout){
-			((LinearLayout)first).getChildAt(1).callOnClick();
+			LinearLayout taskLay=(LinearLayout)((LinearLayout)first).getChildAt(1);
+			taskLay.getChildAt(1).callOnClick();
 		} 
 	}
 
@@ -291,9 +292,7 @@ public class FirstTrial extends FragmentActivity {
 	}
 
 	/**
-	 * 
 	 * Sets the given AT to the view.
-	 * 
 	 * @param at
 	 *            assitive technology object to be set to view
 	 * @param currentClicked
