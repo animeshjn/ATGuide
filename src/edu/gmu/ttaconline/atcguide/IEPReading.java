@@ -5,7 +5,6 @@ import java.util.List;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -33,18 +32,38 @@ public class IEPReading extends Activity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_iepreading);
-		Log.d("ATGUIDE", "on create");
-		context = getApplicationContext();
-		currentIntent = getIntent();
-		checkUri();
-		// setCurrentIntent();
-		setNextListener();
+		try {
+			setContentView(R.layout.activity_iepreading);
+			Log.d("ATGUIDE", "on create");
+			context = getApplicationContext();
+			setIntentFromDB();
+			checkUri();
+			// setCurrentIntent();
+			setValuesFromIntent();
+			setRadioToView();
+			setNextListener();
+		} catch (Exception e) {
+			Log.e("ATGUIDE", "Exception in IEP READING: " + e);
+		}
 	}
 
+	/**
+	 * Set Intent From DB
+	 */
+	private void setIntentFromDB() {
+
+		currentIntent = getIntent();
+		currentIntent = PersistenceBean.getExistingIntent(
+				PersistenceBean.getCurrentId(context), context);
+
+	}
+
+	/**
+	 * Check URI for redirection from another application
+	 */
 	private void checkUri() {
-		// TODO Auto-generated method stub
 		Uri uri = currentIntent.getData();
 		if (uri != null) {
 			String msgFromUrl = currentIntent.getDataString();
@@ -53,13 +72,14 @@ public class IEPReading extends Activity {
 			} catch (UnsupportedEncodingException e) {
 				e.printStackTrace();
 			}
-			// Toast.makeText(context,"Got Uri "+msgFromUrl,Toast.LENGTH_SHORT).show();
 		}
 	}
 
+	/**
+	 * @see android.app.Activity#onResume()
+	 */
 	@Override
 	protected void onResume() {
-		// TODO Auto-generated method stub
 		super.onResume();
 		if (currentIntent.getData() != null
 				&& currentIntent.getData().toString()
@@ -88,7 +108,6 @@ public class IEPReading extends Activity {
 		}
 
 		currentIntent = getIntent();
-
 		// Toast.makeText(context, "Welcome Back !"+currentIntent.getData(),
 		// Toast.LENGTH_SHORT)
 		// .show();
@@ -97,32 +116,29 @@ public class IEPReading extends Activity {
 
 	@Override
 	protected void onRestoreInstanceState(Bundle savedInstanceState) {
+
 		// TODO Auto-generated method stub
 		super.onRestoreInstanceState(savedInstanceState);
 		if (currentIntent.getData() != null
 				&& currentIntent.getData().toString()
 						.contains("http://iepreading.atguide.com")) {
-			Toast.makeText(context, "Welcome Back ! (Restore State)",
-					Toast.LENGTH_SHORT).show();
 		}
 	}
 
-	// public void readData()
-	// {
-	// RadioGroup read=(RadioGroup)findViewById(R.id.read);
-	// }
-
+	/**
+	 * Set listener to forward the view to the next activity.
+	 */
 	private void setNextListener() {
 		Button next = (Button) findViewById(R.id.nextbutton);
 		next.setOnClickListener(new Button.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				setRadioValues();
-
 				currentIntent.putExtra("iepreading", IEPReading);
 				currentIntent.putExtra("iepalt", IEPAlt);
 				Log.d("ATGUIDE", "Alt:" + IEPAlt);
 				Log.d("ATGUIDE", "Reading:" + IEPReading);
+
 				if (IEPAlt.trim().equalsIgnoreCase("NO")) {
 					currentIntent.setClass(context, TaskForm.class);
 					PersistenceBean.persistIntent(
@@ -157,12 +173,7 @@ public class IEPReading extends Activity {
 												.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
 										aimIntent
 												.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-										// aimIntent
-										// .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 										aimIntent.putExtras(currentIntent);
-										// aimIntent.addCategory(Intent.CATEGORY_LAUNCHER);
-										// aimIntent
-										// .setFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
 										aimIntent
 												.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
 										aimIntent
@@ -185,7 +196,6 @@ public class IEPReading extends Activity {
 											}
 										}
 
-										// store
 										PersistenceBean.persistIntent(aimIntent
 												.getStringExtra("studentid"),
 												currentIntent, context);
@@ -200,15 +210,12 @@ public class IEPReading extends Activity {
 													context,
 													"AIM eLigibility not installed",
 													Toast.LENGTH_SHORT).show();
-											// Take to play store
 											aimIntent = new Intent(
 													Intent.ACTION_VIEW,
 													(Uri.parse("market://aimeligibility.com")));
 											aimIntent.putExtras(currentIntent);
 											startActivity(aimIntent);
-
 										}
-
 										finish();
 									} catch (Exception e) {
 										Log.e("ATGUIDE", " " + e.getMessage());
@@ -217,14 +224,9 @@ public class IEPReading extends Activity {
 							});
 					builder.setNegativeButton("No",
 							new DialogInterface.OnClickListener() {
-
 								@Override
 								public void onClick(DialogInterface dialog,
 										int which) {
-									// TODO Auto-generated method stub
-									// Say No
-									// Forward to next without verifying
-									// eligibility
 									try {
 										currentIntent = getIntent();
 										currentIntent.setClass(context,
@@ -241,17 +243,14 @@ public class IEPReading extends Activity {
 									} catch (Exception unknown) {
 										Log.e("ATGUIDE",
 												"EX: " + unknown.getMessage());
-										}
+									}
 								}
 							});
-					
 					builder.setNeutralButton("Cancel",
 							new DialogInterface.OnClickListener() {
 								@Override
 								public void onClick(DialogInterface dialog,
 										int which) {
-									// TODO Auto-generated method stub
-									// Nothing
 									dialog.dismiss();
 								}
 							});
@@ -270,11 +269,37 @@ public class IEPReading extends Activity {
 		RadioButton iepaltradio = (RadioButton) findViewById(iepAlternative
 				.getCheckedRadioButtonId());
 		IEPAlt = (String) iepaltradio.getText();
-
 	}
 
-	private void setCurrentIntent() {
-		currentIntent = getIntent();
+	private void setValuesFromIntent() {
+		IEPReading = "" + currentIntent.getStringExtra("iepreading");
+		IEPAlt = "" + currentIntent.getStringExtra("iepalt");
+	}
+
+	/**
+	 *Set radio to the view
+	 * 
+	 */
+	private void setRadioToView() {
+	
+		read = (RadioGroup) findViewById(R.id.read);
+		if (IEPReading != null && IEPReading.equalsIgnoreCase("Yes")) {
+			RadioButton iepreader = (RadioButton) findViewById(R.id.iepreadyes);
+			read.check(iepreader.getId());
+		} else {
+			RadioButton iepreader = (RadioButton) findViewById(R.id.iepreadno);
+			read.check(iepreader.getId());
+		}
+
+		iepAlternative = (RadioGroup) findViewById(R.id.iepalternative);
+		if (IEPAlt != null && IEPAlt.equalsIgnoreCase("Yes")) {
+			RadioButton iepaltr = (RadioButton) findViewById(R.id.iepaltyes);
+			read.check(iepaltr.getId());
+		}
+		else {
+			RadioButton iepaltr = (RadioButton) findViewById(R.id.iepaltno);
+			read.check(iepaltr.getId());
+		}
 	}
 
 	@Override
@@ -284,7 +309,6 @@ public class IEPReading extends Activity {
 		return true;
 	}
 
-	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// Handle action bar item clicks here. The action bar will
@@ -297,7 +321,6 @@ public class IEPReading extends Activity {
 		return super.onOptionsItemSelected(item);
 	}
 
-	
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
 		// TODO Auto-generated method stub
@@ -307,7 +330,6 @@ public class IEPReading extends Activity {
 		RadioButton radio = (RadioButton) findViewById(selectedId);
 		read = (RadioGroup) findViewById(R.id.read);
 		IEPReading = (String) radio.getText();
-		
 		iepAlternative = (RadioGroup) findViewById(R.id.iepalternative);
 		RadioButton iepaltradio = (RadioButton) findViewById(iepAlternative
 				.getCheckedRadioButtonId());

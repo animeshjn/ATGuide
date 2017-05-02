@@ -6,7 +6,7 @@
 
     <uses-sdk
         android:minSdkVersion="19"
-        android:targetSdkVersion="21" />
+        android:targetSdkVersion="23" />
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
@@ -63,9 +63,7 @@
             android:name=".IEPReading"
             android:label="@string/title_activity_iepreading"
             android:launchMode="singleTask"
-            android:screenOrientation="landscape"
-            
-              >
+            android:screenOrientation="landscape" >
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -90,15 +88,19 @@
         </activity>
         <activity
             android:name=".FirstTrial"
-            android:label="@string/title_activity_first_trial" 
-             android:screenOrientation="landscape"
-             android:windowSoftInputMode="adjustPan" >
+            android:label="@string/title_activity_first_trial"
+            android:screenOrientation="landscape"
+            android:windowSoftInputMode="adjustPan" >
         </activity>
         <activity
             android:name=".AT_List"
-            android:label="@string/title_activity_at__list" 
-             android:screenOrientation="landscape"
-             android:windowSoftInputMode="adjustPan" >
+            android:label="@string/title_activity_at__list"
+            android:screenOrientation="landscape"
+            android:windowSoftInputMode="adjustPan" >
+        </activity>
+        <activity
+            android:name=".SecondTrial"
+            android:label="@string/title_activity_second_trial" >
         </activity>
     </application>
 

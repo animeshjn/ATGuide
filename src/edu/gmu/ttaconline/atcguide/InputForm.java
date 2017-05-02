@@ -49,7 +49,8 @@ public class InputForm extends Activity {
 			fillSampleData();
 		if(currentIntent.getBooleanExtra("open", false))
 		{	currentIntent =PersistenceBean.getExistingIntent(currentIntent.getStringExtra("studentid"), context);
-			fillDataFromIntent();
+			currentIntent.putExtra("open",true);
+		     fillDataFromIntent();
 		}
 		// else blank form
 		// case Preview : fillPDF(Intent)
@@ -122,7 +123,7 @@ public class InputForm extends Activity {
 
 	
 	/**
-	 * Save Data from the view v
+	 *Save Data from the view v
 	 * @param view of current form
 	 */
 	private void saveData(View v) {
@@ -159,7 +160,7 @@ public class InputForm extends Activity {
 		if(!isSample){
 		PersistenceBean.persistIntent(intent.getStringExtra("studentid"),
 				intent, context);
-		Toast.makeText(context, "Saved", Toast.LENGTH_SHORT).show();
+		PersistenceBean.persistCurrentId(intent.getStringExtra("studentid"), context);
 		}
 		startActivity(intent);
 	}

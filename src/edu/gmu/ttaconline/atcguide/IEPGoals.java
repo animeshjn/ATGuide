@@ -50,10 +50,22 @@ public class IEPGoals extends Activity {
 		//current intent
 			currentIntent=getIntent();		
 		//OR get Intent from database
+			currentIntent=PersistenceBean.getExistingIntent(PersistenceBean.getCurrentId(context), context);
 		//if it is already set
 		setSelected();
 		
 	}
+	
+	
+	/**
+	 * Sets the value from the database to the view
+	 *//*
+	private void setPersistedView(){
+		
+		
+		
+	}
+	*/
 	
 	/**
 	 * To set the selected data from the view to the controller layer
