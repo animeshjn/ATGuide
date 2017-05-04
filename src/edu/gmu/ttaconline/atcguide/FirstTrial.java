@@ -3,6 +3,7 @@ package edu.gmu.ttaconline.atcguide;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Currency;
 import java.util.Locale;
 
 import com.commonsware.cwac.merge.MergeAdapter;
@@ -11,6 +12,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -59,7 +61,7 @@ public class FirstTrial extends FragmentActivity {
 	TextWatcher _ATNameWatcher, participantsWatcher, trialDateWatcher;
 	android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
 	Activity activity;
-
+	Intent currentIntent;
 	// areas
 	/* Methods */
 	// Control start point
@@ -80,6 +82,23 @@ public class FirstTrial extends FragmentActivity {
 		setATListener();
 		setDatePickListener();
 		clickFirstItem();
+		setNextListener();
+		
+	}
+
+	private void setNextListener() {
+		currentIntent=PersistenceBean.getExistingIntent(PersistenceBean.getCurrentId(context), context);
+		currentIntent.setClass(context, SecondTrial.class);
+		
+		Button nextButton= (Button)findViewById(R.id.nextbutton);
+		nextButton.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				startActivity(currentIntent);
+				
+			}
+		});
 		
 	}
 
@@ -91,7 +110,7 @@ public class FirstTrial extends FragmentActivity {
 		if (first != null && first instanceof LinearLayout){
 			LinearLayout taskLay=(LinearLayout)((LinearLayout)first).getChildAt(1);
 			taskLay.getChildAt(1).callOnClick();
-		} 
+		}
 	}
 
 	/**

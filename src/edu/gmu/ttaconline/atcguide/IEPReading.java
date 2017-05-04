@@ -32,7 +32,6 @@ public class IEPReading extends Activity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-
 		super.onCreate(savedInstanceState);
 		try {
 			setContentView(R.layout.activity_iepreading);
@@ -40,10 +39,10 @@ public class IEPReading extends Activity {
 			context = getApplicationContext();
 			setIntentFromDB();
 			checkUri();
-			// setCurrentIntent();
 			setValuesFromIntent();
 			setRadioToView();
 			setNextListener();
+			
 		} catch (Exception e) {
 			Log.e("ATGUIDE", "Exception in IEP READING: " + e);
 		}
@@ -53,11 +52,12 @@ public class IEPReading extends Activity {
 	 * Set Intent From DB
 	 */
 	private void setIntentFromDB() {
-
+		/*
+		 * Effects: initialize intent from DB
+		 */
 		currentIntent = getIntent();
 		currentIntent = PersistenceBean.getExistingIntent(
 				PersistenceBean.getCurrentId(context), context);
-
 	}
 
 	/**
@@ -277,28 +277,31 @@ public class IEPReading extends Activity {
 	}
 
 	/**
-	 *Set radio to the view
+	 * Set radio to the view
 	 * 
 	 */
 	private void setRadioToView() {
-	
+
 		read = (RadioGroup) findViewById(R.id.read);
+	
 		if (IEPReading != null && IEPReading.equalsIgnoreCase("Yes")) {
+			
 			RadioButton iepreader = (RadioButton) findViewById(R.id.iepreadyes);
 			read.check(iepreader.getId());
 		} else {
 			RadioButton iepreader = (RadioButton) findViewById(R.id.iepreadno);
 			read.check(iepreader.getId());
+			iepreader.callOnClick();
 		}
 
 		iepAlternative = (RadioGroup) findViewById(R.id.iepalternative);
+		
 		if (IEPAlt != null && IEPAlt.equalsIgnoreCase("Yes")) {
 			RadioButton iepaltr = (RadioButton) findViewById(R.id.iepaltyes);
-			read.check(iepaltr.getId());
-		}
-		else {
+			iepAlternative.check(iepaltr.getId());
+		} else {
 			RadioButton iepaltr = (RadioButton) findViewById(R.id.iepaltno);
-			read.check(iepaltr.getId());
+			iepAlternative.check(iepaltr.getId());
 		}
 	}
 

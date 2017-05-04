@@ -45,6 +45,8 @@ public class InstructionalAreas extends Activity {
 	boolean isSample = false;
 	boolean otherSelected = false;
 	MergeAdapter merge = new MergeAdapter();
+	String firstList[];
+	String secondList[];
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +56,7 @@ public class InstructionalAreas extends Activity {
 		setCurrentIntent(); // Retrieve current intent
 		instructionalCheck = new CheckBoxBean();
 		setInstuctionalAreas(); // set the view of instructional areas
+		checkAreaFromDB();// check areas from db
 		setNextListener(); // Persist selection and go to next activity
 	}
 
@@ -114,8 +117,8 @@ public class InstructionalAreas extends Activity {
 		try {
 			list1 = (LinearLayout) this.findViewById(R.id.list1);
 			list2 = (LinearLayout) this.findViewById(R.id.list2);
-			String firstList[] = getResources().getStringArray(R.array.list1);
-			String secondList[] = getResources().getStringArray(R.array.list2);
+			firstList = getResources().getStringArray(R.array.list1);
+			secondList = getResources().getStringArray(R.array.list2);
 			addListToView(firstList, list1);
 			addListToView(secondList, list2);
 			addOtherArea();
@@ -123,6 +126,47 @@ public class InstructionalAreas extends Activity {
 			Log.e("ATGUIDE", "Other Exception: " + e.getMessage());
 		}
 
+	}
+
+	/**
+	 * Checkbox Area from the database.
+	 */
+	private void checkAreaFromDB() {
+		try {
+			ArrayList<CharSequence> persistedList = PersistenceBean
+					.getPersistedAreaList(
+							PersistenceBean.getCurrentId(context), context);
+			if (persistedList != null)
+				for (CharSequence areaName : persistedList) {
+					LinearLayout list1 = (LinearLayout) findViewById(R.id.list1);
+					for (int i = 0; i < list1.getChildCount(); i++) {
+						if (list1.getChildAt(i) instanceof LinearLayout) {
+							LinearLayout checkLayout = (LinearLayout) list1
+									.getChildAt(i);
+							CheckBox cb = (CheckBox) checkLayout.getChildAt(0);
+							String checkText = (String) cb.getText();
+							if (checkText.contains(areaName)) {
+								cb.setChecked(true);
+							}
+						}
+					}
+
+					LinearLayout list2 = (LinearLayout) findViewById(R.id.list2);
+					for (int i = 0; i < list2.getChildCount(); i++) {
+						if (list1.getChildAt(i) instanceof LinearLayout) {
+							LinearLayout checkLayout = (LinearLayout) list2
+									.getChildAt(i);
+							CheckBox cb = (CheckBox) checkLayout.getChildAt(0);
+							String checkText = (String) cb.getText();
+							if (checkText.contains(areaName)) {
+								cb.setChecked(true);
+							}
+						}
+					}
+				}
+		} catch (Exception e) {
+			Log.e("ATGUIDE", "EX: " + e);
+		}
 	}
 
 	/**
@@ -235,6 +279,7 @@ public class InstructionalAreas extends Activity {
 			CheckBox currentCheck = new CheckBox(context);
 			currentCheck.setLayoutParams(layoutparams);
 			currentCheck.setText(listArray[i]);
+
 			currentCheck.setTextColor(Color.BLACK);
 			currentCheck.setId(instructionalCheck.getNextCheckID());
 
@@ -243,7 +288,8 @@ public class InstructionalAreas extends Activity {
 
 						@Override
 						public void onCheckedChanged(CompoundButton buttonView,
-								boolean isChecked) {
+
+						boolean isChecked) {
 							if (isChecked) {
 								selectedInstructionalAreas
 										.add((String) buttonView.getText());

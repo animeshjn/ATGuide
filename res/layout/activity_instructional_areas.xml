@@ -57,7 +57,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:weightSum="100" >
+                android:weightSum="100"
+                android:id="@+id/arealistlayout">
 
                 <LinearLayout
                     android:id="@+id/list1"

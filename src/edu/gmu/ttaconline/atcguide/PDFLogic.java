@@ -35,47 +35,65 @@ import com.itextpdf.text.pdf.PdfStamper;
  */
 public class PDFLogic extends Service{
 	
-
+	/**Font*/
 	static Font headfont;
+	
+	/**StudentId*/
 	static String studentid;
+	
+	/**IEPGoal*/
 	static String iepgoal = "";
+	
+	/**IEPReading*/
 	static String iepreading = "";
+	
+	/**IEPTest*/
 	static String ieptest = "";
+	
+	/**Participants*/
 	static String participants = "";
+	
+	/**IEPAlt*/
 	static String iepalt = "";
+	
+	/**Context*/
 	static Context context;
+	
+	/**School*/
 	static String school = "";
+	
+	/**Grade*/
 	static String grade = "";
+	
+	/**Date*/
 	static String date = "";
+	
+	/**areaList*/
 	static ArrayList<CharSequence> areaList = null;
+	
 	private final IBinder mBinder = new MyBinder();
+	
 	public static final String LOG_TAG = "ATGUIDE";
+	
 	public static Activity activity;
-//	public Context getContext() {
-//		return context;
-//	}
 
-//	public void setContext(Context context) {
-//		this.context = context;
-//	}
-
+	
 	public void initFonts() {
 		Font f = new Font(FontFamily.HELVETICA, 14, Font.NORMAL, BaseColor.RED);
 		headfont = f;
 	}
 
 	/**
-	 * Generates PDF document from given context
-	 * 
-	 * @param activity
-	 *            in current intent stack
+	 * Generates PDF document from given context.
+	 * @param activity - current intent stack.
 	 */
 	public static void generatePDF() {
 		PDFLogic.context = activity.getApplicationContext();
 		try {
 			setData();
-			// SETUP PATH
+			//Setup Path
 			Log.d(LOG_TAG, "Data set");
+			
 			String dest = Environment.getExternalStorageDirectory()
 					.getAbsolutePath() + File.separator + "ATGUIDE_RESULTS";
 			Log.d(LOG_TAG, "creating dest");
@@ -127,20 +145,26 @@ public class PDFLogic extends Service{
 				}
 			}
 			for (CharSequence area : areaList) {
+				
 				String areaname = area.toString().toLowerCase();
 				form1.setField(areaname, "On");
 				if (areaname.contains("study"))
 					form1.setField("study", "On");
+				
 				else if (areaname.contains("oral"))
 					form1.setField("oral", "On");
+				
 				else if (areaname.contains("activities"))
 					form1.setField("activities", "On");
+				
 				else if (areaname.contains("recreation"))
 					form1.setField("recreation", "On");
+				
 				else if (areaname.contains("Positioning"))
 					form1.setField("positioning", "On");
 				else if (areaname.contains("computer"))
 					form1.setField("computer", "On");
+				
 				else if (areaname.toLowerCase().contains("environment"))
 					form1.setField("environment", "On");
 				else {
@@ -149,7 +173,6 @@ public class PDFLogic extends Service{
 				}
 			}
 			if (iepgoal.toLowerCase().contains("yes"))
-
 				form1.setField("idyes", "On");
 			else if (iepgoal.toLowerCase().contains("no"))
 				form1.setField("idno", "On");
@@ -211,7 +234,6 @@ public class PDFLogic extends Service{
 		// TODO Auto-generated method stub
 		return mBinder;
 	}
-
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		// TODO Auto-generated method stub
@@ -223,5 +245,4 @@ public class PDFLogic extends Service{
                  return PDFLogic.this;
          }
  }
-
 }

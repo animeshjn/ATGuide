@@ -50,7 +50,6 @@ public class TaskForm extends Activity implements Serializable {
 	int clickedId = id;
 	LayoutInflater inflater;
 	boolean trial1=false;
-	
 	ArrayList<CharSequence> selectedInstructional;
 	ArrayList<String> selectedList;
 	ArrayList<String> trial1TextList=new ArrayList<String>();
@@ -697,6 +696,7 @@ public class TaskForm extends Activity implements Serializable {
 			area.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
+
 					try {
 						TextView curr = (TextView) v;
 						// currentText = curr;
@@ -736,6 +736,28 @@ public class TaskForm extends Activity implements Serializable {
 		// context);
 		// Log.d("ATGUIDE","here: "+persisted.getStringExtra("studentid"));
 	}
+	
+	public void setFromDB(){
+		getData();
+		LayoutParams textViewParams = new LayoutParams(
+				LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+		ListView instructional = (ListView) findViewById(R.id.instructionalAreasList);
+		ArrayList<Area> persistedObjL=PersistenceBean.getPersistedAreaObjects(studentid, context);
+		for(Area areaOb: persistedObjL){
+			LinearLayout v = (LinearLayout) inflater.inflate(R.layout.areataskrow, null);
+			v.setId(id++);
+			TextView area = (TextView) v.findViewById(R.id.areatextview);
+			// area.setBackground(getResources().getDrawable(R.drawable.textviewback));
+			area.setText(areaOb.getAreaName());
+			area.setTextAlignment(TextView.TEXT_ALIGNMENT_TEXT_START);
+			area.setLayoutParams(textViewParams);
+			area.setId(id++);
+			TextView task = new TextView(context);
+			task.setText("");
+			
+		}
+	}
+	
 	public void clickThisArea(int currentId) {
 		View v = findViewById(currentId);
 		v.callOnClick();
