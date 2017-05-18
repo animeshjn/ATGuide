@@ -1,7 +1,6 @@
 package edu.gmu.ttaconline.atcguide;
 
 import java.io.Serializable;
-
 import java.util.ArrayList;
 
 import com.commonsware.cwac.merge.MergeAdapter;
@@ -13,6 +12,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -35,34 +35,42 @@ import android.widget.Toast;
 
 public class TaskForm extends Activity implements Serializable {
 	/**
-     *
-     */
+	 * serialVersionUID
+	 */
 	private static final long serialVersionUID = 1L;
+	/**
+	 * Log Tag
+	 */
 	private static final String TAG = "ATGUIDE";
 	Intent currentIntent;
 	Intent persisted;
 	String studentid = "";
 	Context context;
 	TextWatcher watcher[] = new TextWatcher[1000];
-	int id = 3000;
+	static int id = 3000;
 	static int strategyRowid = 0;// to 20
 	ArrayList<Integer> areaIds = new ArrayList<Integer>();
-	int clickedId = id;
+
+	static int clickedId = id;
 	LayoutInflater inflater;
-	boolean trial1=false;
+	boolean trial1 = false;
 	ArrayList<CharSequence> selectedInstructional;
 	ArrayList<String> selectedList;
-	ArrayList<String> trial1TextList=new ArrayList<String>();
+	ArrayList<String> trial1TextList = new ArrayList<String>();
 	ArrayList<Area> areasList = new ArrayList<Area>();
-	ArrayList<Area> trial1List=new ArrayList<Area>();;
+	ArrayList<Area> trial1List = new ArrayList<Area>();;
 	MergeAdapter merge = new MergeAdapter();
 	TextWatcher taskWatcher;
 	Area currentSelection = null;
 	TextView currentText;
 	Activity activity;
-	
-	
-	
+	private OnClickListener taskListener;
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see android.app.Activity#onCreate(android.os.Bundle)
+	 */
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 
@@ -70,76 +78,86 @@ public class TaskForm extends Activity implements Serializable {
 		try {
 			setContentView(R.layout.activity_task_form);
 			// get from db
-			activity=this;
+			activity = this;
 			context = getApplicationContext();
 			currentIntent = getIntentFromDb();// getIntent();//getIntentFromDb();
 			studentid = currentIntent.getStringExtra("studentid");
 			currentIntent.setData(null);
 			inflater = getLayoutInflater();
-			placeArea();//if it is new
-			//retrieveArea()if it is old
+			
+			if(PersistenceBean.getPersistedAreaList(PersistenceBean.getCurrentId(context), context).size()==0)
+			placeArea();// if it is new
+			else
+				placeAreaFromDB();
+			// retrieveArea()if it is old
 			LinearLayout first = (LinearLayout) merge.getItem(0);
 			if (first.getChildAt(0) != null) {
 				first.getChildAt(0).callOnClick();
 			} else
-			first.callOnClick();
+				first.callOnClick();
 			addPlusButtonListener();
 			setNextListener();
 			setLogListener();
 			validateSolutions();
 		} catch (Exception unknown) {
 			Log.e("ATGUIDE", "Exception " + unknown.getMessage());
+			Toast.makeText(context,"Exception"+unknown,Toast.LENGTH_SHORT).show();
 		}
 	}
 
 	/**
-	 * Checks if first trial is required for any tasks, identifies the tasks for first trial 
+	 * Checks if first trial is required for any tasks, identifies the tasks for
+	 * first trial
 	 */
 	private void validateSolutions() {
-		//Abstract function:
-		//Get all area 
-		//Get each task 
-		//Add the solution not working to separate list 
+		// Abstract function:
+		// Get all area
+		// Get each task
+		// Add the solution not working to separate list
 		// save the list
-		
-		//For all selected / persisted Area
-		trial1=false;
-		for (Area checkArea: areasList){
-			//For each task in this area
-			for(Task task:checkArea.tasks)
-			{
-				//If any of the strategies in current task are not working
-				if(!task.solutions){trial1List.add(checkArea);
-				trial1TextList.add(""+checkArea.getAreaName());
-				trial1=true;
+		// For all selected / persisted Area
+		trial1 = false;
+
+		for (Area checkArea : areasList) {
+			// For each task in this area
+			for (Task task : checkArea.tasks) {
+				// If any of the strategies in current task are not working
+				if (!task.solutions) {
+					trial1List.add(checkArea);
+					trial1TextList.add("" + checkArea.getAreaName());
+					trial1 = true;
 				}
 			}
-		
+
 		}
-		
+
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see android.app.Activity#onSaveInstanceState(android.os.Bundle)
 	 */
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
 		// TODO Auto-generated method stub
-	
 		super.onSaveInstanceState(outState);
-		
 	}
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see android.app.Activity#onBackPressed()
 	 */
 	@Override
-    public void onBackPressed(){
-        //Save Data
-		
+	public void onBackPressed() {
+		// Save Data
+
 		super.onBackPressed();
-    }
-	
+	}
+
 	/**
+	 * Intent From DB
 	 * 
 	 * @return Intent fetched from database
 	 */
@@ -157,58 +175,76 @@ public class TaskForm extends Activity implements Serializable {
 		next.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-					Log.d("ATGUIDE", "AREALIST SIZE"+areasList.size());
-					
-					PersistenceBean.persistAreaObject(areasList, studentid, context);
-					Log.d("ATGUIDE","student id on next persist"+studentid);
-					PersistenceBean.persistIntent(currentIntent.getStringExtra("studentid"), currentIntent, context);
-					
-					validateSolutions();
-					if(trial1)
-					{
-						//Alert About trial 1 
-						AlertDialog.Builder info = new AlertDialog.Builder(activity);
-					
-						info.setMessage(getResources().getString(R.string.trial1nav).toString());
-						info.setCancelable(true);
-						info.setPositiveButton("Ok",
-								new DialogInterface.OnClickListener() {
-									public void onClick(DialogInterface dialog, int id) {
-										//FWD to trial 1 
-										currentIntent.putExtra("trial1",trial1);
-										currentIntent.setClass(context, FirstTrial.class);
-										PersistenceBean.persistAreaObject(trial1List, "trial1"+studentid, context);
-										Log.d("ATGUIDE","student id on next persist"+studentid);
-										PersistenceBean.persistInstructionalAreas("trial1"+studentid,trial1TextList, context);
-										startActivity(currentIntent);
-									}
-								});
-						info.setNeutralButton("Cancel",
-								new DialogInterface.OnClickListener() {
-									public void onClick(DialogInterface dialog, int id) {
-										dialog.cancel(); 
-									}
-								});
-						 AlertDialog infoAlert = info.create();
-						 infoAlert.setCanceledOnTouchOutside(false);
-						 infoAlert.setCancelable(false);
-						 infoAlert.show();
-					}
-					else{
-						AlertDialog.Builder info = new AlertDialog.Builder(activity);
-					info.setMessage(getResources().getString(R.string.adequatesolution).toString());
+				Log.d("ATGUIDE", "AREALIST SIZE" + areasList.size());
+				PersistenceBean
+						.persistAreaObject(areasList, studentid, context);
+				Log.d("ATGUIDE", "student id on next persist" + studentid);
+				PersistenceBean.persistIntent(
+						currentIntent.getStringExtra("studentid"),
+						currentIntent, context);
+				validateSolutions();
+				if (trial1) {
+					// Alert About trial 1
+					AlertDialog.Builder info = new AlertDialog.Builder(activity);
+					info.setMessage(getResources()
+							.getString(R.string.trial1nav).toString());
+					info.setCancelable(true);
+					info.setPositiveButton("Ok",
+							new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog,
+										int id) {
+									// FWD to trial 1
+									currentIntent.putExtra("trial1", trial1);
+									
+									currentIntent.setClass(context,
+											FirstTrial.class);
+									PersistenceBean.persistAreaObject(
+											trial1List, "trial1" + studentid,
+											context);
+									Log.d("ATGUIDE",
+											"student id on next persist"
+													+ studentid);
+									PersistenceBean.persistInstructionalAreas(
+											"trial1" + studentid,
+											trial1TextList, context);
+									startActivity(currentIntent);
+								}
+							});
+					info.setNeutralButton("Cancel",
+							new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog,
+										int id) {
+									dialog.cancel();
+								}
+							});
+					AlertDialog infoAlert = info.create();
+					infoAlert.setCanceledOnTouchOutside(false);
+					infoAlert.setCancelable(false);
+					infoAlert.show();
+				} else {
+					AlertDialog.Builder info = new AlertDialog.Builder(activity);
+					info.setMessage(getResources().getString(
+							R.string.adequatesolution).toString());
 					info.setCancelable(true);
 					info.setPositiveButton("OK",
 							new DialogInterface.OnClickListener() {
-								public void onClick(DialogInterface dialog, int id) {
-									Toast.makeText(context, "Please Wait", Toast.LENGTH_SHORT).show();
-									PDFLogic.activity=activity;
-									//Intent pdfService= new Intent(activity.getApplicationContext(),PDFLogic.class);
-									currentIntent.setClass(context, PDFLogic.class);
-									currentIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-									currentIntent.setFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
-									//Intent pdfService= new Intent(getApplicationContext(),PDFLogic.class);
-									android.widget.ProgressBar bar = new android.widget.ProgressBar(getApplicationContext());
+								public void onClick(DialogInterface dialog,
+										int id) {
+									Toast.makeText(context, "Please Wait",
+											Toast.LENGTH_SHORT).show();
+									PDFLogic.activity = activity;
+									// Intent pdfService= new
+									// Intent(activity.getApplicationContext(),PDFLogic.class);
+									currentIntent.setClass(context,
+											PDFLogic.class);
+									currentIntent
+											.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+									currentIntent
+											.setFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+									// Intent pdfService= new
+									// Intent(getApplicationContext(),PDFLogic.class);
+									android.widget.ProgressBar bar = new android.widget.ProgressBar(
+											getApplicationContext());
 									bar.setIndeterminate(true);
 									bar.bringToFront();
 									startService(currentIntent);
@@ -216,43 +252,53 @@ public class TaskForm extends Activity implements Serializable {
 							});
 					info.setNeutralButton("Cancel",
 							new DialogInterface.OnClickListener() {
-								public void onClick(DialogInterface dialog, int id) {
-									dialog.cancel(); 
+								public void onClick(DialogInterface dialog,
+										int id) {
+									dialog.cancel();
 								}
 							});
-					 AlertDialog infoAlert = info.create();
-					 infoAlert.setCanceledOnTouchOutside(false);
-					 infoAlert.setCancelable(false);
-					 infoAlert.show();
-					//setContentView(layoutResID);
-					
-					}
-			}});
-					
+					AlertDialog infoAlert = info.create();
+					infoAlert.setCanceledOnTouchOutside(false);
+					infoAlert.setCancelable(false);
+					infoAlert.show();
+					// setContentView(layoutResID);
+
+				}
+			}
+		});
+
 	}
-	
-	private void setLogListener(){
-		
+
+	private void setLogListener() {
+
 		Button log = (Button) findViewById(R.id.logbutton);
 		log.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-					Toast.makeText(context, "Data Logged on Console",Toast.LENGTH_SHORT).show();
-					//Display DATA
-					Log.d("ATGUIDE", "AREALIST SIZE before retrieving"+areasList.size());
-					ArrayList<Area> persistedarea=PersistenceBean.getPersistedAreaObjects(studentid, context);
-					Log.d("ATGUIDE", "starting looop areacount: "+persistedarea.size());
-					for (Area area : persistedarea) {
-						ATGuideLogger.LogIt(area);
-						area.logTasks();
-					}
-			}});
-		
+				Toast.makeText(context, "Data Logged on Console",
+						Toast.LENGTH_SHORT).show();
+				// Display DATA
+				Log.d("ATGUIDE",
+						"AREALIST SIZE before retrieving" + areasList.size());
+				ArrayList<Area> persistedarea = PersistenceBean
+						.getPersistedAreaObjects(studentid, context);
+				Log.d("ATGUIDE",
+						"starting looop areacount: " + persistedarea.size());
+				for (Area area : persistedarea) {
+					ATGuideLogger.LogIt(area);
+					area.logTasks();
+				}
+			}
+		});
+
 	}
 
 	/**
-	 * Used to check if there is an empty strategy, used to avoid adding strategy in case of empty strategy 
-	 * @param current form view
+	 * Used to check if there is an empty strategy, used to avoid adding
+	 * strategy in case of empty strategy
+	 * 
+	 * @param current
+	 *            form view
 	 * @return true if any of the strategy is empty
 	 */
 	public boolean isStrategyEmpty(View v) {
@@ -297,6 +343,7 @@ public class TaskForm extends Activity implements Serializable {
 					areaObj.tasks.remove(areaObj.getTaskById(clickedId));
 					Toast.makeText(context, "Task deleted", Toast.LENGTH_SHORT)
 							.show();
+
 				} else
 					Toast.makeText(context,
 							"At least one task is required for an area",
@@ -407,7 +454,8 @@ public class TaskForm extends Activity implements Serializable {
 			selectedInstructional = PersistenceBean.getPersistedAreaList(
 					PersistenceBean.getCurrentId(getApplicationContext()),
 					getApplicationContext());
-
+			areasList = PersistenceBean.getPersistedAreaObjects(
+					PersistenceBean.getCurrentId(context), context);
 			selectedList = new ArrayList<String>();
 			for (CharSequence selected : selectedInstructional) {
 				selectedList.add((String) selected);
@@ -438,6 +486,76 @@ public class TaskForm extends Activity implements Serializable {
 		return null;
 	}
 
+	@SuppressLint("InflateParams") void placeExistingView() {
+		// Modifies: this view
+		/*
+		 * Effects: places the area, task and AT on the left panels & sets their
+		 * respective listeners
+		 */
+		try {
+			// Initializing data
+			getData();
+			// Set params
+			LayoutParams textViewParams = new LayoutParams(
+					LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+			// The list view on left side
+			ListView instructional = (ListView) findViewById(R.id.instructionalAreasList);
+			// The list of area
+			for (Area area : areasList) {
+				// For each area get a Row
+				LinearLayout areaRow = (LinearLayout) inflater.inflate(
+						R.layout.areataskrow, null);
+				areaRow.setId(id += 2);
+				// Add the area name
+				TextView areaTextView = (TextView) areaRow
+						.findViewById(R.id.areatextview);
+				// area.setBackground(getResources().getDrawable(R.drawable.textviewback));
+				areaTextView.setText(area.getAreaName());
+				areaTextView
+						.setTextAlignment(TextView.TEXT_ALIGNMENT_TEXT_START);
+				areaTextView.setLayoutParams(textViewParams);
+				areaTextView.setId(area.parentId);
+
+				// Set onClick listener to the area name
+				// append current task for 1st trial
+				for (Task task : area.tasks) {
+					// If solutions aren't working
+					if (!task.solutions) {
+						LinearLayout taskLayout = new LinearLayout(context);
+						taskLayout.setOrientation(LinearLayout.VERTICAL);
+						taskLayout.setLayoutParams(textViewParams);
+						TextView tasktextView = new TextView(context);
+						tasktextView.setText(task.getTaskname());
+						taskLayout.setTag(area.getAreaName());
+						tasktextView.setLayoutParams(textViewParams);
+						tasktextView.setId(task.taskid);
+						tasktextView.setTextColor(Color.BLACK);
+						tasktextView.setTypeface(null, Typeface.BOLD);
+						tasktextView.setPadding(15, 0, 0, 0);
+						TextView assistiveTech = new TextView(context);
+						assistiveTech.setPadding(25, 0, 0, 0);
+						assistiveTech.setText("Choose AT");
+						assistiveTech.setTextColor(Color.BLACK);
+						assistiveTech.setId(id++);
+						// assistiveTech.setOnClickListener(//getATListener());
+						// assistiveTech.setTextAlignment();
+						taskLayout.addView(tasktextView);
+						taskLayout.addView(assistiveTech);
+						areaRow.addView(taskLayout);
+					}
+				}
+				// Linear layout task
+				// append Assistive technology to this task
+				merge.addView(areaRow);
+			}
+			instructional.setAdapter(merge);
+		} catch (Exception e) {
+			Log.e("ATGUIDE",
+					"Error retrieving data  FirstTrial->placeArea() \n" + e);
+		}
+
+	}
+
 	/**
 	 * Places area and task views dynamically. Sets all the changes and
 	 * listeners. Sets the listener to the task views, and buttons. Implements
@@ -450,7 +568,8 @@ public class TaskForm extends Activity implements Serializable {
 				LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 		ListView instructional = (ListView) findViewById(R.id.instructionalAreasList);
 		for (CharSequence areaText : selectedInstructional) {
-			LinearLayout v = (LinearLayout) inflater.inflate(R.layout.areataskrow, null);
+			LinearLayout v = (LinearLayout) inflater.inflate(
+					R.layout.areataskrow, null);
 			v.setId(id++);
 			TextView area = (TextView) v.findViewById(R.id.areatextview);
 			// area.setBackground(getResources().getDrawable(R.drawable.textviewback));
@@ -554,9 +673,11 @@ public class TaskForm extends Activity implements Serializable {
 
 								@Override
 								public void afterTextChanged(Editable s) {
-									View v1=(View)findViewById(clickedId);
-									LinearLayout parent = (LinearLayout) v1.getParent();
-									TextView area = (TextView) parent.getChildAt(0);
+									View v1 = (View) findViewById(clickedId);
+									LinearLayout parent = (LinearLayout) v1
+											.getParent();
+									TextView area = (TextView) parent
+											.getChildAt(0);
 									Area areaobj = getAreaById(area.getId());
 									Task t = areaobj.getTaskById(clickedId);
 									t.strategies.remove(id + "");
@@ -578,9 +699,11 @@ public class TaskForm extends Activity implements Serializable {
 												.removeView(row
 														.findViewById(row
 																.getId()));
-										View v1=(View)findViewById(clickedId);
-										LinearLayout parent = (LinearLayout) v1.getParent();
-										TextView area = (TextView) parent.getChildAt(0);
+										View v1 = (View) findViewById(clickedId);
+										LinearLayout parent = (LinearLayout) v1
+												.getParent();
+										TextView area = (TextView) parent
+												.getChildAt(0);
 										Area areaobj = getAreaById(area.getId());
 										Task t = areaobj.getTaskById(clickedId);
 										t.strategies.remove(id + "");
@@ -598,19 +721,21 @@ public class TaskForm extends Activity implements Serializable {
 							// add accordingly
 						}
 					}
-					
+
 					watcher[0] = new TextWatcher() {
 						@Override
 						public void onTextChanged(CharSequence s, int start,
 								int before, int count) {
 						}
+
 						@Override
 						public void beforeTextChanged(CharSequence s,
 								int start, int count, int after) {
 						}
+
 						@Override
 						public void afterTextChanged(Editable s) {
-							View v1=(View)findViewById(clickedId);
+							View v1 = (View) findViewById(clickedId);
 							LinearLayout parent = (LinearLayout) v1.getParent();
 							TextView area = (TextView) parent.getChildAt(0);
 							Area areaobj = getAreaById(area.getId());
@@ -626,7 +751,7 @@ public class TaskForm extends Activity implements Serializable {
 					// taskname.callOnClick();
 					taskname.requestFocus();
 					taskname.removeTextChangedListener(taskWatcher);
-					taskWatcher= new TextWatcher() {
+					taskWatcher = new TextWatcher() {
 						@Override
 						public void onTextChanged(CharSequence s, int start,
 								int before, int count) {
@@ -637,6 +762,7 @@ public class TaskForm extends Activity implements Serializable {
 								int start, int count, int after) {
 							// TODO Auto-generated method stub
 						}
+
 						@Override
 						public void afterTextChanged(Editable s) {
 							// TODO Auto-generated method stub
@@ -645,8 +771,9 @@ public class TaskForm extends Activity implements Serializable {
 								// Toast.LENGTH_SHORT).show();
 								TextView task = (TextView) findViewById(clickedId);
 								task.setText(s);
-								View v1=(View)findViewById(clickedId);
-								LinearLayout parent = (LinearLayout) v1.getParent();
+								View v1 = (View) findViewById(clickedId);
+								LinearLayout parent = (LinearLayout) v1
+										.getParent();
 								TextView area = (TextView) parent.getChildAt(0);
 								Area areaobj = getAreaById(area.getId());
 								Task t = areaobj.getTaskById(clickedId);
@@ -659,37 +786,46 @@ public class TaskForm extends Activity implements Serializable {
 						}
 					};
 					taskname.addTextChangedListener(taskWatcher);
-					RadioGroup solutions=(RadioGroup)findViewById(R.id.solutionradiogroup);
-					if(t.solutions){
-						((RadioButton)solutions.findViewById(R.id.solutionyes)).setChecked(true);
+					RadioGroup solutions = (RadioGroup) findViewById(R.id.solutionradiogroup);
+					if (t.solutions) {
+						((RadioButton) solutions.findViewById(R.id.solutionyes))
+								.setChecked(true);
+					} else {
+						((RadioButton) solutions.findViewById(R.id.solutionno))
+								.setChecked(true);
+
 					}
-					else
-					{
-						((RadioButton)solutions.findViewById(R.id.solutionno)).setChecked(true);
-						
-					}
-					solutions.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-						@Override
-						public void onCheckedChanged(RadioGroup group, int checkedId) {
-							 RadioButton checkedSolution = (RadioButton)group.findViewById(checkedId);
-							 boolean isChecked = checkedSolution.isChecked();
-								View v1=(View)findViewById(clickedId);
-								LinearLayout parent = (LinearLayout) v1.getParent();
-								TextView area = (TextView) parent.getChildAt(0);
-								Area areaobj = getAreaById(area.getId());
-								Task t = areaobj.getTaskById(clickedId);
-							 if(isChecked&&(checkedId==R.id.solutionyes))	
-							 {t.solutions=true;
-							 Toast.makeText(context,"checked",Toast.LENGTH_SHORT).show();
-							 
-							 }
-							else if(isChecked&&(checkedId==R.id.solutionno))
-								{t.solutions=false;
-								Toast.makeText(context,"UN Checked",Toast.LENGTH_SHORT).show();
+					solutions
+							.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+								@Override
+								public void onCheckedChanged(RadioGroup group,
+										int checkedId) {
+									RadioButton checkedSolution = (RadioButton) group
+											.findViewById(checkedId);
+									boolean isChecked = checkedSolution
+											.isChecked();
+									View v1 = (View) findViewById(clickedId);
+									LinearLayout parent = (LinearLayout) v1
+											.getParent();
+									TextView area = (TextView) parent
+											.getChildAt(0);
+									Area areaobj = getAreaById(area.getId());
+									Task t = areaobj.getTaskById(clickedId);
+									if (isChecked
+											&& (checkedId == R.id.solutionyes)) {
+										t.solutions = true;
+										Toast.makeText(context, "checked",
+												Toast.LENGTH_SHORT).show();
+
+									} else if (isChecked
+											&& (checkedId == R.id.solutionno)) {
+										t.solutions = false;
+										Toast.makeText(context, "UN Checked",
+												Toast.LENGTH_SHORT).show();
+									}
+
 								}
-							 
-						}
-					});
+							});
 				}
 			});
 			v.addView(task);
@@ -736,37 +872,365 @@ public class TaskForm extends Activity implements Serializable {
 		// context);
 		// Log.d("ATGUIDE","here: "+persisted.getStringExtra("studentid"));
 	}
+
 	
-	public void setFromDB(){
+	private OnClickListener getAreaOnclickListener(){
+		
+		return new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+
+				try {
+					TextView curr = (TextView) v;
+					Toast.makeText(context, "Area called"+ clickedId,Toast.LENGTH_SHORT).show();
+					// currentText = curr;
+					TextView areatitle = (TextView) findViewById(R.id.tasktitle);
+					areatitle.setText(curr.getText());
+					highlightThis((View) v.getParent());
+					// set on edit listener
+					LinearLayout area = (LinearLayout) v.getParent();
+					// final int parentid = area.getId();
+					area.getChildAt(1).callOnClick();
+					// EditText title = (EditText)
+					// findViewById(R.id.taskname);
+					// title.addTextChangedListener(taskWatcher);
+					Button addTask = (Button) findViewById(R.id.addnewtask);
+					addTask.setOnClickListener(new OnClickListener() {
+						@Override
+						public void onClick(View v) {
+							Toast.makeText(context,
+									"Add new task to this area",
+									Toast.LENGTH_SHORT).show();
+							onAddNewTask();
+						}
+					});
+				} catch (Exception e) {
+					Log.e("ATGUIDE", e.getMessage());
+				}
+			}
+		};
+		
+	}
+	
+	
+	@SuppressLint("InflateParams")
+	public void placeAreaFromDB() {
 		getData();
 		LayoutParams textViewParams = new LayoutParams(
 				LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
-		ListView instructional = (ListView) findViewById(R.id.instructionalAreasList);
-		ArrayList<Area> persistedObjL=PersistenceBean.getPersistedAreaObjects(studentid, context);
-		for(Area areaOb: persistedObjL){
-			LinearLayout v = (LinearLayout) inflater.inflate(R.layout.areataskrow, null);
-			v.setId(id++);
-			TextView area = (TextView) v.findViewById(R.id.areatextview);
+		 ListView instructional = (ListView) findViewById(R.id.instructionalAreasList);
+		ArrayList<Area> persistedObjL = PersistenceBean
+				.getPersistedAreaObjects(studentid, context);
+		for (Area area : persistedObjL) {
+			// For each area get a Row
+			LinearLayout areaRow = (LinearLayout) inflater.inflate(
+					R.layout.areataskrow, null);
+			//areaRow.setId(id += 2);
+			areaRow.setClickable(false);
+			// Add the area name
+			TextView areaTextView = (TextView) areaRow
+					.findViewById(R.id.areatextview);
 			// area.setBackground(getResources().getDrawable(R.drawable.textviewback));
-			area.setText(areaOb.getAreaName());
-			area.setTextAlignment(TextView.TEXT_ALIGNMENT_TEXT_START);
-			area.setLayoutParams(textViewParams);
-			area.setId(id++);
-			TextView task = new TextView(context);
-			task.setText("");
+			areaTextView.setText(area.getAreaName());
+			areaTextView
+					.setTextAlignment(TextView.TEXT_ALIGNMENT_TEXT_START);
+			areaTextView.setLayoutParams(textViewParams);
+			areaTextView.setId(area.parentId);
+			areaTextView.setOnClickListener(getAreaOnclickListener());
+	
+			// Set onClick listener to the area name
 			
+			for (Task task : area.tasks) {
+					
+					
+					TextView tasktextView = new TextView(context);
+					tasktextView.setText(task.getTaskname());
+					//modularized
+					tasktextView.setId(task.taskid);
+					tasktextView.setOnClickListener(getTaskListener());
+					
+					tasktextView.setLayoutParams(textViewParams);
+					tasktextView.setTextColor(Color.BLACK);
+					tasktextView.setTypeface(null, Typeface.BOLD);
+					tasktextView.setPadding(15, 0, 0, 0);
+				
+					areaRow.addView(tasktextView);
+				
+			}
+			// Linear layout task
+			// append Assistive technology to this task
+			merge.addView(areaRow);
 		}
+		instructional.setAdapter(merge);
 	}
 	
+	
+	OnClickListener getTaskListener(){
+		
+	return	new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				Toast.makeText(context, "Task called "+ clickedId,Toast.LENGTH_SHORT).show();
+				
+				TextView taskview=null;
+				try{
+				taskview= (TextView) v;
+				}catch(Exception e){
+					
+					Log.e("ATGUIDE","Ex: "+e);
+				}
+				CharSequence taskviewText = taskview.getText();
+				clickedId = v.getId();
+				Toast.makeText(context, ""+clickedId,Toast.LENGTH_SHORT).show();
+				setDeleteTaskListener(v);
+				highlightThis(v);
+				LinearLayout parent = (LinearLayout) v.getParent();
+				TextView area = (TextView) parent.getChildAt(0);
+				CharSequence areaText = area.getText();
+				Area areaobj = getAreaById(area.getId());
+				Task t = areaobj.getTaskById(v.getId());
+				t.setTaskname(taskviewText.toString());
+				// TODO: CODE HERE TO ADD STRATEGIES
+				LinearLayout strategyLayout = (LinearLayout) findViewById(R.id.strategylayout);
+				strategyLayout.removeAllViews();
+				final LinearLayout row0 = (LinearLayout) getLayoutInflater()
+						.inflate(R.layout.strategyrow, null);
+				row0.setId(0);
+				strategyLayout.addView(row0);
+				EditText strategy = (EditText) row0
+						.findViewById(R.id.strategyedittext);
+				if (strategy == null)
+					Toast.makeText(context, "Strategy is null",
+							Toast.LENGTH_SHORT).show();
+				// Insert strategies
+				if (t.strategies.keySet() != null
+						&& t.strategies.get("0") != null
+						&& t.strategies.get("0") != "")
+					strategy.setText(t.strategies.get("0"));
+				else
+					strategy.setText("");
+				if (t.strategies.keySet().size() > 0) {// Loop through all
+														// of them
+					strategyLayout.removeAllViews(); // instead of finding
+														// and removing text
+
+					// change listeners, just start over for every click
+					// improved efficiency O(n)
+
+					int i = -1;
+					// for each of the strategy in the task object
+					for (final String key : t.strategies.keySet()) {
+						// Toast.makeText(context,
+						// t.strategies.keySet().toString() + " in loop " +
+						// t.strategies.keySet().size(),
+						// Toast.LENGTH_SHORT).show();
+						i++;
+						final int id = i;
+						// get a new row
+						final LinearLayout row = (LinearLayout) getLayoutInflater()
+								.inflate(R.layout.strategyrow, null);
+						// set id
+						row.setId(id);
+						EditText strategyText = (EditText) row
+								.findViewById(R.id.strategyedittext);
+						if (t.strategies.keySet() != null
+								&& t.strategies.get(key) != null
+								&& t.strategies.get(key) != "")
+							strategyText.setText(t.strategies.get(key));
+						else
+							strategyText.setText("");
+						watcher[id] = new TextWatcher() {
+							@Override
+							public void onTextChanged(CharSequence s,
+									int start, int before, int count) {
+							}
+
+							@Override
+							public void beforeTextChanged(CharSequence s,
+									int start, int count, int after) {
+							}
+
+							@Override
+							public void afterTextChanged(Editable s) {
+								View v1 = (View) findViewById(clickedId);
+								LinearLayout parent = (LinearLayout) v1
+										.getParent();
+								TextView area = (TextView) parent
+										.getChildAt(0);
+								Area areaobj = getAreaById(area.getId());
+								Task t = areaobj.getTaskById(clickedId);
+								t.strategies.remove(id + "");
+								t.strategies.put(id + "",
+										new String(s.toString()));
+							}
+						};
+						strategyText.addTextChangedListener(watcher[id]);
+						((LinearLayout) findViewById(R.id.strategylayout))
+								.addView(row);
+						ImageButton delete = (ImageButton) row
+								.findViewById(R.id.deletethisstrategy);
+						delete.setOnClickListener(new OnClickListener() {
+							@Override
+							public void onClick(View v) {
+								if (((LinearLayout) v.getParent()
+										.getParent()).getChildCount() > 1) {
+									((LinearLayout) findViewById(R.id.strategylayout))
+											.removeView(row
+													.findViewById(row
+															.getId()));
+									View v1 = (View) findViewById(clickedId);
+									LinearLayout parent = (LinearLayout) v1
+											.getParent();
+									TextView area = (TextView) parent
+											.getChildAt(0);
+									Area areaobj = getAreaById(area.getId());
+									Task t = areaobj.getTaskById(clickedId);
+									t.strategies.remove(id + "");
+									Toast.makeText(context,
+											"Strategy deleted",
+											Toast.LENGTH_SHORT).show();
+
+								} else
+									Toast.makeText(
+											context,
+											"At least one strategy is required",
+											Toast.LENGTH_SHORT).show();
+							}
+						});
+						// add accordingly
+					}
+				}
+
+				watcher[0] = new TextWatcher() {
+					@Override
+					public void onTextChanged(CharSequence s, int start,
+							int before, int count) {
+					}
+
+					@Override
+					public void beforeTextChanged(CharSequence s,
+							int start, int count, int after) {
+					}
+
+					@Override
+					public void afterTextChanged(Editable s) {
+						View v1 = (View) findViewById(clickedId);
+						LinearLayout parent = (LinearLayout) v1.getParent();
+						TextView area = (TextView) parent.getChildAt(0);
+						Area areaobj = getAreaById(area.getId());
+						Task t = areaobj.getTaskById(clickedId);
+						t.strategies.remove("0");
+						t.strategies.put("0", new String(s.toString()));
+					}
+				};
+				strategy.addTextChangedListener(watcher[0]);
+				((TextView) findViewById(R.id.tasktitle)).setText(areaText);
+				EditText taskname = (EditText) findViewById(R.id.taskname);
+				taskname.setText(taskviewText);
+				// taskname.callOnClick();
+				taskname.requestFocus();
+				taskname.removeTextChangedListener(taskWatcher);
+				taskWatcher = new TextWatcher() {
+					@Override
+					public void onTextChanged(CharSequence s, int start,
+							int before, int count) {
+					}
+
+					@Override
+					public void beforeTextChanged(CharSequence s,
+							int start, int count, int after) {
+						// TODO Auto-generated method stub
+					}
+
+					@Override
+					public void afterTextChanged(Editable s) {
+						// TODO Auto-generated method stub
+						try {
+							// Toast.makeText(context, "Text Changed",
+							// Toast.LENGTH_SHORT).show();
+							TextView task = (TextView) findViewById(clickedId);
+							task.setText(s);
+							View v1 = (View) findViewById(clickedId);
+							LinearLayout parent = (LinearLayout) v1
+									.getParent();
+							TextView area = (TextView) parent.getChildAt(0);
+							Area areaobj = getAreaById(area.getId());
+							Task t = areaobj.getTaskById(clickedId);
+							t.setTaskname(s.toString());
+							// Toast.makeText(context, "Editable text:"+s,
+							// Toast.LENGTH_SHORT).show();
+							
+						} catch (Exception e) {
+							Log.e(TAG, "ex: " + e.getMessage());
+						}
+					}
+				};
+				taskname.addTextChangedListener(taskWatcher);
+				RadioGroup solutions = (RadioGroup) findViewById(R.id.solutionradiogroup);
+				if (t.solutions) {
+					((RadioButton) solutions.findViewById(R.id.solutionyes))
+							.setChecked(true);
+				} else {
+					((RadioButton) solutions.findViewById(R.id.solutionno))
+							.setChecked(true);
+
+				}
+				solutions
+						.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+							@Override
+							public void onCheckedChanged(RadioGroup group,
+									int checkedId) {
+								RadioButton checkedSolution = (RadioButton) group
+										.findViewById(checkedId);
+								boolean isChecked = checkedSolution
+										.isChecked();
+								View v1 = (View) findViewById(clickedId);
+								LinearLayout parent = (LinearLayout) v1
+										.getParent();
+								TextView area = (TextView) parent
+										.getChildAt(0);
+								Area areaobj = getAreaById(area.getId());
+								Task t = areaobj.getTaskById(clickedId);
+								if (isChecked
+										&& (checkedId == R.id.solutionyes)) {
+									t.solutions = true;
+									Toast.makeText(context, "checked",
+											Toast.LENGTH_SHORT).show();
+
+								} else if (isChecked
+										&& (checkedId == R.id.solutionno)) {
+									t.solutions = false;
+									Toast.makeText(context, "UN Checked",
+											Toast.LENGTH_SHORT).show();
+								}
+
+							}
+						});
+			}
+		};
+		
+	}	/**
+	 * Mark this Area as clicked now
+	 * 
+	 * @param currentId
+	 *            to be clicked
+	 */
 	public void clickThisArea(int currentId) {
 		View v = findViewById(currentId);
+
 		v.callOnClick();
 	}
+
+	/**
+	 * highlight this text view
+	 * 
+	 * @param tv
+	 */
 	public void highlightThis(View tv) {
 		ListView lv = (ListView) findViewById(R.id.instructionalAreasList);
 		MergeAdapter m = (MergeAdapter) lv.getAdapter();
 		m.getCount();
-		//
 		for (int c = 0; c <= m.getCount(); c++) {
 			View tt = (View) m.getItem(c);
 			if (tt != null && tt instanceof LinearLayout) {
@@ -783,6 +1247,7 @@ public class TaskForm extends Activity implements Serializable {
 			((LinearLayout) tv.getParent()).getChildAt(0).setBackgroundColor(
 					Color.CYAN);
 	}
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
@@ -803,16 +1268,17 @@ public class TaskForm extends Activity implements Serializable {
 	}
 
 	public void onAddNewTask() {
-
 		// AddNewTextView to current area
 		// blank all text views
 		// set ids++
 		// set on click listener
 		// store task to the object
 		// FIND CURRENT CLICKED
-		TextView currentClicked = (TextView) findViewById(clickedId);
+		View currentClicked = (View) findViewById(clickedId);
 		// FIND PARENT
-		LinearLayout parent = (LinearLayout) currentClicked.getParent();
+		LinearLayout parent;
+		 parent= (LinearLayout) currentClicked.getParent();
+		
 		// get area id
 		// get area object
 		// Create empty View
@@ -821,8 +1287,8 @@ public class TaskForm extends Activity implements Serializable {
 		CharSequence areaText = area.getText();
 		((TextView) findViewById(R.id.tasktitle)).setText(areaText);
 		TextView tv = new TextView(context);
-		tv.setLayoutParams(new LayoutParams(
-				LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+		tv.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
+				LayoutParams.WRAP_CONTENT));
 		tv.setId(id++);
 		tv.setTextColor(Color.BLACK);
 		tv.setPadding(15, 0, 0, 0);
@@ -830,30 +1296,33 @@ public class TaskForm extends Activity implements Serializable {
 		final Task t = new Task();
 		t.setTaskname(tv.getText().toString());
 		t.taskid = tv.getId();
-		RadioGroup solutions=(RadioGroup)findViewById(R.id.solutionradiogroup);
-		if(t.solutions){
-			((RadioButton)solutions.findViewById(R.id.solutionyes)).setChecked(true);
+		RadioGroup solutions = (RadioGroup) findViewById(R.id.solutionradiogroup);
+		if (t.solutions) {
+			((RadioButton) solutions.findViewById(R.id.solutionyes))
+					.setChecked(true);
+		} else {
+			((RadioButton) solutions.findViewById(R.id.solutionno))
+					.setChecked(true);
 		}
-		else
-		{
-			((RadioButton)solutions.findViewById(R.id.solutionno)).setChecked(true);
-		}
-		solutions.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-			@Override
-			public void onCheckedChanged(RadioGroup group, int checkedId) {
-				 RadioButton checkedSolution = (RadioButton)group.findViewById(checkedId);
-				 boolean isChecked = checkedSolution.isChecked();
-				if(isChecked&&(checkedId==R.id.solutionyes))	
-				 t.solutions=true;
-				else
-					t.solutions=false;
-				
-			}
-		});
+		solutions
+				.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+					@Override
+					public void onCheckedChanged(RadioGroup group, int checkedId) {
+						RadioButton checkedSolution = (RadioButton) group
+								.findViewById(checkedId);
+						boolean isChecked = checkedSolution.isChecked();
+						if (isChecked && (checkedId == R.id.solutionyes))
+							t.solutions = true;
+						else
+							t.solutions = false;
+
+					}
+				});
 		areaObject.addTask(t);
-		//On click listener of the task
+		// On click listener of the task
 		tv.setOnClickListener(new OnClickListener() {
-			@SuppressLint("InflateParams") @Override
+			@SuppressLint("InflateParams")
+			@Override
 			public void onClick(View v) {
 				TextView taskview = (TextView) v;
 				CharSequence taskviewText = taskview.getText();
@@ -863,16 +1332,17 @@ public class TaskForm extends Activity implements Serializable {
 				LinearLayout parent = (LinearLayout) v.getParent();
 				TextView area = (TextView) parent.getChildAt(0);
 				CharSequence areaText = area.getText();
-				//Area Object is already created and is in the area list
+				// Area Object is already created and is in the area list
 				Area areaobj = getAreaById(area.getId());
-				//Create task for this 
-				Task t = areaobj.getTaskById(v.getId());//? what if task not present
+				// Create task for this
+				Task t = areaobj.getTaskById(v.getId());// ? what if task not
+														// present
 				Task t1 = new Task();
 				t1.copyTask(t);
 				t.setTaskname(taskviewText.toString());
 				// TODO: CODE HERE TO ADD STRATEGIES
 				LinearLayout strategyLayout = (LinearLayout) findViewById(R.id.strategylayout);
-				//Remove All views
+				// Remove All views
 				strategyLayout.removeAllViews();
 				final LinearLayout row0 = (LinearLayout) getLayoutInflater()
 						.inflate(R.layout.strategyrow, null);
@@ -939,18 +1409,19 @@ public class TaskForm extends Activity implements Serializable {
 
 							@Override
 							public void afterTextChanged(Editable s) {
-								View v= (View)findViewById(clickedId);
-								LinearLayout parent = (LinearLayout) v.getParent();
+								View v = (View) findViewById(clickedId);
+								LinearLayout parent = (LinearLayout) v
+										.getParent();
 								TextView area = (TextView) parent.getChildAt(0);
-								Area areaObj=getAreaById(area.getId());
-								Task t=areaObj.getTaskById(clickedId);
-								
+								Area areaObj = getAreaById(area.getId());
+								Task t = areaObj.getTaskById(clickedId);
+
 								t.strategies.remove(id + "");
 								t.strategies.put(id + "",
 										new String(s.toString()));
 							}
 						};
-						//Strategy Text
+						// Strategy Text
 						strategyText.addTextChangedListener(watcher[id]);
 						((LinearLayout) findViewById(R.id.strategylayout))
 								.addView(row);
@@ -964,12 +1435,14 @@ public class TaskForm extends Activity implements Serializable {
 									((LinearLayout) findViewById(R.id.strategylayout))
 											.removeView(row.findViewById(row
 													.getId()));
-									View v1= (View)findViewById(clickedId);
-									LinearLayout parent = (LinearLayout) v1.getParent();
-									TextView area = (TextView) parent.getChildAt(0);
-									Area areaObj=getAreaById(area.getId());
-									Task t=areaObj.getTaskById(clickedId);
-									
+									View v1 = (View) findViewById(clickedId);
+									LinearLayout parent = (LinearLayout) v1
+											.getParent();
+									TextView area = (TextView) parent
+											.getChildAt(0);
+									Area areaObj = getAreaById(area.getId());
+									Task t = areaObj.getTaskById(clickedId);
+
 									t.strategies.remove(id + "");
 									Toast.makeText(context, "Strategy deleted",
 											Toast.LENGTH_SHORT).show();
@@ -984,28 +1457,30 @@ public class TaskForm extends Activity implements Serializable {
 					}
 				}
 
-				//First strategy 
+				// First strategy
 				watcher[0] = new TextWatcher() {
 					@Override
 					public void onTextChanged(CharSequence s, int start,
 							int before, int count) {
 					}
+
 					@Override
 					public void beforeTextChanged(CharSequence s, int start,
 							int count, int after) {
 					}
+
 					@Override
 					public void afterTextChanged(Editable s) {
-						View v1= (View)findViewById(clickedId);
+						View v1 = (View) findViewById(clickedId);
 						LinearLayout parent = (LinearLayout) v1.getParent();
 						TextView area = (TextView) parent.getChildAt(0);
-						Area areaObj=getAreaById(area.getId());
-						Task t=areaObj.getTaskById(clickedId);
+						Area areaObj = getAreaById(area.getId());
+						Task t = areaObj.getTaskById(clickedId);
 						t.strategies.remove("0");
 						t.strategies.put("0", new String(s.toString()));
 					}
 				};
-				//Add listener to first strategy
+				// Add listener to first strategy
 				strategy.addTextChangedListener(watcher[0]);
 				((TextView) findViewById(R.id.tasktitle)).setText(areaText);
 				EditText taskname = (EditText) findViewById(R.id.taskname);
@@ -1032,11 +1507,11 @@ public class TaskForm extends Activity implements Serializable {
 							// Toast.LENGTH_SHORT).show();
 							TextView task = (TextView) findViewById(clickedId);
 							task.setText(s);
-							View v1= (View)findViewById(clickedId);
+							View v1 = (View) findViewById(clickedId);
 							LinearLayout parent = (LinearLayout) v1.getParent();
 							TextView area = (TextView) parent.getChildAt(0);
-							Area areaObj=getAreaById(area.getId());
-							Task t=areaObj.getTaskById(clickedId);
+							Area areaObj = getAreaById(area.getId());
+							Task t = areaObj.getTaskById(clickedId);
 							t.setTaskname(task.getText().toString());
 							// Toast.makeText(context, "Editable text:"+s,
 							// Toast.LENGTH_SHORT).show();
@@ -1054,6 +1529,7 @@ public class TaskForm extends Activity implements Serializable {
 		parent.addView(tv);
 		tv.callOnClick();
 	}
+
 	public class addTasklistener implements OnClickListener {
 		@Override
 		public void onClick(View v) {

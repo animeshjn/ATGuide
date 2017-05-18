@@ -15,6 +15,7 @@ import android.os.Binder;
 import android.os.Environment;
 import android.os.IBinder;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Document;
@@ -33,51 +34,65 @@ import com.itextpdf.text.pdf.PdfStamper;
  * 
  * @author Animesh Jain
  */
-public class PDFLogic extends Service{
-	
-	/**Font*/
-	static Font headfont;
-	
-	/**StudentId*/
-	static String studentid;
-	
-	/**IEPGoal*/
-	static String iepgoal = "";
-	
-	/**IEPReading*/
-	static String iepreading = "";
-	
-	/**IEPTest*/
-	static String ieptest = "";
-	
-	/**Participants*/
-	static String participants = "";
-	
-	/**IEPAlt*/
-	static String iepalt = "";
-	
-	/**Context*/
-	static Context context;
-	
-	/**School*/
-	static String school = "";
-	
-	/**Grade*/
-	static String grade = "";
-	
-	/**Date*/
-	static String date = "";
-	
-	/**areaList*/
-	static ArrayList<CharSequence> areaList = null;
-	
-	private final IBinder mBinder = new MyBinder();
-	
-	public static final String LOG_TAG = "ATGUIDE";
-	
-	public static Activity activity;
+public class PDFLogic extends Service {
 
-	
+	/** Font */
+	static Font headfont;
+
+	/** StudentId */
+	static String studentid;
+
+	/** IEPGoal */
+	static String iepgoal = "";
+
+	/** IEPReading */
+	static String iepreading = "";
+
+	/** IEPTest */
+	static String ieptest = "";
+
+	/** Participants */
+	static String participants = "";
+
+	/** IEPAlt */
+	static String iepalt = "";
+
+	/** Context */
+	static Context context;
+
+	/** School */
+	static String school = "";
+
+	/** Grade */
+	static String grade = "";
+
+	/** Date */
+	static String date = "";
+
+	/** areaList */
+	static ArrayList<CharSequence> areaList = null;
+
+	static ArrayList<Area> trial1List = null;
+
+	/**
+	 * Binds the intent
+	 */
+	private final IBinder mBinder = new MyBinder();
+
+	/**
+	 * LOG_TAG
+	 */
+	public static final String LOG_TAG = "ATGUIDE";
+
+	/**
+	 * activity
+	 */
+	public static Activity activity;
+	public static boolean trial1=false;
+
+	/**
+	 * init fonts
+	 */
 	public void initFonts() {
 		Font f = new Font(FontFamily.HELVETICA, 14, Font.NORMAL, BaseColor.RED);
 		headfont = f;
@@ -85,20 +100,27 @@ public class PDFLogic extends Service{
 
 	/**
 	 * Generates PDF document from given context.
-	 * @param activity - current intent stack.
+	 * 
+	 * @param activity
+	 *            - current intent stack.
 	 */
 	public static void generatePDF() {
 		PDFLogic.context = activity.getApplicationContext();
 		try {
 			setData();
-			//Setup Path
+			/** Setup Path */
 			Log.d(LOG_TAG, "Data set");
-			
+
+			/** Setup Destination */
 			String dest = Environment.getExternalStorageDirectory()
 					.getAbsolutePath() + File.separator + "ATGUIDE_RESULTS";
+
 			Log.d(LOG_TAG, "creating dest");
+
 			File filepath = new File(dest);
+
 			Log.d(LOG_TAG, "creating dest directory");
+
 			if (!filepath.exists())
 				filepath.mkdirs();
 			Log.d(LOG_TAG, "creating filled form");
@@ -113,6 +135,7 @@ public class PDFLogic extends Service{
 					"VAATGUIDE_FORM2.pdf"));
 			PdfStamper stamp1 = new PdfStamper(reader, new FileOutputStream(
 					file));
+
 			AcroFields form1 = stamp1.getAcroFields();
 			// SET FIELDS HERE
 			form1.setField("student", studentid);
@@ -125,6 +148,7 @@ public class PDFLogic extends Service{
 			final ArrayList<Area> persistedAreaList = PersistenceBean
 					.getPersistedAreaObjects(studentid, context);
 			int i = 1;
+
 			for (Area area : persistedAreaList) {
 				// Complexity O(n) {n Area + constant tasks (Max=7)* constant
 				// strategy (Max=6)}
@@ -145,26 +169,26 @@ public class PDFLogic extends Service{
 				}
 			}
 			for (CharSequence area : areaList) {
-				
+
 				String areaname = area.toString().toLowerCase();
 				form1.setField(areaname, "On");
 				if (areaname.contains("study"))
 					form1.setField("study", "On");
-				
+
 				else if (areaname.contains("oral"))
 					form1.setField("oral", "On");
-				
+
 				else if (areaname.contains("activities"))
 					form1.setField("activities", "On");
-				
+
 				else if (areaname.contains("recreation"))
 					form1.setField("recreation", "On");
-				
+
 				else if (areaname.contains("Positioning"))
 					form1.setField("positioning", "On");
 				else if (areaname.contains("computer"))
 					form1.setField("computer", "On");
-				
+
 				else if (areaname.toLowerCase().contains("environment"))
 					form1.setField("environment", "On");
 				else {
@@ -185,6 +209,28 @@ public class PDFLogic extends Service{
 				form1.setField("iepaltyes", "On");
 			else if (iepalt.toLowerCase().contains("no"))
 				form1.setField("iepaltno", "On");
+			if (trial1) {
+				form1.setField("iep0no", "On");
+				int c = 1;
+				if(trial1List!=null)
+					Log.d(LOG_TAG, "Trail1 no null in gen");
+				for (Area ar : trial1List) {
+					for (Task task : ar.tasks){
+						if(ar.tasks!=null)
+							{Log.d(LOG_TAG, "tasks not null"+c);}
+						for (AT ats : task.ats) {
+							if(task.ats!=null)
+							{Log.d(LOG_TAG, "tasks not null"+c);}
+							Log.d(LOG_TAG, "ATS:"+c);
+							String fieldName = ats.instructionalArea+": "+""+ats.ATName;
+							form1.setField("trial1at"+c, fieldName);
+							form1.setField("trial1person" + c, ats.participants);
+							form1.setField("trial1date" + c, ats.firstTrialDate);
+							c++;
+						}
+				}}
+			} else
+				form1.setField("iep0complete", "On");
 			stamp1.setFormFlattening(true);
 			stamp1.close();
 			reader.close();
@@ -227,22 +273,49 @@ public class PDFLogic extends Service{
 		iepreading = intent.getStringExtra("iepreading");
 		iepalt = intent.getStringExtra("iepalt");
 		areaList = PersistenceBean.getPersistedAreaList(studentid, context);
+		trial1 = intent.getBooleanExtra("trial1", false);
+		if (trial1)
+			trial1List = PersistenceBean.getPersistedAreaObjects("trial1"
+					+ studentid, context);
+			if(!(trial1List==null)){
+				Toast.makeText(context, "TRIAL!NOT NULL", Toast.LENGTH_SHORT).show();
+			}
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see android.app.Service#onBind(android.content.Intent)
+	 */
 	@Override
 	public IBinder onBind(Intent intent) {
 		// TODO Auto-generated method stub
 		return mBinder;
 	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see android.app.Service#onStartCommand(android.content.Intent, int, int)
+	 */
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		// TODO Auto-generated method stub
-		PDFLogic.generatePDF();
+		try{PDFLogic.generatePDF();}
+		catch(Exception e){
+			Log.e(LOG_TAG, ""+e);
+			
+		}
 		return Service.START_NOT_STICKY;
 	}
-	 public class MyBinder extends Binder {
-         PDFLogic getService() {
-                 return PDFLogic.this;
-         }
- }
+
+	/**
+	 * @author ajain13
+	 * 
+	 */
+	public class MyBinder extends Binder {
+		PDFLogic getService() {
+			return PDFLogic.this;
+		}
+	}
 }

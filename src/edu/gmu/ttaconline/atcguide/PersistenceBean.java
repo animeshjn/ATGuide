@@ -34,9 +34,7 @@ import android.widget.Toast;
  * @author Animesh Jain | Java programmer -CEHD GMU |MS CS class of 2018 
  * */
 public class PersistenceBean {
-
 	// Static Methods
-
 	/**
 	 * Method to input data from the first form of the screen in creating new
 	 * student record.
@@ -70,7 +68,6 @@ public class PersistenceBean {
 		FeedReaderDbHelper mDbHelper = new FeedReaderDbHelper(context);
 		@SuppressWarnings("deprecation")
 		java.sql.Date date = new java.sql.Date(year, month, day);
-
 		// Gets the data repository in write mode
 		SQLiteDatabase db = mDbHelper.getWritableDatabase();
 		mDbHelper.onUpgrade(db, 2, 3);
@@ -95,7 +92,6 @@ public class PersistenceBean {
 		} finally {
 			db.close();
 		}
-
 		Log.d("ATGUIDE", "Data Persistence ended with : " + result);
 		Intent intent = new Intent();
 		intent.putExtra("studentid", studentid);
@@ -104,7 +100,6 @@ public class PersistenceBean {
 		intent.putExtra("studentschool", studentschool);
 		intent.putExtra("date", date.toString());
 		Log.d("ATGUIDE", "date " +date.toString());
-
 		return intent;
 	}
 

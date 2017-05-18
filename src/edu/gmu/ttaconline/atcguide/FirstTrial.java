@@ -62,6 +62,7 @@ public class FirstTrial extends FragmentActivity {
 	android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
 	Activity activity;
 	Intent currentIntent;
+	boolean exploreVA=false;
 	// areas
 	/* Methods */
 	// Control start point
@@ -88,15 +89,28 @@ public class FirstTrial extends FragmentActivity {
 
 	private void setNextListener() {
 		currentIntent=PersistenceBean.getExistingIntent(PersistenceBean.getCurrentId(context), context);
-		currentIntent.setClass(context, SecondTrial.class);
+		
 		
 		Button nextButton= (Button)findViewById(R.id.nextbutton);
 		nextButton.setOnClickListener(new OnClickListener() {
-			
 			@Override
 			public void onClick(View v) {
-				startActivity(currentIntent);
+				PersistenceBean.persistAreaObject(areaList,"trial1"+PersistenceBean.getCurrentId(context), context);
+				PDFLogic.activity=activity;
 				
+				currentIntent.setClass(context,
+						PDFLogic.class);
+				currentIntent
+						.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+				currentIntent
+						.setFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+				// Intent pdfService= new
+				// Intent(getApplicationContext(),PDFLogic.class);
+				android.widget.ProgressBar bar = new android.widget.ProgressBar(
+						getApplicationContext());
+				bar.setIndeterminate(true);
+				bar.bringToFront();
+				startService(currentIntent);
 			}
 		});
 		
@@ -537,7 +551,6 @@ public class FirstTrial extends FragmentActivity {
 
 	/**
 	 * Highlights the given view (un-highlights all the other views )
-	 * 
 	 * @param tv
 	 */
 	public void highlightThis(View tv) {
