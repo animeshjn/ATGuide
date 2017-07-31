@@ -262,7 +262,6 @@ public class TaskForm extends Activity implements Serializable {
 					infoAlert.setCancelable(false);
 					infoAlert.show();
 					// setContentView(layoutResID);
-
 				}
 			}
 		});

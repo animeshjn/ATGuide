@@ -46,7 +46,20 @@ public final class FeedReaderContract {
     	public static final String COL_TASK_NAME="taskname";
     	public static final String COL_SOLUTION="solution";
     }
-    
+    public static class ATStore{
+    	public static final String TABLE_NAME= "ATS";
+    	public static final String COL_STUDENT_ID= "studentid";
+    	public static final String COL_AREA_ID="areaid";
+    	public static final String COL_TASK_ID= "taskid";
+    	public static final String COL_AT_ID= "atid";
+    	public static final String COL_ATNAME= "atname";
+    	public static final String COL_PARTICIPANTS= "participants";
+    	public static final String COL_1stTrialDate= "firsttrialdate";
+    	public static final String COL_1stTrialWorking= "firsttrialworking";
+    	public static final String COL_AREA_NAME= "areaname";
+    	public static final String COL_TASK_NAME="taskname";
+    	public static final String COL_SOLUTION="solution";
+    }
     public static class StrategyStore{
     	
     	public static final String TABLE_NAME="strategymapping";

@@ -377,6 +377,57 @@ public class PersistenceBean {
 		}
 	}
 	/**
+	 * Method to persist AT object
+	 * */
+	public static void persistATObject(AT at,Task task, String studentid, String areaId,
+			Context context) {
+		int taskid = task.taskid;
+		String taskName = task.getTaskname();
+		String ATName =at.ATName;
+		int ATID=at.id;
+		String areaName = task.getAreaname();
+		String solution=null;
+		
+		if(task.solutions){
+			solution="yes";
+		}
+		else
+			solution="no";
+		Set<String> StrategyKeys = task.strategies.keySet();
+		// studentid, taskid
+		try {
+			Log.d("ATGUIDE", "Inserting into task store");
+			FeedReaderDbHelper mDbHelper = new FeedReaderDbHelper(context);
+			SQLiteDatabase db = mDbHelper.getWritableDatabase();
+			db.execSQL("DELETE FROM "+TaskStore.TABLE_NAME+" WHERE "+TaskStore.COL_STUDENT_ID+" = '"+studentid+"' AND "+TaskStore.COL_TASK_ID+" = '"+taskid+"'"
+					+ " AND "+TaskStore.COL_AREA_ID+"= '"+areaId+"'");
+			ContentValues values = new ContentValues();
+			//REMOVE PREVIOUS TASKS
+			values.put(TaskStore.COL_TASK_ID, taskid);
+			values.put(TaskStore.COL_STUDENT_ID, studentid);
+			values.put(TaskStore.COL_TASK_NAME, taskName);
+			values.put(TaskStore.COL_AREA_NAME, areaName);
+			values.put(TaskStore.COL_AREA_ID, areaId);
+			values.put(TaskStore.COL_SOLUTION, solution);
+			db.insert(TaskStore.TABLE_NAME, null, values);
+			Log.d("ATGUIDE",
+					"Inserting into strategy store on an iterative loop");
+			for (String key : StrategyKeys) {
+				// Loop Through all the strategies
+				values = new ContentValues();
+				values.put(StrategyStore.COL_STUDENT_ID, studentid);
+				values.put(StrategyStore.COL_TASKID, taskid);
+				values.put(StrategyStore.COL_STRATEGY_ID, key);
+				values.put(StrategyStore.COL_STRATEGY_TEXT,
+						task.strategies.get(key));
+				db.insert(StrategyStore.TABLE_NAME, null, values);
+			}
+			db.close();
+		} catch (Exception e) {
+			Log.e("ATGUIDE", "Exception while persisting current task  "+e);
+		}
+	}
+	/**
 	 * Method to persist Area object
 	 * */
 	public static void persistAreaObject(ArrayList<Area> areasList, String studentid,

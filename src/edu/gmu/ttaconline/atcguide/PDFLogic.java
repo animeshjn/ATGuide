@@ -228,7 +228,8 @@ public class PDFLogic extends Service {
 							form1.setField("trial1date" + c, ats.firstTrialDate);
 							c++;
 						}
-				}}
+				}
+					}
 			} else
 				form1.setField("iep0complete", "On");
 			stamp1.setFormFlattening(true);

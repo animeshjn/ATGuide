@@ -89,15 +89,12 @@ public class FirstTrial extends FragmentActivity {
 
 	private void setNextListener() {
 		currentIntent=PersistenceBean.getExistingIntent(PersistenceBean.getCurrentId(context), context);
-		
-		
 		Button nextButton= (Button)findViewById(R.id.nextbutton);
 		nextButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				PersistenceBean.persistAreaObject(areaList,"trial1"+PersistenceBean.getCurrentId(context), context);
 				PDFLogic.activity=activity;
-				
 				currentIntent.setClass(context,
 						PDFLogic.class);
 				currentIntent
@@ -105,11 +102,14 @@ public class FirstTrial extends FragmentActivity {
 				currentIntent
 						.setFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
 				// Intent pdfService= new
+				
+				
 				// Intent(getApplicationContext(),PDFLogic.class);
 				android.widget.ProgressBar bar = new android.widget.ProgressBar(
 						getApplicationContext());
 				bar.setIndeterminate(true);
 				bar.bringToFront();
+				Log.d("ATGUIDE",""+currentIntent.toString());
 				startService(currentIntent);
 			}
 		});
@@ -163,6 +163,7 @@ public class FirstTrial extends FragmentActivity {
 			// The list view on left side
 			ListView instructional = (ListView) findViewById(R.id.instructionalAreasList);
 			// The list of area
+			int atCount=-1;
 			for (Area area : areaList) {
 				// For each area get a Row
 				LinearLayout areaRow = (LinearLayout) inflater.inflate(
@@ -183,6 +184,8 @@ public class FirstTrial extends FragmentActivity {
 				for (Task task : area.tasks) {
 					// If solutions aren't working
 					if (!task.solutions) {
+						atCount++;
+				
 						LinearLayout taskLayout = new LinearLayout(context);
 						taskLayout.setOrientation(LinearLayout.VERTICAL);
 						taskLayout.setLayoutParams(textViewParams);
@@ -200,6 +203,9 @@ public class FirstTrial extends FragmentActivity {
 						assistiveTech.setTextColor(Color.BLACK);
 						assistiveTech.setId(id++);
 						assistiveTech.setOnClickListener(getATListener());
+						AT at0= new AT();
+						at0.ATName= "";
+						
 						// assistiveTech.setTextAlignment();
 						taskLayout.addView(tasktextView);
 						taskLayout.addView(assistiveTech);
@@ -411,9 +417,11 @@ public class FirstTrial extends FragmentActivity {
 			@Override
 			public void afterTextChanged(Editable s) {
 			}
+			
 		};
 		participantView.addTextChangedListener(participantsWatcher);
 
+		
 	}
 
 	/**
