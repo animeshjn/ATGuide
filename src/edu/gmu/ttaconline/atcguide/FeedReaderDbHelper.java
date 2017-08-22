@@ -19,7 +19,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class FeedReaderDbHelper extends SQLiteOpenHelper {
 	// If you change the database schema, you must increment the database
 	// version.
-	public static final int DATABASE_VERSION = 21;
+	public static final int DATABASE_VERSION = 23;
 	public static final String DATABASE_NAME = "Student.db";
 	private static final String SQL_CREATE_ENTRIES = "CREATE TABLE "
 			+ FeedEntry.STUDENT + " (" + FeedEntry.STUDENT_ID
@@ -37,6 +37,7 @@ public class FeedReaderDbHelper extends SQLiteOpenHelper {
 	private static final String SQL_CREATE_AREALIST = "CREATE TABLE "
 			+ SelectedArea.TABLE_NAME + "(" + SelectedArea.COL_ID + " TEXT,"
 			+ SelectedArea.COL_AREA + " TEXT)";
+	
 	private static final String SQL_CREATE_TASK = "CREATE TABLE "
 			+ TaskStore.TABLE_NAME + "(" + TaskStore.COL_STUDENT_ID + " TEXT,"
 			+ TaskStore.COL_TASK_ID + " TEXT," + "" + TaskStore.COL_TASK_NAME
@@ -65,7 +66,7 @@ public class FeedReaderDbHelper extends SQLiteOpenHelper {
 			+ ATStore.COL_1stTrialWorking + " TEXT,"
 			+ ATStore.COL_AREA_NAME + " TEXT,"
 			+ ATStore.COL_TASK_NAME + " TEXT,"
-			+ ATStore.COL_SOLUTION + " TEXT,"
+			+ ATStore.COL_SOLUTION + " TEXT"
 			+ ")";
 
 	private static final String SQL_DELETE_ENTRIES = "DROP TABLE IF EXISTS "

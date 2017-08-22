@@ -219,10 +219,10 @@ public class PDFLogic extends Service {
 						if(ar.tasks!=null)
 							{Log.d(LOG_TAG, "tasks not null"+c);}
 						for (AT ats : task.ats) {
-							if(task.ats!=null)
-							{Log.d(LOG_TAG, "tasks not null"+c);}
+							{Log.d(LOG_TAG, "ATS not null"+c);}
 							Log.d(LOG_TAG, "ATS:"+c);
 							String fieldName = ats.instructionalArea+": "+""+ats.ATName;
+							Log.d("ATGuide","Filed Name: "+fieldName);
 							form1.setField("trial1at"+c, fieldName);
 							form1.setField("trial1person" + c, ats.participants);
 							form1.setField("trial1date" + c, ats.firstTrialDate);
@@ -275,6 +275,7 @@ public class PDFLogic extends Service {
 		iepalt = intent.getStringExtra("iepalt");
 		areaList = PersistenceBean.getPersistedAreaList(studentid, context);
 		trial1 = intent.getBooleanExtra("trial1", false);
+		Log.d("ATGuide",""+trial1);
 		if (trial1)
 			trial1List = PersistenceBean.getPersistedAreaObjects("trial1"
 					+ studentid, context);
@@ -305,7 +306,6 @@ public class PDFLogic extends Service {
 		try{PDFLogic.generatePDF();}
 		catch(Exception e){
 			Log.e(LOG_TAG, ""+e);
-			
 		}
 		return Service.START_NOT_STICKY;
 	}

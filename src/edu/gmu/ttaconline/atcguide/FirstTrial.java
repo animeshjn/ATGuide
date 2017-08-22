@@ -102,8 +102,8 @@ public class FirstTrial extends FragmentActivity {
 				currentIntent
 						.setFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
 				// Intent pdfService= new
-				
-				
+				currentIntent.putExtra("trial1", true);
+				PersistenceBean.persistIntent(PersistenceBean.getCurrentId(context), currentIntent, context);
 				// Intent(getApplicationContext(),PDFLogic.class);
 				android.widget.ProgressBar bar = new android.widget.ProgressBar(
 						getApplicationContext());
@@ -185,7 +185,6 @@ public class FirstTrial extends FragmentActivity {
 					// If solutions aren't working
 					if (!task.solutions) {
 						atCount++;
-				
 						LinearLayout taskLayout = new LinearLayout(context);
 						taskLayout.setOrientation(LinearLayout.VERTICAL);
 						taskLayout.setLayoutParams(textViewParams);
@@ -205,7 +204,6 @@ public class FirstTrial extends FragmentActivity {
 						assistiveTech.setOnClickListener(getATListener());
 						AT at0= new AT();
 						at0.ATName= "";
-						
 						// assistiveTech.setTextAlignment();
 						taskLayout.addView(tasktextView);
 						taskLayout.addView(assistiveTech);

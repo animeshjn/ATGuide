@@ -14,6 +14,7 @@ public class AT {
 	public String task = "";
 	public String participants = "";
 	public String firstTrialDate = "";
+	public boolean firstWorking = false;
 	public boolean solutionWorking = false;
 	
 	/**
