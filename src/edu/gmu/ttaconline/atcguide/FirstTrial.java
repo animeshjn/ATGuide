@@ -452,9 +452,7 @@ public class FirstTrial extends FragmentActivity {
 			}
 		};
 		dateView.addTextChangedListener(trialDateWatcher);
-
 	}
-	
 	/**
 	 *Sets the Listener to the ADD New AT Button 
 	 */

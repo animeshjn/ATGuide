@@ -397,6 +397,7 @@ public class PersistenceBean {
 		int ATID = at.id;
 		String firstTrialDate = at.firstTrialDate;
 		String participants = at.participants;
+		Log.d("ATGUIDE", "PersistenceBean.persistATObject() 400 participants:"+participants);
 		String solutionWorking = at.solutionWorking + "";
 		String areaName = task.getAreaname();
 		String solution = null;

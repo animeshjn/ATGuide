@@ -148,7 +148,7 @@ public class PDFLogic extends Service {
 			final ArrayList<Area> persistedAreaList = PersistenceBean
 					.getPersistedAreaObjects(studentid, context);
 			int i = 1;
-
+			try{
 			for (Area area : persistedAreaList) {
 				// Complexity O(n) {n Area + constant tasks (Max=7)* constant
 				// strategy (Max=6)}
@@ -168,9 +168,15 @@ public class PDFLogic extends Service {
 					i++;
 				}
 			}
+			if(areaList==null)
+			{
+				Log.d(LOG_TAG,"Area List is null");
+			}
+			else
 			for (CharSequence area : areaList) {
-
-				String areaname = area.toString().toLowerCase();
+				String areaname="";
+				if(area!=null)
+				areaname = area.toString().toLowerCase();
 				form1.setField(areaname, "On");
 				if (areaname.contains("study"))
 					form1.setField("study", "On");
@@ -196,6 +202,7 @@ public class PDFLogic extends Service {
 					form1.setField("otherareaname", areaname);
 				}
 			}
+			
 			if (iepgoal.toLowerCase().contains("yes"))
 				form1.setField("idyes", "On");
 			else if (iepgoal.toLowerCase().contains("no"))
@@ -209,11 +216,12 @@ public class PDFLogic extends Service {
 				form1.setField("iepaltyes", "On");
 			else if (iepalt.toLowerCase().contains("no"))
 				form1.setField("iepaltno", "On");
+			}catch(Exception e){Log.e(LOG_TAG,"Exception PDFLOGIC .214"+e);}
 			if (trial1) {
 				form1.setField("iep0no", "On");
 				int c = 1;
 				if(trial1List!=null)
-					Log.d(LOG_TAG, "Trail1 no null in gen");
+				{	Log.d(LOG_TAG, "Trail1 no null in gen");
 				for (Area ar : trial1List) {
 					for (Task task : ar.tasks){
 						if(ar.tasks!=null)
@@ -229,7 +237,12 @@ public class PDFLogic extends Service {
 							c++;
 						}
 				}
-					}
+				}}
+				else 
+				{
+					Log.d(LOG_TAG, "PDFLogic.235 Trail1 List isnull");
+				}
+				
 			} else
 				form1.setField("iep0complete", "On");
 			stamp1.setFormFlattening(true);
@@ -264,7 +277,7 @@ public class PDFLogic extends Service {
 	 * Set the data from persisted intent to this
 	 */
 	public static void setData() {
-		studentid = PersistenceBean.getCurrentId(context);
+		try{studentid = PersistenceBean.getCurrentId(context);
 		Intent intent = PersistenceBean.getExistingIntent(studentid, context);
 		grade = intent.getStringExtra("studentgrade");
 		school = intent.getStringExtra("studentschool");
@@ -272,7 +285,7 @@ public class PDFLogic extends Service {
 		date = intent.getStringExtra("date");
 		iepgoal = intent.getStringExtra("iepgoal");
 		iepreading = intent.getStringExtra("iepreading");
-		iepalt = intent.getStringExtra("iepalt");
+		iepalt = intent.getStringExtra("iepaltfffffdddddsdsdsdsdsdsddsdsdsdsdsdssd");
 		areaList = PersistenceBean.getPersistedAreaList(studentid, context);
 		trial1 = intent.getBooleanExtra("trial1", false);
 		Log.d("ATGuide",""+trial1);
@@ -282,7 +295,10 @@ public class PDFLogic extends Service {
 			if(!(trial1List==null)){
 				Toast.makeText(context, "TRIAL!NOT NULL", Toast.LENGTH_SHORT).show();
 			}
+	}catch(Exception e){
+		Log.e(LOG_TAG,"Exception in PDFLogic.setData() 294 "+e);
 	}
+		}
 
 	/*
 	 * (non-Javadoc)
