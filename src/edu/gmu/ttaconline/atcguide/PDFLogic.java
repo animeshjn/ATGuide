@@ -88,7 +88,7 @@ public class PDFLogic extends Service {
 	 * activity
 	 */
 	public static Activity activity;
-	public static boolean trial1=false;
+	public static boolean trial1 = false;
 
 	/**
 	 * init fonts
@@ -148,101 +148,117 @@ public class PDFLogic extends Service {
 			final ArrayList<Area> persistedAreaList = PersistenceBean
 					.getPersistedAreaObjects(studentid, context);
 			int i = 1;
-			try{
-			for (Area area : persistedAreaList) {
-				// Complexity O(n) {n Area + constant tasks (Max=7)* constant
-				// strategy (Max=6)}
-				final ArrayList<Task> persistedTasks = PersistenceBean
-						.getPersistedTasks(area, studentid, context);
-				for (Task task : persistedTasks) {
-					form1.setField("task" + i,
-							task.getAreaname() + ": " + task.getTaskname());
-					Log.d(LOG_TAG,
-							"" + task.getAreaname() + ": " + task.getTaskname());
-					String strategy = "";
-					for (String strategyKey : task.strategies.keySet()) {
+			try {
+				for (Area area : persistedAreaList) {
+					// Complexity O(n) {n Area + constant tasks (Max=7)*
+					// constant
+					// strategy (Max=6)}
+					final ArrayList<Task> persistedTasks = PersistenceBean
+							.getPersistedTasks(area, studentid, context);
+					for (Task task : persistedTasks) {
+						form1.setField("task" + i, task.getAreaname() + ": "
+								+ task.getTaskname());
+						Log.d(LOG_TAG,
+								"" + task.getAreaname() + ": "
+										+ task.getTaskname());
+						String strategy = "";
+						for (String strategyKey : task.strategies.keySet()) {
 
-						strategy += "" + task.strategies.get(strategyKey) + ";";
+							strategy += "" + task.strategies.get(strategyKey)
+									+ ";";
+						}
+						form1.setField("strategy" + i, strategy);
+						i++;
 					}
-					form1.setField("strategy" + i, strategy);
-					i++;
 				}
+			} catch (Exception unknown) {
+				Log.e(LOG_TAG, "PDFLogic 172 :" + unknown);
 			}
-			if(areaList==null)
-			{
-				Log.d(LOG_TAG,"Area List is null");
+			try {
+				if (areaList == null) {
+					Log.d(LOG_TAG, "Area List is null");
+				} else
+					for (CharSequence area : areaList) {
+
+						String areaname = "";
+						if (area == null) {
+							Log.e(LOG_TAG, "area null");
+						}
+						if (area != null)
+							areaname = area.toString().toLowerCase();
+						form1.setField(areaname, "On");
+						if (areaname.contains("study"))
+							form1.setField("study", "On");
+
+						else if (areaname.contains("oral"))
+							form1.setField("oral", "On");
+
+						else if (areaname.contains("activities"))
+							form1.setField("activities", "On");
+
+						else if (areaname.contains("recreation"))
+							form1.setField("recreation", "On");
+
+						else if (areaname.contains("Positioning"))
+							form1.setField("positioning", "On");
+						else if (areaname.contains("computer"))
+							form1.setField("computer", "On");
+
+						else if (areaname.toLowerCase().contains("environment"))
+							form1.setField("environment", "On");
+						else {
+							form1.setField("other", "On");
+							form1.setField("otherareaname", areaname);
+						}
+					}
+
+				if (iepgoal.toLowerCase().contains("yes"))
+					form1.setField("idyes", "On");
+				else if (iepgoal.toLowerCase().contains("no"))
+					form1.setField("idno", "On");
+
+				if (iepreading.toLowerCase().contains("yes"))
+					form1.setField("iepreadingyes", "On");
+				else if (iepreading.toLowerCase().contains("no"))
+					form1.setField("iepreadingno", "On");
+				if (iepalt.toLowerCase().contains("yes"))
+					form1.setField("iepaltyes", "On");
+				else if (iepalt.toLowerCase().contains("no"))
+					form1.setField("iepaltno", "On");
+			} catch (Exception e) {
+				Log.e(LOG_TAG, "Exception PDFLOGIC .226" + e);
 			}
-			else
-			for (CharSequence area : areaList) {
-				String areaname="";
-				if(area!=null)
-				areaname = area.toString().toLowerCase();
-				form1.setField(areaname, "On");
-				if (areaname.contains("study"))
-					form1.setField("study", "On");
-
-				else if (areaname.contains("oral"))
-					form1.setField("oral", "On");
-
-				else if (areaname.contains("activities"))
-					form1.setField("activities", "On");
-
-				else if (areaname.contains("recreation"))
-					form1.setField("recreation", "On");
-
-				else if (areaname.contains("Positioning"))
-					form1.setField("positioning", "On");
-				else if (areaname.contains("computer"))
-					form1.setField("computer", "On");
-
-				else if (areaname.toLowerCase().contains("environment"))
-					form1.setField("environment", "On");
-				else {
-					form1.setField("other", "On");
-					form1.setField("otherareaname", areaname);
-				}
-			}
-			
-			if (iepgoal.toLowerCase().contains("yes"))
-				form1.setField("idyes", "On");
-			else if (iepgoal.toLowerCase().contains("no"))
-				form1.setField("idno", "On");
-
-			if (iepreading.toLowerCase().contains("yes"))
-				form1.setField("iepreadingyes", "On");
-			else if (iepreading.toLowerCase().contains("no"))
-				form1.setField("iepreadingno", "On");
-			if (iepalt.toLowerCase().contains("yes"))
-				form1.setField("iepaltyes", "On");
-			else if (iepalt.toLowerCase().contains("no"))
-				form1.setField("iepaltno", "On");
-			}catch(Exception e){Log.e(LOG_TAG,"Exception PDFLOGIC .214"+e);}
 			if (trial1) {
 				form1.setField("iep0no", "On");
 				int c = 1;
-				if(trial1List!=null)
-				{	Log.d(LOG_TAG, "Trail1 no null in gen");
-				for (Area ar : trial1List) {
-					for (Task task : ar.tasks){
-						if(ar.tasks!=null)
-							{Log.d(LOG_TAG, "tasks not null"+c);}
-						for (AT ats : task.ats) {
-							{Log.d(LOG_TAG, "ATS not null"+c);}
-							Log.d(LOG_TAG, "ATS:"+c);
-							String fieldName = ats.instructionalArea+": "+""+ats.ATName;
-							Log.d("ATGuide","Filed Name: "+fieldName);
-							form1.setField("trial1at"+c, fieldName);
-							form1.setField("trial1person" + c, ats.participants);
-							form1.setField("trial1date" + c, ats.firstTrialDate);
-							c++;
+				if (trial1List != null) {
+					Log.d(LOG_TAG, "Trail1 no null in gen");
+					for (Area ar : trial1List) {
+						for (Task task : ar.tasks) {
+							if (ar.tasks != null) {
+								Log.d(LOG_TAG, "tasks not null" + c);
+							}
+							for (AT ats : task.ats) {
+								{
+									Log.d(LOG_TAG, "ATS not null" + c);
+								}
+								Log.d(LOG_TAG, "ATS:" + c);
+								String fieldName = ats.instructionalArea + ": "
+										+ "" + ats.ATName;
+								Log.d("ATGuide", "Filed Name: " + fieldName);
+								form1.setField("trial1at" + c, fieldName);
+								form1.setField("trial1person" + c,
+										ats.participants);
+								form1.setField("trial1date" + c,
+										ats.firstTrialDate);
+								c++;
+							}
 						}
-				}
-				}}
-				else 
-				{
+					}
+				} else {
 					Log.d(LOG_TAG, "PDFLogic.235 Trail1 List isnull");
 				}
-				
+
 			} else
 				form1.setField("iep0complete", "On");
 			stamp1.setFormFlattening(true);
@@ -277,28 +293,32 @@ public class PDFLogic extends Service {
 	 * Set the data from persisted intent to this
 	 */
 	public static void setData() {
-		try{studentid = PersistenceBean.getCurrentId(context);
-		Intent intent = PersistenceBean.getExistingIntent(studentid, context);
-		grade = intent.getStringExtra("studentgrade");
-		school = intent.getStringExtra("studentschool");
-		participants = intent.getStringExtra("studentparticipant");
-		date = intent.getStringExtra("date");
-		iepgoal = intent.getStringExtra("iepgoal");
-		iepreading = intent.getStringExtra("iepreading");
-		iepalt = intent.getStringExtra("iepaltfffffdddddsdsdsdsdsdsddsdsdsdsdsdssd");
-		areaList = PersistenceBean.getPersistedAreaList(studentid, context);
-		trial1 = intent.getBooleanExtra("trial1", false);
-		Log.d("ATGuide",""+trial1);
-		if (trial1)
-			trial1List = PersistenceBean.getPersistedAreaObjects("trial1"
-					+ studentid, context);
-			if(!(trial1List==null)){
-				Toast.makeText(context, "TRIAL!NOT NULL", Toast.LENGTH_SHORT).show();
+		try {
+			studentid = PersistenceBean.getCurrentId(context);
+			Intent intent = PersistenceBean.getExistingIntent(studentid,
+					context);
+			grade = intent.getStringExtra("studentgrade");
+			school = intent.getStringExtra("studentschool");
+			participants = intent.getStringExtra("studentparticipant");
+			date = intent.getStringExtra("date");
+			iepgoal = intent.getStringExtra("iepgoal");
+			iepreading = intent.getStringExtra("iepreading");
+			iepalt = intent
+					.getStringExtra("iepaltfffffdddddsdsdsdsdsdsddsdsdsdsdsdssd");
+			areaList = PersistenceBean.getPersistedAreaList(studentid, context);
+			trial1 = intent.getBooleanExtra("trial1", false);
+			Log.d("ATGuide", "" + trial1);
+			if (trial1)
+				trial1List = PersistenceBean.getPersistedAreaObjects("trial1"
+						+ studentid, context);
+			if (!(trial1List == null)) {
+				Toast.makeText(context, "TRIAL!NOT NULL", Toast.LENGTH_SHORT)
+						.show();
 			}
-	}catch(Exception e){
-		Log.e(LOG_TAG,"Exception in PDFLogic.setData() 294 "+e);
-	}
+		} catch (Exception e) {
+			Log.e(LOG_TAG, "Exception in PDFLogic.setData() 306 " + e);
 		}
+	}
 
 	/*
 	 * (non-Javadoc)
@@ -319,9 +339,10 @@ public class PDFLogic extends Service {
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		// TODO Auto-generated method stub
-		try{PDFLogic.generatePDF();}
-		catch(Exception e){
-			Log.e(LOG_TAG, ""+e);
+		try {
+			PDFLogic.generatePDF();
+		} catch (Exception e) {
+			Log.e(LOG_TAG, "" + e);
 		}
 		return Service.START_NOT_STICKY;
 	}
