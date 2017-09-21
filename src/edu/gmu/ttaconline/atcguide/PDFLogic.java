@@ -181,10 +181,10 @@ public class PDFLogic extends Service {
 					for (CharSequence area : areaList) {
 
 						String areaname = "";
-						if (area == null) {
+						if (null== area) {
 							Log.e(LOG_TAG, "area null");
 						}
-						if (area != null)
+						if (null!=area)
 							areaname = area.toString().toLowerCase();
 						form1.setField(areaname, "On");
 						if (areaname.contains("study"))
@@ -211,7 +211,7 @@ public class PDFLogic extends Service {
 							form1.setField("otherareaname", areaname);
 						}
 					}
-
+try{
 				if (iepgoal.toLowerCase().contains("yes"))
 					form1.setField("idyes", "On");
 				else if (iepgoal.toLowerCase().contains("no"))
@@ -225,7 +225,10 @@ public class PDFLogic extends Service {
 					form1.setField("iepaltyes", "On");
 				else if (iepalt.toLowerCase().contains("no"))
 					form1.setField("iepaltno", "On");
-			} catch (Exception e) {
+}catch(Exception e){
+	Log.e(LOG_TAG,"Ex part 2: "+e+" Values: "+iepgoal+" alt "+iepalt+" reading "+iepreading);
+}	
+} catch (Exception e) {
 				Log.e(LOG_TAG, "Exception PDFLOGIC .226" + e);
 			}
 			if (trial1) {
@@ -243,11 +246,12 @@ public class PDFLogic extends Service {
 									Log.d(LOG_TAG, "ATS not null" + c);
 								}
 								Log.d(LOG_TAG, "ATS:" + c);
-								String fieldName = ats.instructionalArea + ": "
+								String fieldName = task.taskname + ": "
 										+ "" + ats.ATName;
 								Log.d("ATGuide", "Filed Name: " + fieldName);
 								form1.setField("trial1at" + c, fieldName);
-								form1.setField("trial1person" + c,
+								Log.d(LOG_TAG,"participants: "+ats.participants);
+								form1.setField("trail1person" + c,
 										ats.participants);
 								form1.setField("trial1date" + c,
 										ats.firstTrialDate);

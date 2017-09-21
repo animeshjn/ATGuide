@@ -2,7 +2,6 @@ package edu.gmu.ttaconline.atcguide;
 
 public class StudentBean {
 	/*Overview: Non static bean to store a student record*/
-	
 	//Instances
 	String studentid;
 	String grade;
