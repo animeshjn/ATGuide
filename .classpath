@@ -10,5 +10,6 @@
 	<classpathentry kind="lib" path="libs/cwac-merge-1.1.1.jar"/>
 	<classpathentry kind="lib" path="libs/cwac-sacklist-1.0.2.jar"/>
 	<classpathentry kind="lib" path="libs/itextg-5.5.10.jar" sourcepath="C:/Users/ajain13/.sourceattacher/itextg-5.5.10-sources.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

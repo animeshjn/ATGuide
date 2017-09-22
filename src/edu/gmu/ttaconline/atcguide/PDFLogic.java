@@ -308,17 +308,14 @@ try{
 			iepgoal = intent.getStringExtra("iepgoal");
 			iepreading = intent.getStringExtra("iepreading");
 			iepalt = intent
-					.getStringExtra("iepaltfffffdddddsdsdsdsdsdsddsdsdsdsdsdssd");
+					.getStringExtra("iepalt");
 			areaList = PersistenceBean.getPersistedAreaList(studentid, context);
 			trial1 = intent.getBooleanExtra("trial1", false);
 			Log.d("ATGuide", "" + trial1);
 			if (trial1)
 				trial1List = PersistenceBean.getPersistedAreaObjects("trial1"
 						+ studentid, context);
-			if (!(trial1List == null)) {
-				Toast.makeText(context, "TRIAL!NOT NULL", Toast.LENGTH_SHORT)
-						.show();
-			}
+			
 		} catch (Exception e) {
 			Log.e(LOG_TAG, "Exception in PDFLogic.setData() 306 " + e);
 		}

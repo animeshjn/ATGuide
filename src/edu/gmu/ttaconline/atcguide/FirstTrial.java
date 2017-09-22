@@ -300,7 +300,7 @@ public class FirstTrial extends FragmentActivity {
 				dateView.removeTextChangedListener(trialDateWatcher);
 				// AT View
 				TextView aTView = (TextView) v;
-				CharSequence atName = aTView.getText();
+				CharSequence atName = trimATName((String)aTView.getText());
 				clickedId = v.getId();
 				//Parent
 				LinearLayout parent = (LinearLayout) v.getParent().getParent();
@@ -367,8 +367,8 @@ public class FirstTrial extends FragmentActivity {
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before,
 					int count) {
-				at.setATName(s.toString());
-				((TextView) currentClicked).setText(s);
+				at.setATName(trimATName(s.toString()));
+				((TextView) currentClicked).setText(trimATName(s.toString()));
 			}
 
 			@Override
@@ -616,7 +616,13 @@ public class FirstTrial extends FragmentActivity {
 	protected void onResume() {
 		super.onResume();
 	}
-
+	
+	public String trimATName(String atName){
+		if(atName.contains("(e.g.")||atName.contains("( e.g.")){
+		return atName.replaceFirst("[(][e][.][g][.](.+?)[)]", " ");
+		}
+		return atName;
+	}
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// Handle action bar item clicks here. The action bar will
