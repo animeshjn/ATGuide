@@ -143,8 +143,8 @@ public class PersistenceBean {
 		FeedReaderDbHelper mDbHelper = new FeedReaderDbHelper(context);
 		SQLiteDatabase db = mDbHelper.getWritableDatabase();
 		// delete before inserting for uniqueness of values
-//		db.execSQL("DELETE FROM " + SelectedArea.TABLE_NAME + " WHERE "
-//				+ SelectedArea.COL_ID + " = '" + studentId + "'");
+		// db.execSQL("DELETE FROM " + SelectedArea.TABLE_NAME + " WHERE "
+		// + SelectedArea.COL_ID + " = '" + studentId + "'");
 		for (String area : selectedInstructionalAreas) {
 			ContentValues values = new ContentValues();
 			values.put(SelectedArea.COL_ID, studentId);
@@ -397,7 +397,8 @@ public class PersistenceBean {
 		int ATID = at.id;
 		String firstTrialDate = at.firstTrialDate;
 		String participants = at.participants;
-		Log.d("ATGUIDE", "PersistenceBean.persistATObject() 400 participants:"+participants);
+		Log.d("ATGUIDE", "PersistenceBean.persistATObject() 400 participants:"
+				+ participants);
 		String solutionWorking = at.solutionWorking + "";
 		String areaName = task.getAreaname();
 		String solution = null;
@@ -428,7 +429,9 @@ public class PersistenceBean {
 			db.insert(ATStore.TABLE_NAME, null, values);
 			db.close();
 		} catch (Exception e) {
-			Log.e("ATGUIDE", "Exception while persisting current AT PersistenceBean.persistATObject() " + e);
+			Log.e("ATGUIDE",
+					"Exception while persisting current AT PersistenceBean.persistATObject() "
+							+ e);
 		}
 	}
 
@@ -480,6 +483,13 @@ public class PersistenceBean {
 		}
 	}
 
+	/**
+	 * get the Area objects from the database, use the student id
+	 * 
+	 * @param studentid
+	 * @param context
+	 * @return ArrayList Area list of Area objects
+	 */
 	public static ArrayList<Area> getPersistedAreaObjects(String studentid,
 			Context context) {
 		ArrayList<Area> areaObjList = new ArrayList<Area>();
@@ -558,7 +568,8 @@ public class PersistenceBean {
 					currentTask.solutions = false;
 				currentTask.strategies = getPersistedStrategiesMap(
 						currentTask.taskid + "", studentid, context);
-				currentTask.ats=getPersistedATs(area, currentTask, studentid, context);
+				currentTask.ats = getPersistedATs(area, currentTask, studentid,
+						context);
 				tasks.add(currentTask);
 				cursor.moveToNext();
 			}

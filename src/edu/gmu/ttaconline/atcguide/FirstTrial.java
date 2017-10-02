@@ -62,7 +62,8 @@ public class FirstTrial extends FragmentActivity {
 	android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
 	Activity activity;
 	Intent currentIntent;
-	boolean exploreVA=false;
+	boolean exploreVA = false;
+	boolean open=false;
 	// areas
 	/* Methods */
 	// Control start point
@@ -71,13 +72,22 @@ public class FirstTrial extends FragmentActivity {
 	 */
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_first_trial);
+		
 		context = getApplicationContext();
 		areaList = PersistenceBean.getPersistedAreaObjects("trial1"
 				+ PersistenceBean.getCurrentId(context), context);
 		inflater = getLayoutInflater();
-		placeArea();
+		//Get existing useful data from intent and SQLite
+		getData();
+		//if not open
+		if(!open){
+		placeArea();}
+		else{
+		placeAreaFromDB();
+		}
 		activity = this;
 		datePick = (EditText) findViewById(R.id.date);
 		setATListener();
@@ -149,6 +159,7 @@ public class FirstTrial extends FragmentActivity {
 	@SuppressLint("InflateParams")
 	private void placeArea() {
 
+
 		// Modifies: this view
 		/*
 		 * Effects: places the area, task and AT on the left panels & sets their
@@ -156,7 +167,7 @@ public class FirstTrial extends FragmentActivity {
 		 */
 		try {
 			// Initializing data
-			getData();
+			Log.e("ATGUIDE","In placeArea (NON DB)");
 			// Set params
 			LayoutParams textViewParams = new LayoutParams(
 					LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
@@ -224,12 +235,102 @@ public class FirstTrial extends FragmentActivity {
 	}
 
 	/**
+	 * Place the elements: Area, Task and ATs from database
+	 */
+	private void placeAreaFromDB(){
+
+		// Modifies: this view
+		/*
+		 * Effects: places the area, task and AT on the left panels & sets their
+		 * respective listeners from the database
+		 */
+		try {
+			// Initializing data
+			// Set params
+			LayoutParams textViewParams = new LayoutParams(
+					LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+			// The list view on left side
+			ListView instructional = (ListView) findViewById(R.id.instructionalAreasList);
+			// The list of area
+			int atCount=-1;
+			for (Area area : areaList) {
+				// For each area get a Row
+				LinearLayout areaRow = (LinearLayout) inflater.inflate(
+						R.layout.areataskrow, null);
+				areaRow.setId(id += 2);
+				// Add the area name
+				TextView areaTextView = (TextView) areaRow
+						.findViewById(R.id.areatextview);
+				// area.setBackground(getResources().getDrawable(R.drawable.textviewback));
+				areaTextView.setText(area.getAreaName());
+				areaTextView
+						.setTextAlignment(TextView.TEXT_ALIGNMENT_TEXT_START);
+				areaTextView.setLayoutParams(textViewParams);
+				areaTextView.setId(area.parentId);
+
+				// Set onClick listener to the area name
+				// append current task for 1st trial
+				for (Task task : area.tasks) {
+					// If solutions aren't working
+					if (!task.solutions) {
+						atCount++;
+						LinearLayout taskLayout = new LinearLayout(context);
+						taskLayout.setOrientation(LinearLayout.VERTICAL);
+						taskLayout.setLayoutParams(textViewParams);
+						TextView tasktextView = new TextView(context);
+						tasktextView.setText(task.getTaskname());
+						taskLayout.setTag(area.getAreaName());
+						tasktextView.setLayoutParams(textViewParams);
+						tasktextView.setId(task.taskid);
+						tasktextView.setTextColor(Color.BLACK);
+						tasktextView.setTypeface(null, Typeface.BOLD);
+						tasktextView.setPadding(15, 0, 0, 0);
+						taskLayout.addView(tasktextView);
+						TextView assistiveTech= new TextView(context);
+						if(task.ats.size()>0){
+							for(AT at:task.ats){
+						if(null!=at){assistiveTech = new TextView(context);
+								assistiveTech.setPadding(25, 0, 0, 0);
+								assistiveTech.setText(at.getATName());
+								assistiveTech.setTextColor(Color.BLACK);
+								assistiveTech.setId(at.id);
+								assistiveTech.setOnClickListener(getATListener());
+								taskLayout.addView(assistiveTech);}
+							}
+						}
+																
+//						assistiveTech.setTextColor(Color.BLACK);
+//						assistiveTech.setId(id++);
+//						assistiveTech.setOnClickListener(getATListener());
+						
+						//AT at0= new AT();
+						//at0.ATName= "";
+						// assistiveTech.setTextAlignment();
+						areaRow.addView(taskLayout);
+					}
+				}
+
+				// Linear layout task
+				// append Assistive technology to this task
+
+				merge.addView(areaRow);
+			}
+			instructional.setAdapter(merge);
+		} catch (Exception e) {
+			Log.e("ATGUIDE",
+					"Error retrieving data  FirstTrial->placeAreaFromDB() \n" + e);
+		}
+	}
+	
+	/**
 	 * Get Data from intent and the persistence layer.
 	 */
 	private void getData() {
+
 		try {
 			selectedInstructional = PersistenceBean.getPersistedAreaList(
 					"trial1" + PersistenceBean.getCurrentId(context), context);
+			open = getIntent().getBooleanExtra("open", false);
 			for (CharSequence cs : selectedInstructional) {
 				trial1Texts.add(cs.toString());
 			}
@@ -286,10 +387,13 @@ public class FirstTrial extends FragmentActivity {
 	 */
 	public OnClickListener getATListener() {
 
+
 		OnClickListener atL = new OnClickListener() {
+
 
 			@Override
 			public void onClick(View v) {
+
 				// Remove Previous Listeners if set
 				
 				EditText atname = (EditText) findViewById(R.id.at);

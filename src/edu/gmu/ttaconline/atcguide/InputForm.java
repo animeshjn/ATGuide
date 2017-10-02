@@ -49,7 +49,8 @@ public class InputForm extends Activity {
 			fillSampleData();
 		if(currentIntent.getBooleanExtra("open", false))
 		{	currentIntent =PersistenceBean.getExistingIntent(currentIntent.getStringExtra("studentid"), context);
-			//currentIntent.putExtra("open",true);
+			PersistenceBean.persistCurrentId(currentIntent.getStringExtra("studentid"), context);
+		    currentIntent.putExtra("open",true);
 		     fillDataFromIntent();
 		}
 		// else blank form
