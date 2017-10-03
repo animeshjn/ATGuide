@@ -1,9 +1,9 @@
 package edu.gmu.ttaconline.atcguide;
 
+import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Currency;
 import java.util.Locale;
 
 import com.commonsware.cwac.merge.MergeAdapter;
@@ -15,6 +15,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.text.Editable;
@@ -36,6 +37,7 @@ import android.widget.LinearLayout.LayoutParams;
 import android.widget.Toast;
 
 /**
+ * 
  * Activity for first trial of the AT Inputs the additional data for the first
  * trial
  * 
@@ -62,8 +64,10 @@ public class FirstTrial extends FragmentActivity {
 	android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
 	Activity activity;
 	Intent currentIntent;
+	OnClickListener addATCLick;
 	boolean exploreVA = false;
-	boolean open=false;
+	boolean open = false;
+
 	// areas
 	/* Methods */
 	// Control start point
@@ -75,64 +79,96 @@ public class FirstTrial extends FragmentActivity {
 
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_first_trial);
-		
+
 		context = getApplicationContext();
 		areaList = PersistenceBean.getPersistedAreaObjects("trial1"
 				+ PersistenceBean.getCurrentId(context), context);
 		inflater = getLayoutInflater();
-		//Get existing useful data from intent and SQLite
+		// Get existing useful data from intent and SQLite
+		//checkUri();
+		try{
 		getData();
-		//if not open
-		if(!open){
-		placeArea();}
-		else{
-		placeAreaFromDB();
+		// if not open
+		if (!open) {
+			placeArea();
+		} else {
+			placeAreaFromDB();
 		}
 		activity = this;
 		datePick = (EditText) findViewById(R.id.date);
-		setATListener();
+		//setATListener();
 		setDatePickListener();
 		clickFirstItem();
 		setNextListener();
-		
+		}catch(Exception e){
+			Log.e("AT GUIDE","Exception in FirstTrial.onCreate 104: *"+e);
+		}
 	}
 
+	private void checkUri() {
+
+		Uri uri = currentIntent.getData();
+		if (uri != null) {
+			String msgFromUrl = getIntent().getDataString();
+			try {
+				msgFromUrl = java.net.URLDecoder.decode(msgFromUrl, "UTF-8");
+			} catch (UnsupportedEncodingException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	/**
+	 * Set Listener for the Next Button
+	 */
 	private void setNextListener() {
-		currentIntent=PersistenceBean.getExistingIntent(PersistenceBean.getCurrentId(context), context);
-		Button nextButton= (Button)findViewById(R.id.nextbutton);
+		/**
+		 * Modifies: Next button in the view Effects: Sets listener to the next
+		 * button
+		 * */
+
+		currentIntent = PersistenceBean.getExistingIntent(
+				PersistenceBean.getCurrentId(context), context);
+		Button nextButton = (Button) findViewById(R.id.nextbutton);
 		nextButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				PersistenceBean.persistAreaObject(areaList,"trial1"+PersistenceBean.getCurrentId(context), context);
-				PDFLogic.activity=activity;
-				currentIntent.setClass(context,
-						PDFLogic.class);
-				currentIntent
-						.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+				PersistenceBean.persistAreaObject(areaList, "trial1"
+						+ PersistenceBean.getCurrentId(context), context);
+				PDFLogic.activity = activity;
+				currentIntent.setClass(context, PDFLogic.class);
+				currentIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 				currentIntent
 						.setFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
 				// Intent pdfService= new
 				currentIntent.putExtra("trial1", true);
-				PersistenceBean.persistIntent(PersistenceBean.getCurrentId(context), currentIntent, context);
+				PersistenceBean.persistIntent(
+						PersistenceBean.getCurrentId(context), currentIntent,
+						context);
 				// Intent(getApplicationContext(),PDFLogic.class);
 				android.widget.ProgressBar bar = new android.widget.ProgressBar(
 						getApplicationContext());
 				bar.setIndeterminate(true);
 				bar.bringToFront();
-				Log.d("ATGUIDE",""+currentIntent.toString());
+				Log.d("ATGUIDE", "" + currentIntent.toString());
 				startService(currentIntent);
 			}
 		});
-		
+
 	}
 
+	/**
+	 * Click the first item in the Adapter
+	 */
 	private void clickFirstItem() {
+
 		ListView lv = (ListView) findViewById(R.id.instructionalAreasList);
 		MergeAdapter m = (MergeAdapter) lv.getAdapter();
 		m.getCount();
-		View first = (View) m.getItem(0); //Linear Layout
-		if (first != null && first instanceof LinearLayout){
-			LinearLayout taskLay=(LinearLayout)((LinearLayout)first).getChildAt(1);
+		View first = (View) m.getItem(0); // Linear Layout
+		if (first != null && first instanceof LinearLayout) {
+			LinearLayout taskLay = (LinearLayout) ((LinearLayout) first)
+					.getChildAt(1);
 			taskLay.getChildAt(1).callOnClick();
 		}
 	}
@@ -141,7 +177,10 @@ public class FirstTrial extends FragmentActivity {
 	 * Set Listener for Assistive technology. Select the listener
 	 */
 	private void setATListener() {
+
 		ImageButton add = (ImageButton) findViewById(R.id.addat);
+		add.setImageResource(R.drawable.plusstrategy);
+
 		add.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -154,11 +193,29 @@ public class FirstTrial extends FragmentActivity {
 	}
 
 	/**
+	 * Place the special listener to call navigator app
+	 */
+	private void setSpecialATListener() {
+		/*Requires:*/
+		/*Modifies:*/
+		/*Effects:*/
+		ImageButton add = (ImageButton) findViewById(R.id.addat);
+		add.setImageResource(R.drawable.navigator);
+		add.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Toast.makeText(context, "Call the navigator App",
+						Toast.LENGTH_SHORT).show();
+			}
+		});
+
+	}
+
+	/**
 	 * Place all areas in the view
 	 */
 	@SuppressLint("InflateParams")
 	private void placeArea() {
-
 
 		// Modifies: this view
 		/*
@@ -167,14 +224,33 @@ public class FirstTrial extends FragmentActivity {
 		 */
 		try {
 			// Initializing data
-			Log.e("ATGUIDE","In placeArea (NON DB)");
 			// Set params
 			LayoutParams textViewParams = new LayoutParams(
 					LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 			// The list view on left side
 			ListView instructional = (ListView) findViewById(R.id.instructionalAreasList);
 			// The list of area
-			int atCount=-1;
+			// int atCount = -1;
+			String iepAlt = currentIntent.getStringExtra("iepalt");
+			if (null != iepAlt && iepAlt.equalsIgnoreCase("Yes")) {
+				// TODO: Add Aim Navigator to area and create special view
+				// Add AreaName as Exploring AT
+				// Add Onclick Listener: OnClick: Add extra button to call app
+				// add check to the data for incoming URL
+				// Auto Fill from the data
+				Area nav = new Area("Exploring VA");
+				// nav.addTask();
+				nav.parentId=id++;
+				Task explorer = new Task();
+				explorer.solutions=false;
+				explorer.taskid=id++;
+				explorer.setAreaname(nav.getAreaName());
+				explorer.taskname = "Exploring VA";
+				nav.addTask(explorer);
+				areaList.add(nav);
+
+			}
+
 			for (Area area : areaList) {
 				// For each area get a Row
 				LinearLayout areaRow = (LinearLayout) inflater.inflate(
@@ -195,7 +271,7 @@ public class FirstTrial extends FragmentActivity {
 				for (Task task : area.tasks) {
 					// If solutions aren't working
 					if (!task.solutions) {
-						atCount++;
+						// atCount++;
 						LinearLayout taskLayout = new LinearLayout(context);
 						taskLayout.setOrientation(LinearLayout.VERTICAL);
 						taskLayout.setLayoutParams(textViewParams);
@@ -212,9 +288,16 @@ public class FirstTrial extends FragmentActivity {
 						assistiveTech.setText("Choose AT");
 						assistiveTech.setTextColor(Color.BLACK);
 						assistiveTech.setId(id++);
+						if(area.getAreaName().equalsIgnoreCase("Exploring VA")){
+							assistiveTech.setOnClickListener(getExplorerATListener());
+							
+						}
+						else{
 						assistiveTech.setOnClickListener(getATListener());
-						AT at0= new AT();
-						at0.ATName= "";
+						
+						}
+						AT at0 = new AT();
+						at0.ATName = "";
 						// assistiveTech.setTextAlignment();
 						taskLayout.addView(tasktextView);
 						taskLayout.addView(assistiveTech);
@@ -224,7 +307,6 @@ public class FirstTrial extends FragmentActivity {
 
 				// Linear layout task
 				// append Assistive technology to this task
-
 				merge.addView(areaRow);
 			}
 			instructional.setAdapter(merge);
@@ -237,7 +319,7 @@ public class FirstTrial extends FragmentActivity {
 	/**
 	 * Place the elements: Area, Task and ATs from database
 	 */
-	private void placeAreaFromDB(){
+	private void placeAreaFromDB() {
 
 		// Modifies: this view
 		/*
@@ -252,7 +334,28 @@ public class FirstTrial extends FragmentActivity {
 			// The list view on left side
 			ListView instructional = (ListView) findViewById(R.id.instructionalAreasList);
 			// The list of area
-			int atCount=-1;
+			// int atCount = -1;
+			String iepAlt = currentIntent.getStringExtra("iepalt");
+			if (null != iepAlt && iepAlt.equalsIgnoreCase("Yes")) {
+				// TODO: Add Aim Navigator to area and create special view
+				// Add AreaName as Exploring AT
+				// Add OnClick Listener: OnClick: Add extra button to call app
+				// add check to the data for incoming URL
+				// Auto Fill from the data
+				Area nav = new Area("Exploring VA");
+				// nav.addTask();
+				nav.parentId=id++;
+				
+				Task explorer = new Task();
+				explorer.solutions=false;
+				explorer.taskid=id++;
+				explorer.setAreaname(nav.getAreaName());
+				explorer.taskname = "Exploring VA";
+				nav.addTask(explorer);
+				areaList.add(nav);
+
+			}
+
 			for (Area area : areaList) {
 				// For each area get a Row
 				LinearLayout areaRow = (LinearLayout) inflater.inflate(
@@ -273,7 +376,7 @@ public class FirstTrial extends FragmentActivity {
 				for (Task task : area.tasks) {
 					// If solutions aren't working
 					if (!task.solutions) {
-						atCount++;
+						// atCount++;
 						LinearLayout taskLayout = new LinearLayout(context);
 						taskLayout.setOrientation(LinearLayout.VERTICAL);
 						taskLayout.setLayoutParams(textViewParams);
@@ -286,25 +389,33 @@ public class FirstTrial extends FragmentActivity {
 						tasktextView.setTypeface(null, Typeface.BOLD);
 						tasktextView.setPadding(15, 0, 0, 0);
 						taskLayout.addView(tasktextView);
-						TextView assistiveTech= new TextView(context);
-						if(task.ats.size()>0){
-							for(AT at:task.ats){
-						if(null!=at){assistiveTech = new TextView(context);
-								assistiveTech.setPadding(25, 0, 0, 0);
-								assistiveTech.setText(at.getATName());
-								assistiveTech.setTextColor(Color.BLACK);
-								assistiveTech.setId(at.id);
-								assistiveTech.setOnClickListener(getATListener());
-								taskLayout.addView(assistiveTech);}
+						TextView assistiveTech = new TextView(context);
+						if (task.ats.size() > 0) {
+							for (AT at : task.ats) {
+								if (null != at) {
+									assistiveTech = new TextView(context);
+									assistiveTech.setPadding(25, 0, 0, 0);
+									assistiveTech.setText(at.getATName());
+									assistiveTech.setTextColor(Color.BLACK);
+									assistiveTech.setId(at.id);
+									if(area.getAreaName().equalsIgnoreCase("Exploring VA")){
+										assistiveTech.setOnClickListener(getExplorerATListener());
+										
+									}
+									else{
+									assistiveTech.setOnClickListener(getATListener());
+									
+									}
+									taskLayout.addView(assistiveTech);
+								}
 							}
 						}
-																
-//						assistiveTech.setTextColor(Color.BLACK);
-//						assistiveTech.setId(id++);
-//						assistiveTech.setOnClickListener(getATListener());
-						
-						//AT at0= new AT();
-						//at0.ATName= "";
+
+						// assistiveTech.setTextColor(Color.BLACK);
+						// assistiveTech.setId(id++);
+						// assistiveTech.setOnClickListener(getATListener());
+						// AT at0= new AT();
+						// at0.ATName= "";
 						// assistiveTech.setTextAlignment();
 						areaRow.addView(taskLayout);
 					}
@@ -318,10 +429,11 @@ public class FirstTrial extends FragmentActivity {
 			instructional.setAdapter(merge);
 		} catch (Exception e) {
 			Log.e("ATGUIDE",
-					"Error retrieving data  FirstTrial->placeAreaFromDB() \n" + e);
+					"Error retrieving data  FirstTrial->placeAreaFromDB() \n"
+							+ e);
 		}
 	}
-	
+
 	/**
 	 * Get Data from intent and the persistence layer.
 	 */
@@ -331,6 +443,7 @@ public class FirstTrial extends FragmentActivity {
 			selectedInstructional = PersistenceBean.getPersistedAreaList(
 					"trial1" + PersistenceBean.getCurrentId(context), context);
 			open = getIntent().getBooleanExtra("open", false);
+			currentIntent = getIntent();
 			for (CharSequence cs : selectedInstructional) {
 				trial1Texts.add(cs.toString());
 			}
@@ -341,14 +454,17 @@ public class FirstTrial extends FragmentActivity {
 	}
 
 	/**
-	 *Allows a pop-up calendar on click of EditTextView of the Date 
+	 * Allows a pop-up calendar on click of EditTextView of the Date
 	 */
 	public void setDatePickListener() {
+
 		final DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
+
 			@Override
 			public void onDateSet(DatePicker view, int year, int monthOfYear,
-					int dayOfMonth) {
-				// TODO Auto-generated method stub
+
+			int dayOfMonth) {
+
 				myCalendar.set(Calendar.YEAR, year);
 				myCalendar.set(Calendar.MONTH, monthOfYear);
 				myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
@@ -358,9 +474,10 @@ public class FirstTrial extends FragmentActivity {
 		};
 
 		datePick.setOnClickListener(new View.OnClickListener() {
+
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
+
 				DatePickerDialog dialog = new DatePickerDialog(FirstTrial.this,
 						date, myCalendar.get(Calendar.YEAR), myCalendar
 								.get(Calendar.MONTH), myCalendar
@@ -382,35 +499,34 @@ public class FirstTrial extends FragmentActivity {
 	}
 
 	/**
+	 * Provide the onclick listener to the special AIM Navigator AT
 	 * 
-	 * @return OnClickListener for the AT 
+	 * @return Listener to special AT
 	 */
-	public OnClickListener getATListener() {
-
+	public OnClickListener getExplorerATListener() {
 
 		OnClickListener atL = new OnClickListener() {
-
-
 			@Override
 			public void onClick(View v) {
-
 				// Remove Previous Listeners if set
-				
 				EditText atname = (EditText) findViewById(R.id.at);
 				atname.removeTextChangedListener(_ATNameWatcher);
+				// atname.setText("Choose AT");//Default
 				EditText participantView = (EditText) findViewById(R.id.participants);
 				participantView.removeTextChangedListener(participantsWatcher);
+				// participantView.setText("");//
 				EditText dateView = (EditText) findViewById(R.id.date);
 				dateView.removeTextChangedListener(trialDateWatcher);
 				// AT View
 				TextView aTView = (TextView) v;
-				CharSequence atName = trimATName((String)aTView.getText());
+				CharSequence atName = trimATName((String) aTView.getText());
 				clickedId = v.getId();
-				//Parent
+				// Parent
 				LinearLayout parent = (LinearLayout) v.getParent().getParent();
 				TextView area = (TextView) parent.getChildAt(0);
 				CharSequence areaText = area.getText();
-				TextView taskView = (TextView) ((LinearLayout) v.getParent()).getChildAt(0);
+				TextView taskView = (TextView) ((LinearLayout) v.getParent())
+						.getChildAt(0);
 				Area areaobj = getAreaByName(areaText);
 				Task t = areaobj.getTaskById(taskView.getId());
 				if (t.ats.size() == 0) {
@@ -425,6 +541,63 @@ public class FirstTrial extends FragmentActivity {
 					setAtToView(t.getATById(clickedId), v);
 				}
 				highlightThis(v);
+				setSpecialATListener();
+				setAddATListener(v);
+				setDeleteATListener(v);
+			}
+		};
+		return atL;
+
+	}
+
+	/**
+	 * 
+	 * @return OnClickListener for the AT
+	 */
+	public OnClickListener getATListener() {
+
+
+		OnClickListener atL = new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+
+
+				// Remove Previous Listeners if set
+
+				EditText atname = (EditText) findViewById(R.id.at);
+				atname.removeTextChangedListener(_ATNameWatcher);
+				// atname.setText("Choose AT");//Default
+				EditText participantView = (EditText) findViewById(R.id.participants);
+				participantView.removeTextChangedListener(participantsWatcher);
+				// participantView.setText("");//
+				EditText dateView = (EditText) findViewById(R.id.date);
+				dateView.removeTextChangedListener(trialDateWatcher);
+				// AT View
+				TextView aTView = (TextView) v;
+				CharSequence atName = trimATName((String) aTView.getText());
+				clickedId = v.getId();
+				// Parent
+				LinearLayout parent = (LinearLayout) v.getParent().getParent();
+				TextView area = (TextView) parent.getChildAt(0);
+				CharSequence areaText = area.getText();
+				TextView taskView = (TextView) ((LinearLayout) v.getParent())
+						.getChildAt(0);
+				Area areaobj = getAreaByName(areaText);
+				Task t = areaobj.getTaskById(taskView.getId());
+				if (t.ats.size() == 0) {
+					AT at = new AT();
+					at.task = t.taskname;
+					at.ATName = atName.toString();
+					at.instructionalArea = area.getText().toString();
+					at.id = clickedId;
+					setAtToView(at, v);
+					t.ats.add(at);
+				} else {
+					setAtToView(t.getATById(clickedId), v);
+				}
+				highlightThis(v);
+				setATListener();
 				setAddATListener(v);
 				setDeleteATListener(v);
 			}
@@ -434,6 +607,7 @@ public class FirstTrial extends FragmentActivity {
 
 	/**
 	 * Sets the given AT to the view.
+	 * 
 	 * @param at
 	 *            assitive technology object to be set to view
 	 * @param currentClicked
@@ -519,11 +693,10 @@ public class FirstTrial extends FragmentActivity {
 			@Override
 			public void afterTextChanged(Editable s) {
 			}
-			
+
 		};
 		participantView.addTextChangedListener(participantsWatcher);
 
-		
 	}
 
 	/**
@@ -557,20 +730,24 @@ public class FirstTrial extends FragmentActivity {
 		};
 		dateView.addTextChangedListener(trialDateWatcher);
 	}
+
 	/**
-	 *Sets the Listener to the ADD New AT Button 
+	 * Sets the Listener to the ADD New AT Button
 	 */
 	public void setAddATListener(final View op) {
+
 		try {
-			// TODO: ADD Listener
+			// ADD Listener
 			OnClickListener addCLick = new View.OnClickListener() {
+
 				@Override
 				public void onClick(View v) {
-					// TODO Auto-generated method stub
+
 					EditText atname = (EditText) findViewById(R.id.at);
 					atname.removeTextChangedListener(_ATNameWatcher);
 					EditText participantView = (EditText) findViewById(R.id.participants);
-					participantView.removeTextChangedListener(participantsWatcher);
+					participantView
+							.removeTextChangedListener(participantsWatcher);
 					EditText dateView = (EditText) findViewById(R.id.date);
 					dateView.removeTextChangedListener(trialDateWatcher);
 					LinearLayout taskLayout = (LinearLayout) op.getParent();
@@ -579,26 +756,29 @@ public class FirstTrial extends FragmentActivity {
 					assistiveTech.setText("Choose AT");
 					assistiveTech.setTextColor(Color.BLACK);
 					assistiveTech.setId(id++);
-					LinearLayout areaLayout= (LinearLayout)taskLayout.getParent();
-					String areaText=((TextView)areaLayout.getChildAt(0)).getText().toString();
+					LinearLayout areaLayout = (LinearLayout) taskLayout
+							.getParent();
+					String areaText = ((TextView) areaLayout.getChildAt(0))
+							.getText().toString();
 					Area areaobj = getAreaByName(areaText);
-					Task t = areaobj.getTaskById(taskLayout.getChildAt(0).getId());
-						AT at = new AT();
-						at.task = t.taskname;
-						at.ATName = "Choose AT";
-						at.instructionalArea = areaText;
-						at.id = assistiveTech.getId();
-						
-						t.ats.add(at);
-						setAtToView(at, v);
+					Task t = areaobj.getTaskById(taskLayout.getChildAt(0)
+							.getId());
+					AT at = new AT();
+					at.task = t.taskname;
+					at.ATName = "Choose AT";
+					at.instructionalArea = areaText;
+					at.id = assistiveTech.getId();
+
+					t.ats.add(at);
+					setAtToView(at, v);
 					assistiveTech.setOnClickListener(getATListener());
-					Log.d("ATGuide","Area Text: "+areaText);
-					Log.d("ATGuide","Area Text: "+areaText);
+					Log.d("ATGuide", "Area Text: " + areaText);
+					Log.d("ATGuide", "Area Text: " + areaText);
 					taskLayout.addView(assistiveTech);
 					assistiveTech.callOnClick();
 				}
 			};
-			((Button)findViewById(R.id.addnewat)).setOnClickListener(addCLick);
+			((Button) findViewById(R.id.addnewat)).setOnClickListener(addCLick);
 		} catch (ClassCastException e) {
 			Log.e("ATGuide", "" + e);
 		} catch (Exception e) {
@@ -606,59 +786,64 @@ public class FirstTrial extends FragmentActivity {
 		}
 	}
 
-	
 	/**
 	 * Deletes the AT from logic and View
+	 * 
 	 * @param op
 	 */
-	public void setDeleteATListener(final View op){
-		//Requires: current selected AT
+	public void setDeleteATListener(final View op) {
+		// Requires: current selected AT
 		// Modifies: this, current view, area and task
-		//Effects:  Deletes the AT from logic and View
+		// Effects: Deletes the AT from logic and View
 		try {
 			OnClickListener addCLick = new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					//Remove All listeners
+					// Remove All listeners
 					EditText atname = (EditText) findViewById(R.id.at);
 					atname.removeTextChangedListener(_ATNameWatcher);
 					EditText participantView = (EditText) findViewById(R.id.participants);
-					participantView.removeTextChangedListener(participantsWatcher);
+					participantView
+							.removeTextChangedListener(participantsWatcher);
 					EditText dateView = (EditText) findViewById(R.id.date);
 					dateView.removeTextChangedListener(trialDateWatcher);
-					//Get Layouts
+					// Get Layouts
 					LinearLayout taskLayout = (LinearLayout) op.getParent();
-					TextView assistiveTech = (TextView)op;
-					LinearLayout areaLayout= (LinearLayout)taskLayout.getParent();
-					String areaText=((TextView)areaLayout.getChildAt(0)).getText().toString();
-					//If deletion invalid
-					if(taskLayout.getChildCount()<=2){
-						Toast.makeText(context, "At least one AT is required for a task", Toast.LENGTH_SHORT).show();
-					}	
-					else{//getObjects
-					Area areaobj = getAreaByName(areaText);
-					Task t = areaobj.getTaskById(taskLayout.getChildAt(0).getId());
-					//Delete from Logics
-					t.ats.remove(t.getATById(assistiveTech.getId()));
-					//Delete from view
-					taskLayout.removeView(assistiveTech);
-					//Select other AT
-					taskLayout.getChildAt(1).callOnClick();}
+					TextView assistiveTech = (TextView) op;
+					LinearLayout areaLayout = (LinearLayout) taskLayout
+							.getParent();
+					String areaText = ((TextView) areaLayout.getChildAt(0))
+							.getText().toString();
+					// If deletion invalid
+					if (taskLayout.getChildCount() <= 2) {
+						Toast.makeText(context,
+								"At least one AT is required for a task",
+								Toast.LENGTH_SHORT).show();
+					} else {// getObjects
+						Area areaobj = getAreaByName(areaText);
+						Task t = areaobj.getTaskById(taskLayout.getChildAt(0)
+								.getId());
+						// Delete from Logics
+						t.ats.remove(t.getATById(assistiveTech.getId()));
+						// Delete from view
+						taskLayout.removeView(assistiveTech);
+						// Select other AT
+						taskLayout.getChildAt(1).callOnClick();
+					}
 				}
 			};
-			((Button)findViewById(R.id.deleteat)).setOnClickListener(addCLick);
+			((Button) findViewById(R.id.deleteat)).setOnClickListener(addCLick);
 		} catch (ClassCastException e) {
 			Log.e("ATGuide", "" + e);
 		} catch (Exception e) {
 			Log.e("ATGuide", "" + e);
 		}
-		
+
 	}
-	
-	
 
 	/**
 	 * Highlights the given view (un-highlights all the other views )
+	 * 
 	 * @param tv
 	 */
 	public void highlightThis(View tv) {
@@ -693,6 +878,7 @@ public class FirstTrial extends FragmentActivity {
 
 	/**
 	 * To get area object by name from the list
+	 * 
 	 * @param areaname
 	 * @return
 	 */
@@ -708,7 +894,6 @@ public class FirstTrial extends FragmentActivity {
 		return null;
 	}
 
-
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
@@ -720,13 +905,14 @@ public class FirstTrial extends FragmentActivity {
 	protected void onResume() {
 		super.onResume();
 	}
-	
-	public String trimATName(String atName){
-		if(atName.contains("(e.g.")||atName.contains("( e.g.")){
-		return atName.replaceFirst("[(][e][.][g][.](.+?)[)]", " ");
+
+	public String trimATName(String atName) {
+		if (atName.contains("(e.g.") || atName.contains("( e.g.")) {
+			return atName.replaceFirst("[(][e][.][g][.](.+?)[)]", " ");
 		}
 		return atName;
 	}
+
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// Handle action bar item clicks here. The action bar will

@@ -32,6 +32,7 @@ public class IEPReading extends Activity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+
 		super.onCreate(savedInstanceState);
 		try {
 			setContentView(R.layout.activity_iepreading);
@@ -64,6 +65,9 @@ public class IEPReading extends Activity {
 	 * Check URI for redirection from another application
 	 */
 	private void checkUri() {
+
+
+
 		Uri uri = currentIntent.getData();
 		if (uri != null) {
 			String msgFromUrl = currentIntent.getDataString();
@@ -129,10 +133,13 @@ public class IEPReading extends Activity {
 	 * Set listener to forward the view to the next activity.
 	 */
 	private void setNextListener() {
+
 		Button next = (Button) findViewById(R.id.nextbutton);
 		next.setOnClickListener(new Button.OnClickListener() {
+
 			@Override
 			public void onClick(View v) {
+
 				setRadioValues();
 				currentIntent.putExtra("iepreading", IEPReading);
 				currentIntent.putExtra("iepalt", IEPAlt);
@@ -157,8 +164,10 @@ public class IEPReading extends Activity {
 							R.string.AIMCall));
 					builder.setPositiveButton("Yes",
 							new DialogInterface.OnClickListener() {
+
 								@Override
 								public void onClick(DialogInterface dialog,
+
 										int which) {
 									// go to the AIM VA Eligibility at
 									// http://aimeligibility.com
@@ -208,7 +217,7 @@ public class IEPReading extends Activity {
 										else {
 											Toast.makeText(
 													context,
-													"AIM eLigibility not installed",
+													"AIM Eligibility not installed",
 													Toast.LENGTH_SHORT).show();
 											aimIntent = new Intent(
 													Intent.ACTION_VIEW,
