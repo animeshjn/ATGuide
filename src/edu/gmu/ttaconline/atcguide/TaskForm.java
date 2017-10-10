@@ -239,6 +239,7 @@ public class TaskForm extends Activity implements Serializable {
 									PersistenceBean.persistInstructionalAreas(
 											"trial1" + studentid,
 											trial1TextList, context);
+									
 									startActivity(currentIntent);
 								}
 							});

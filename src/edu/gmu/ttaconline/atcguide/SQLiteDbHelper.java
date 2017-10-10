@@ -1,12 +1,12 @@
 package edu.gmu.ttaconline.atcguide;
 
-import edu.gmu.ttaconline.atcguide.FeedReaderContract.ATStore;
-import edu.gmu.ttaconline.atcguide.FeedReaderContract.AreaStore;
-import edu.gmu.ttaconline.atcguide.FeedReaderContract.FeedEntry;
-import edu.gmu.ttaconline.atcguide.FeedReaderContract.IntentStore;
-import edu.gmu.ttaconline.atcguide.FeedReaderContract.SelectedArea;
-import edu.gmu.ttaconline.atcguide.FeedReaderContract.StrategyStore;
-import edu.gmu.ttaconline.atcguide.FeedReaderContract.TaskStore;
+import edu.gmu.ttaconline.atcguide.SQLiteContract.ATStore;
+import edu.gmu.ttaconline.atcguide.SQLiteContract.AreaStore;
+import edu.gmu.ttaconline.atcguide.SQLiteContract.FeedEntry;
+import edu.gmu.ttaconline.atcguide.SQLiteContract.IntentStore;
+import edu.gmu.ttaconline.atcguide.SQLiteContract.SelectedArea;
+import edu.gmu.ttaconline.atcguide.SQLiteContract.StrategyStore;
+import edu.gmu.ttaconline.atcguide.SQLiteContract.TaskStore;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -16,10 +16,10 @@ import android.database.sqlite.SQLiteOpenHelper;
  * 
  * @author Animesh Jain
  */
-public class FeedReaderDbHelper extends SQLiteOpenHelper {
+public class SQLiteDbHelper extends SQLiteOpenHelper {
 	// If you change the database schema, you must increment the database
 	// version.
-	public static final int DATABASE_VERSION = 25;
+	public static final int DATABASE_VERSION = 26;
 	public static final String DATABASE_NAME = "Student.db";
 	private static final String SQL_CREATE_ENTRIES = "CREATE TABLE "
 			+ FeedEntry.STUDENT + " (" + FeedEntry.STUDENT_ID
@@ -91,7 +91,7 @@ public class FeedReaderDbHelper extends SQLiteOpenHelper {
 	private static final String SQL_DELETE_AT = "DROP TABLE IF EXISTS "
 			+ ATStore.TABLE_NAME;
 
-	public FeedReaderDbHelper(Context context) {
+	public SQLiteDbHelper(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
 	}
 

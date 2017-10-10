@@ -2,10 +2,10 @@ package edu.gmu.ttaconline.atcguide;
 
 
 
-public final class FeedReaderContract {
+public final class SQLiteContract {
     // To prevent someone from accidentally instantiating the contract class,
     // make the constructor private.
-    private FeedReaderContract() {}
+    private SQLiteContract() {}
     public static int id=1000;
     
     /* Inner class that defines the table contents */

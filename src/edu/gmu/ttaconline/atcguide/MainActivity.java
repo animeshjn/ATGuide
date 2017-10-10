@@ -66,6 +66,13 @@ public class MainActivity extends Activity {
                     .commit();
         }
     }
+    
+    @Override
+    protected void onRestart() {
+    	// TODO Auto-generated method stub
+    	super.onRestart();
+    	this.onCreate(new Bundle());
+    }
     public void actionNew(View v)
     {
     	Intent i= new Intent(context,InputForm.class );

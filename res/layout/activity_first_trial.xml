@@ -143,16 +143,17 @@
 
                     <ImageButton
                         android:id="@+id/addat"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
                         android:background="@android:color/transparent"
                         android:contentDescription="add at"
                         android:src="@drawable/plusstrategy" 
+                        android:scaleType="fitXY"
                         android:layout_gravity="center_vertical"/>
 
                     <EditText
                         android:id="@+id/at"
-                        android:layout_width="match_parent"
+                        android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
                         android:background="#E3ECEF"
                         android:hint="@string/assistivetech"

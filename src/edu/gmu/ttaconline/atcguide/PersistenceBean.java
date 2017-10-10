@@ -5,13 +5,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
 
-import edu.gmu.ttaconline.atcguide.FeedReaderContract.ATStore;
-import edu.gmu.ttaconline.atcguide.FeedReaderContract.AreaStore;
-import edu.gmu.ttaconline.atcguide.FeedReaderContract.FeedEntry;
-import edu.gmu.ttaconline.atcguide.FeedReaderContract.IntentStore;
-import edu.gmu.ttaconline.atcguide.FeedReaderContract.SelectedArea;
-import edu.gmu.ttaconline.atcguide.FeedReaderContract.StrategyStore;
-import edu.gmu.ttaconline.atcguide.FeedReaderContract.TaskStore;
+import edu.gmu.ttaconline.atcguide.SQLiteContract.ATStore;
+import edu.gmu.ttaconline.atcguide.SQLiteContract.AreaStore;
+import edu.gmu.ttaconline.atcguide.SQLiteContract.FeedEntry;
+import edu.gmu.ttaconline.atcguide.SQLiteContract.IntentStore;
+import edu.gmu.ttaconline.atcguide.SQLiteContract.SelectedArea;
+import edu.gmu.ttaconline.atcguide.SQLiteContract.StrategyStore;
+import edu.gmu.ttaconline.atcguide.SQLiteContract.TaskStore;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -65,7 +65,7 @@ public class PersistenceBean {
 		// SQLiteDatabase
 		// db=context.openOrCreateDatabase("student",context.MODE_PRIVATE,null);
 
-		FeedReaderDbHelper mDbHelper = new FeedReaderDbHelper(context);
+		SQLiteDbHelper mDbHelper = new SQLiteDbHelper(context);
 		@SuppressWarnings("deprecation")
 		java.sql.Date date = new java.sql.Date(year, month, day);
 		// Gets the data repository in write mode
@@ -109,7 +109,7 @@ public class PersistenceBean {
 	 * */
 	public static void persistIEGoals(String studentid, String iepGoal,
 			Context context) {
-		FeedReaderDbHelper mDbHelper = new FeedReaderDbHelper(context);
+		SQLiteDbHelper mDbHelper = new SQLiteDbHelper(context);
 		ContentValues values = new ContentValues();
 		int rows = 0;
 		values.put(FeedEntry.STUDENT_IEPGOAL, iepGoal);
@@ -140,7 +140,7 @@ public class PersistenceBean {
 	public static void persistInstructionalAreas(String studentId,
 
 	ArrayList<String> selectedInstructionalAreas, Context context) {
-		FeedReaderDbHelper mDbHelper = new FeedReaderDbHelper(context);
+		SQLiteDbHelper mDbHelper = new SQLiteDbHelper(context);
 		SQLiteDatabase db = mDbHelper.getWritableDatabase();
 		// delete before inserting for uniqueness of values
 		// db.execSQL("DELETE FROM " + SelectedArea.TABLE_NAME + " WHERE "
@@ -163,7 +163,7 @@ public class PersistenceBean {
 		boolean result = true;
 		try {
 			String intentDescription = null;
-			FeedReaderDbHelper mDbHelper = new FeedReaderDbHelper(context);
+			SQLiteDbHelper mDbHelper = new SQLiteDbHelper(context);
 			SQLiteDatabase db = mDbHelper.getWritableDatabase();
 			db.execSQL("DELETE FROM " + IntentStore.TABLE_NAME + " WHERE "
 					+ IntentStore.COLUMN_NAME_ID + " = '" + studentId + "'");
@@ -194,7 +194,7 @@ public class PersistenceBean {
 
 	String studentid, Context context) {
 		ArrayList<CharSequence> persistedAreas = new ArrayList<CharSequence>();
-		FeedReaderDbHelper mDbHelper = new FeedReaderDbHelper(context);
+		SQLiteDbHelper mDbHelper = new SQLiteDbHelper(context);
 		SQLiteDatabase db = mDbHelper.getWritableDatabase();
 		Cursor cursor;
 		try {
@@ -231,7 +231,7 @@ public class PersistenceBean {
 		int records = 0;
 		Log.d("ATGUIDE", "before Db Helper");
 
-		FeedReaderDbHelper mDbHelper = new FeedReaderDbHelper(context);
+		SQLiteDbHelper mDbHelper = new SQLiteDbHelper(context);
 		Log.d("ATGUIDE", "before getting database");
 		SQLiteDatabase db = mDbHelper.getWritableDatabase();
 		// ContentValues values = new ContentValues();
@@ -279,7 +279,7 @@ public class PersistenceBean {
 	 * Method to check if given student id is already present in the database
 	 * */
 	public static boolean isExistingRecord(String studentId, Context context) {
-		FeedReaderDbHelper mDbHelper = new FeedReaderDbHelper(
+		SQLiteDbHelper mDbHelper = new SQLiteDbHelper(
 				context.getApplicationContext());
 		SQLiteDatabase db = mDbHelper.getWritableDatabase();
 		Cursor cursor = db.query(IntentStore.TABLE_NAME,
@@ -297,7 +297,7 @@ public class PersistenceBean {
 	 * */
 	public static void persistCurrentId(String studentId, Context context) {
 		try {
-			FeedReaderDbHelper mDbHelper = new FeedReaderDbHelper(context);
+			SQLiteDbHelper mDbHelper = new SQLiteDbHelper(context);
 			SQLiteDatabase db = mDbHelper.getWritableDatabase();
 			ContentValues values = new ContentValues();
 			values.put(SelectedArea.COL_ID, studentId);
@@ -316,7 +316,7 @@ public class PersistenceBean {
 		// Requires: current application context
 		// Effects: Returns the current running id of this student
 
-		FeedReaderDbHelper mDbHelper = new FeedReaderDbHelper(context);
+		SQLiteDbHelper mDbHelper = new SQLiteDbHelper(context);
 		String currentId = null;
 		SQLiteDatabase db = mDbHelper.getWritableDatabase();
 		Cursor cursor;
@@ -350,7 +350,7 @@ public class PersistenceBean {
 		// studentid, taskid
 		try {
 			Log.d("ATGUIDE", "Inserting into task store");
-			FeedReaderDbHelper mDbHelper = new FeedReaderDbHelper(context);
+			SQLiteDbHelper mDbHelper = new SQLiteDbHelper(context);
 			SQLiteDatabase db = mDbHelper.getWritableDatabase();
 			db.execSQL("DELETE FROM " + TaskStore.TABLE_NAME + " WHERE "
 					+ TaskStore.COL_STUDENT_ID + " = '" + studentid + "' AND "
@@ -406,7 +406,7 @@ public class PersistenceBean {
 		// studentid, taskid
 		try {
 			Log.d("ATGUIDE", "Inserting into AT store");
-			FeedReaderDbHelper mDbHelper = new FeedReaderDbHelper(context);
+			SQLiteDbHelper mDbHelper = new SQLiteDbHelper(context);
 			SQLiteDatabase db = mDbHelper.getWritableDatabase();
 			db.execSQL("DELETE FROM " + ATStore.TABLE_NAME + " WHERE "
 					+ ATStore.COL_STUDENT_ID + " = '" + studentid + "' AND "
@@ -454,7 +454,7 @@ public class PersistenceBean {
 			ArrayList<Task> tasks = area.getTasks();
 			try {
 				Log.d("ATGUIDE", "Inserting into Area store");
-				FeedReaderDbHelper mDbHelper = new FeedReaderDbHelper(context);
+				SQLiteDbHelper mDbHelper = new SQLiteDbHelper(context);
 				SQLiteDatabase db = mDbHelper.getWritableDatabase();
 				// db.execSQL("DELETE FROM "+TaskStore.TABLE_NAME+" WHERE "+TaskStore.COL_STUDENT_ID+" = '"+studentid+"' AND "+TaskStore.COL_AREA_ID+"= '"+parentid+"'");
 				db.execSQL("DELETE FROM " + AreaStore.TABLE_NAME + " WHERE "
@@ -502,7 +502,7 @@ public class PersistenceBean {
 			try {
 				Log.d("ATGUIDE", "Getting Persisted area objects student id: "
 						+ studentid);
-				FeedReaderDbHelper mDbHelper = new FeedReaderDbHelper(context);
+				SQLiteDbHelper mDbHelper = new SQLiteDbHelper(context);
 				SQLiteDatabase db = mDbHelper.getWritableDatabase();
 				// db.execSQL("DELETE FROM "+TaskStore.TABLE_NAME+" WHERE "+TaskStore.COL_STUDENT_ID+" = '"+studentid+"' AND "+TaskStore.COL_AREA_ID+"= '"+parentid+"'");
 				Cursor cursor = db.rawQuery("SELECT * FROM "
@@ -544,7 +544,7 @@ public class PersistenceBean {
 		ArrayList<Task> tasks = new ArrayList<Task>();
 		try {
 			Log.d("ATGUIDE", "task store");
-			FeedReaderDbHelper mDbHelper = new FeedReaderDbHelper(context);
+			SQLiteDbHelper mDbHelper = new SQLiteDbHelper(context);
 			SQLiteDatabase db = mDbHelper.getWritableDatabase();
 			// db.execSQL("DELETE FROM "+TaskStore.TABLE_NAME+" WHERE "+TaskStore.COL_STUDENT_ID+" = '"+studentid+"' AND "+TaskStore.COL_AREA_ID+"= '"+parentid+"'");
 			String sql = "SELECT * FROM " + TaskStore.TABLE_NAME + " WHERE "
@@ -596,7 +596,7 @@ public class PersistenceBean {
 		ArrayList<AT> atList = new ArrayList<AT>();
 		try {
 			Log.d("ATGUIDE", "task store");
-			FeedReaderDbHelper mDbHelper = new FeedReaderDbHelper(context);
+			SQLiteDbHelper mDbHelper = new SQLiteDbHelper(context);
 			SQLiteDatabase db = mDbHelper.getWritableDatabase();
 			// db.execSQL("DELETE FROM "+TaskStore.TABLE_NAME+" WHERE "+TaskStore.COL_STUDENT_ID+" = '"+studentid+"' AND "+TaskStore.COL_AREA_ID+"= '"+parentid+"'");
 			String sql = "SELECT * FROM " + ATStore.TABLE_NAME + " WHERE "
@@ -639,7 +639,7 @@ public class PersistenceBean {
 			String taskid, String studentid, Context context) {
 		HashMap<String, String> strategyMap = new HashMap<String, String>();
 		try {
-			FeedReaderDbHelper mDbHelper = new FeedReaderDbHelper(context);
+			SQLiteDbHelper mDbHelper = new SQLiteDbHelper(context);
 			SQLiteDatabase db = mDbHelper.getWritableDatabase();
 			String sql = "SELECT * FROM " + StrategyStore.TABLE_NAME
 					+ " WHERE " + "" + StrategyStore.COL_STUDENT_ID + " = '"
@@ -671,7 +671,7 @@ public class PersistenceBean {
 	public static ArrayList<String> getStudentList(Context context) {
 
 		ArrayList<String> studentList = new ArrayList<String>();
-		FeedReaderDbHelper mDbHelper = new FeedReaderDbHelper(context);
+		SQLiteDbHelper mDbHelper = new SQLiteDbHelper(context);
 		SQLiteDatabase db = mDbHelper.getWritableDatabase();
 		try {
 			String sql = "SELECT DISTINCT " + IntentStore.COLUMN_NAME_ID

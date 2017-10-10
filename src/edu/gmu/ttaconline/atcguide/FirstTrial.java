@@ -4,6 +4,7 @@ import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
 
 import com.commonsware.cwac.merge.MergeAdapter;
@@ -13,6 +14,8 @@ import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.Uri;
@@ -85,23 +88,23 @@ public class FirstTrial extends FragmentActivity {
 				+ PersistenceBean.getCurrentId(context), context);
 		inflater = getLayoutInflater();
 		// Get existing useful data from intent and SQLite
-		//checkUri();
-		try{
-		getData();
-		// if not open
-		if (!open) {
-			placeArea();
-		} else {
-			placeAreaFromDB();
-		}
-		activity = this;
-		datePick = (EditText) findViewById(R.id.date);
-		//setATListener();
-		setDatePickListener();
-		clickFirstItem();
-		setNextListener();
-		}catch(Exception e){
-			Log.e("AT GUIDE","Exception in FirstTrial.onCreate 104: *"+e);
+		// checkUri();
+		try {
+			getData();
+			// if not open
+			if (!open) {
+				placeArea();
+			} else {
+				placeAreaFromDB();
+			}
+			activity = this;
+			datePick = (EditText) findViewById(R.id.date);
+			// setATListener();
+			setDatePickListener();
+			clickFirstItem();
+			setNextListener();
+		} catch (Exception e) {
+			Log.e("AT GUIDE", "Exception in FirstTrial.onCreate 104: *" + e);
 		}
 	}
 
@@ -180,7 +183,7 @@ public class FirstTrial extends FragmentActivity {
 
 		ImageButton add = (ImageButton) findViewById(R.id.addat);
 		add.setImageResource(R.drawable.plusstrategy);
-
+		// add.setLayoutParams(new LinearLayout.LayoutParams());
 		add.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -196,16 +199,84 @@ public class FirstTrial extends FragmentActivity {
 	 * Place the special listener to call navigator app
 	 */
 	private void setSpecialATListener() {
-		/*Requires:*/
-		/*Modifies:*/
-		/*Effects:*/
+
+
+		/* Requires: */
+		/* Modifies: */
+		/* Effects: */
 		ImageButton add = (ImageButton) findViewById(R.id.addat);
 		add.setImageResource(R.drawable.navigator);
 		add.setOnClickListener(new View.OnClickListener() {
+
+
 			@Override
 			public void onClick(View v) {
+
+
 				Toast.makeText(context, "Call the navigator App",
 						Toast.LENGTH_SHORT).show();
+
+				// go to the AIM VA Eligibility at
+				// http://aimeligibility.com
+				Uri aimEligible = Uri
+						.parse("http://aimnavigator.com/");
+				try {
+					Intent aimIntent = new Intent(
+							Intent.ACTION_VIEW, aimEligible);
+					aimIntent
+							.addFlags(Intent.URI_INTENT_SCHEME);
+//					aimIntent
+//							.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+					aimIntent
+							.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+					aimIntent.putExtras(currentIntent);
+					aimIntent
+							.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+					aimIntent
+							.setDataAndNormalize(aimEligible);
+					PackageManager packageManager = getPackageManager();
+					List<ResolveInfo> activities = packageManager
+							.queryIntentActivities(
+									aimIntent, 0);
+					boolean isIntentSafe = activities
+							.size() > 0;
+					boolean installed = false;
+					if (isIntentSafe) {
+						for (ResolveInfo resolveInfo : activities) {
+							if (resolveInfo.activityInfo.packageName
+									.contains("aim")) {
+								installed = true;
+								aimIntent
+										.setPackage(resolveInfo.activityInfo.packageName);
+							}
+						}
+					}
+
+					PersistenceBean.persistIntent(aimIntent
+							.getStringExtra("studentid"),
+							currentIntent, context);
+					PersistenceBean.persistCurrentId(
+							aimIntent
+									.getStringExtra("studentid"),
+							context);
+					if (installed)
+						startActivity(aimIntent);
+					else {
+						Toast.makeText(
+								context,
+								"AIM Explorer not installed",
+								Toast.LENGTH_SHORT).show();
+						aimIntent = new Intent(
+								Intent.ACTION_VIEW,
+								(Uri.parse("market://aimnavigator.com")));
+						aimIntent.putExtras(currentIntent);
+						startActivity(aimIntent);
+					}
+					finish();
+				} catch (Exception e) {
+					Log.e("ATGUIDE", " " + e.getMessage());
+				}
+			
 			}
 		});
 
@@ -240,10 +311,10 @@ public class FirstTrial extends FragmentActivity {
 				// Auto Fill from the data
 				Area nav = new Area("Exploring VA");
 				// nav.addTask();
-				nav.parentId=id++;
+				nav.parentId = id++;
 				Task explorer = new Task();
-				explorer.solutions=false;
-				explorer.taskid=id++;
+				explorer.solutions = false;
+				explorer.taskid = id++;
 				explorer.setAreaname(nav.getAreaName());
 				explorer.taskname = "Exploring VA";
 				nav.addTask(explorer);
@@ -288,13 +359,13 @@ public class FirstTrial extends FragmentActivity {
 						assistiveTech.setText("Choose AT");
 						assistiveTech.setTextColor(Color.BLACK);
 						assistiveTech.setId(id++);
-						if(area.getAreaName().equalsIgnoreCase("Exploring VA")){
-							assistiveTech.setOnClickListener(getExplorerATListener());
-							
-						}
-						else{
-						assistiveTech.setOnClickListener(getATListener());
-						
+						if (area.getAreaName().equalsIgnoreCase("Exploring VA")) {
+							assistiveTech
+									.setOnClickListener(getExplorerATListener());
+
+						} else {
+							assistiveTech.setOnClickListener(getATListener());
+
 						}
 						AT at0 = new AT();
 						at0.ATName = "";
@@ -342,18 +413,46 @@ public class FirstTrial extends FragmentActivity {
 				// Add OnClick Listener: OnClick: Add extra button to call app
 				// add check to the data for incoming URL
 				// Auto Fill from the data
-				Area nav = new Area("Exploring VA");
+				Area nav;
+				Area navOld = getAreaByName("Exploring VA");
+				if (null != navOld) {
+					nav = navOld;
+				} else {
+					nav = new Area("Exploring VA");
+				}
 				// nav.addTask();
-				nav.parentId=id++;
+				nav.parentId = id++;
+				// nav.tasks.clear();
+				AT exploreAT = null;
+				Task t = nav.tasks.get(0);
+				if (null != t)
+					exploreAT = t.ats.get(0);
+
+				if (null == exploreAT) {
+					exploreAT = new AT();
+					exploreAT.ATName = "Exploring VA";
+					exploreAT.participants = "";
+					exploreAT.firstTrialDate = "";
+					exploreAT.task = "Exploring VA";
+				}
+				Task explorer=null;
 				
-				Task explorer = new Task();
-				explorer.solutions=false;
-				explorer.taskid=id++;
+				if(null == t){
+				explorer = new Task();
+				explorer.solutions = false;
+				explorer.taskid = id++;
 				explorer.setAreaname(nav.getAreaName());
 				explorer.taskname = "Exploring VA";
+				}
+				else{
+					explorer= t;
+				}
+				explorer.ats.clear();
+				explorer.ats.add(exploreAT);
+				nav.tasks.clear();
 				nav.addTask(explorer);
+				if(null==navOld)
 				areaList.add(nav);
-
 			}
 
 			for (Area area : areaList) {
@@ -398,19 +497,18 @@ public class FirstTrial extends FragmentActivity {
 									assistiveTech.setText(at.getATName());
 									assistiveTech.setTextColor(Color.BLACK);
 									assistiveTech.setId(at.id);
-									if(area.getAreaName().equalsIgnoreCase("Exploring VA")){
-										assistiveTech.setOnClickListener(getExplorerATListener());
-										
-									}
-									else{
-									assistiveTech.setOnClickListener(getATListener());
-									
+									if (area.getAreaName().equalsIgnoreCase(
+											"Exploring VA")) {
+										assistiveTech
+												.setOnClickListener(getExplorerATListener());
+									} else {
+										assistiveTech
+												.setOnClickListener(getATListener());
 									}
 									taskLayout.addView(assistiveTech);
 								}
 							}
 						}
-
 						// assistiveTech.setTextColor(Color.BLACK);
 						// assistiveTech.setId(id++);
 						// assistiveTech.setOnClickListener(getATListener());
@@ -556,12 +654,10 @@ public class FirstTrial extends FragmentActivity {
 	 */
 	public OnClickListener getATListener() {
 
-
 		OnClickListener atL = new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
-
 
 				// Remove Previous Listeners if set
 
@@ -883,6 +979,7 @@ public class FirstTrial extends FragmentActivity {
 	 * @return
 	 */
 	public Area getAreaByName(CharSequence areaname) {
+
 		if (areaname != null)
 			for (Area area : areaList) {
 				if (area != null

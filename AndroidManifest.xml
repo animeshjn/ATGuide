@@ -89,8 +89,18 @@
         <activity
             android:name=".FirstTrial"
             android:label="@string/title_activity_first_trial"
+            android:launchMode="singleTask"
             android:screenOrientation="landscape"
             android:windowSoftInputMode="adjustPan" >
+           
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data
+                    android:host="trial1.atguide.com"
+                    android:scheme="http" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".AT_List"
