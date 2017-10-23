@@ -401,7 +401,7 @@ public class PersistenceBean {
 				+ participants);
 		String solutionWorking = at.solutionWorking + "";
 		String areaName = task.getAreaname();
-		String solution = null;
+//		String solution = null;
 
 		// studentid, taskid
 		try {

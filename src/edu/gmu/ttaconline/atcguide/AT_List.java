@@ -1,25 +1,19 @@
 package edu.gmu.ttaconline.atcguide;
 
 import java.util.ArrayList;
+
 import java.util.HashMap;
 import java.util.List;
-
-import org.w3c.dom.ls.LSInput;
-
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 public class AT_List extends DialogFragment {
 	ATListAdapter listAdapter;

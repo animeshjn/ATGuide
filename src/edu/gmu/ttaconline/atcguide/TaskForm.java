@@ -65,7 +65,7 @@ public class TaskForm extends Activity implements Serializable {
 	Area currentSelection = null;
 	TextView currentText;
 	Activity activity;
-	private OnClickListener taskListener;
+	//private OnClickListener taskListener;
 
 	/*
 	 * (non-Javadoc)
@@ -91,6 +91,7 @@ public class TaskForm extends Activity implements Serializable {
 			studentid = currentIntent.getStringExtra("studentid");
 			currentIntent.setData(null);
 			inflater = getLayoutInflater();
+			@SuppressWarnings("unused")
 			int areaListSize = 0;
 			try {
 				areaListSize = PersistenceBean.getPersistedAreaList(
@@ -927,6 +928,7 @@ public class TaskForm extends Activity implements Serializable {
 		// Log.d("ATGUIDE","here: "+persisted.getStringExtra("studentid"));
 	}
 
+	@SuppressWarnings("unused")
 	private OnClickListener getAreaOnclickListener() {
 
 		return new OnClickListener() {
@@ -1306,7 +1308,7 @@ public class TaskForm extends Activity implements Serializable {
 
 		return new OnClickListener() {
 
-			@Override
+			@SuppressLint("InflateParams") @Override
 			public void onClick(View v) {
 				Toast.makeText(context, "Task called " + clickedId,
 						Toast.LENGTH_SHORT).show();

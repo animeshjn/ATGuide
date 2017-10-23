@@ -69,6 +69,7 @@ public class FirstTrial extends FragmentActivity {
 	Intent currentIntent;
 	OnClickListener addATCLick;
 	boolean exploreVA = false;
+	String exploringVA="Exploring VA";
 	boolean open = false;
 
 	// areas
@@ -79,18 +80,19 @@ public class FirstTrial extends FragmentActivity {
 	 */
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_first_trial);
-
 		context = getApplicationContext();
 		areaList = PersistenceBean.getPersistedAreaObjects("trial1"
 				+ PersistenceBean.getCurrentId(context), context);
 		inflater = getLayoutInflater();
 		// Get existing useful data from intent and SQLite
-		// checkUri();
+		
 		try {
 			getData();
+			checkUri();
+			
+			//toast("data string"+ getIntent().getDataString());
 			// if not open
 			if (!open) {
 				placeArea();
@@ -108,14 +110,15 @@ public class FirstTrial extends FragmentActivity {
 		}
 	}
 
+	@SuppressWarnings("unused")
 	private void checkUri() {
 
-		Uri uri = currentIntent.getData();
+		Uri uri = getIntent().getData();
 		if (uri != null) {
-			String msgFromUrl = getIntent().getDataString();
-			try {
-				msgFromUrl = java.net.URLDecoder.decode(msgFromUrl, "UTF-8");
-			} catch (UnsupportedEncodingException e) {
+		try {
+				exploringVA=""+getIntent().getStringExtra("dataFromAIMVANavigator");
+							
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
@@ -201,6 +204,7 @@ public class FirstTrial extends FragmentActivity {
 	private void setSpecialATListener() {
 
 
+
 		/* Requires: */
 		/* Modifies: */
 		/* Effects: */
@@ -209,8 +213,10 @@ public class FirstTrial extends FragmentActivity {
 		add.setOnClickListener(new View.OnClickListener() {
 
 
+
 			@Override
 			public void onClick(View v) {
+
 
 
 				Toast.makeText(context, "Call the navigator App",
@@ -225,8 +231,8 @@ public class FirstTrial extends FragmentActivity {
 							Intent.ACTION_VIEW, aimEligible);
 					aimIntent
 							.addFlags(Intent.URI_INTENT_SCHEME);
-//					aimIntent
-//							.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+					aimIntent
+							.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
 					aimIntent
 							.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 					aimIntent.putExtras(currentIntent);
@@ -252,9 +258,11 @@ public class FirstTrial extends FragmentActivity {
 						}
 					}
 
+					aimIntent.putExtra("open", true);
 					PersistenceBean.persistIntent(aimIntent
 							.getStringExtra("studentid"),
 							currentIntent, context);
+//					Log.d("ATGUIDE","intent "+aimIntent.getStringExtra("studentid")+aimIntent.getStringExtra("studentgrade"));
 					PersistenceBean.persistCurrentId(
 							aimIntent
 									.getStringExtra("studentid"),
@@ -269,6 +277,7 @@ public class FirstTrial extends FragmentActivity {
 						aimIntent = new Intent(
 								Intent.ACTION_VIEW,
 								(Uri.parse("market://aimnavigator.com")));
+						Toast.makeText(getApplicationContext(), "AIM Navigator not installed",Toast.LENGTH_SHORT).show();
 						aimIntent.putExtras(currentIntent);
 						startActivity(aimIntent);
 					}
@@ -287,6 +296,7 @@ public class FirstTrial extends FragmentActivity {
 	 */
 	@SuppressLint("InflateParams")
 	private void placeArea() {
+
 
 		// Modifies: this view
 		/*
@@ -360,6 +370,7 @@ public class FirstTrial extends FragmentActivity {
 						assistiveTech.setTextColor(Color.BLACK);
 						assistiveTech.setId(id++);
 						if (area.getAreaName().equalsIgnoreCase("Exploring VA")) {
+							assistiveTech.setText(exploringVA);
 							assistiveTech
 									.setOnClickListener(getExplorerATListener());
 
@@ -387,10 +398,19 @@ public class FirstTrial extends FragmentActivity {
 		}
 	}
 
+	@Override
+	protected void onRestart() {
+		// TODO Auto-generated method stub
+		super.onRestart();
+		Toast.makeText(context, "Restart called",Toast.LENGTH_SHORT).show();
+	}
+	
+	
 	/**
 	 * Place the elements: Area, Task and ATs from database
 	 */
-	private void placeAreaFromDB() {
+	@SuppressLint("InflateParams") private void placeAreaFromDB() {
+
 
 		// Modifies: this view
 		/*
@@ -424,13 +444,27 @@ public class FirstTrial extends FragmentActivity {
 				nav.parentId = id++;
 				// nav.tasks.clear();
 				AT exploreAT = null;
-				Task t = nav.tasks.get(0);
-				if (null != t)
-					exploreAT = t.ats.get(0);
+				Task t;
+				if(null==nav.tasks||nav.tasks.size()==0)
+				{
+					t=null;
+					
+				}
+				else{t = nav.tasks.get(0);}
+				
+				if (null != t){
+					if(t.ats.size()==0){
+					exploreAT=null;	
+					}
+					else{
+						exploreAT = t.ats.get(0);
+					}
+				}
+					
 
 				if (null == exploreAT) {
 					exploreAT = new AT();
-					exploreAT.ATName = "Exploring VA";
+					exploreAT.ATName = exploringVA;
 					exploreAT.participants = "";
 					exploreAT.firstTrialDate = "";
 					exploreAT.task = "Exploring VA";
@@ -499,6 +533,8 @@ public class FirstTrial extends FragmentActivity {
 									assistiveTech.setId(at.id);
 									if (area.getAreaName().equalsIgnoreCase(
 											"Exploring VA")) {
+										assistiveTech.setText(exploringVA);
+										at.setATName(exploringVA);
 										assistiveTech
 												.setOnClickListener(getExplorerATListener());
 									} else {
@@ -509,9 +545,15 @@ public class FirstTrial extends FragmentActivity {
 								}
 							}
 						}
-						// assistiveTech.setTextColor(Color.BLACK);
-						// assistiveTech.setId(id++);
-						// assistiveTech.setOnClickListener(getATListener());
+						else{
+							 assistiveTech.setTextColor(Color.BLACK);
+							 assistiveTech.setId(id++);
+							 assistiveTech.setOnClickListener(getATListener());
+							 taskLayout.addView(assistiveTech);
+						}
+							
+							// }
+						
 						// AT at0= new AT();
 						// at0.ATName= "";
 						// assistiveTech.setTextAlignment();
@@ -531,17 +573,18 @@ public class FirstTrial extends FragmentActivity {
 							+ e);
 		}
 	}
-
 	/**
 	 * Get Data from intent and the persistence layer.
 	 */
 	private void getData() {
 
+
 		try {
 			selectedInstructional = PersistenceBean.getPersistedAreaList(
 					"trial1" + PersistenceBean.getCurrentId(context), context);
 			open = getIntent().getBooleanExtra("open", false);
-			currentIntent = getIntent();
+			currentIntent = PersistenceBean.getExistingIntent(PersistenceBean.getCurrentId(context), context);
+			
 			for (CharSequence cs : selectedInstructional) {
 				trial1Texts.add(cs.toString());
 			}
@@ -1022,4 +1065,12 @@ public class FirstTrial extends FragmentActivity {
 		}
 		return super.onOptionsItemSelected(item);
 	}
+	public void log(String string) {
+		Log.d("ATGUIDE", string);
+	}
+
+	public void toast(String string) {
+		Toast.makeText(getApplicationContext(), string, Toast.LENGTH_SHORT).show();
+	}
+
 }

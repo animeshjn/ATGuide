@@ -3,28 +3,20 @@ package edu.gmu.ttaconline.atcguide;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
-
+import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.IntentService;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.PaintDrawable;
 import android.net.Uri;
 import android.os.Binder;
 import android.os.Environment;
 import android.os.IBinder;
 import android.util.Log;
-import android.widget.Toast;
-
 import com.itextpdf.text.BaseColor;
-import com.itextpdf.text.Document;
 import com.itextpdf.text.Font;
-import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Font.FontFamily;
 import com.itextpdf.text.pdf.AcroFields;
-import com.itextpdf.text.pdf.PdfPCell;
-import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.PdfStamper;
 
@@ -34,7 +26,7 @@ import com.itextpdf.text.pdf.PdfStamper;
  * 
  * @author Animesh Jain
  */
-public class PDFLogic extends Service {
+@SuppressLint("DefaultLocale") public class PDFLogic extends Service {
 
 	/** Font */
 	static Font headfont;
@@ -104,7 +96,7 @@ public class PDFLogic extends Service {
 	 * @param activity
 	 *            - current intent stack.
 	 */
-	public static void generatePDF() {
+	@SuppressLint("DefaultLocale") public static void generatePDF() {
 		PDFLogic.context = activity.getApplicationContext();
 		try {
 			setData();

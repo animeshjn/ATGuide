@@ -2,13 +2,12 @@ package edu.gmu.ttaconline.atcguide;
 
 import java.util.HashMap;
 import java.util.List;
-
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.TextView;
 
@@ -62,7 +61,7 @@ public class ATListAdapter extends BaseExpandableListAdapter {
 		return false;
 	}
 
-	@Override
+	@SuppressLint("InflateParams") @Override
 	public View getGroupView(int groupPosition, boolean isExpanded,
 			View convertView, ViewGroup parent) {
         String headerTitle = (String) getGroup(groupPosition);
@@ -80,7 +79,7 @@ public class ATListAdapter extends BaseExpandableListAdapter {
         return convertView;
 	}
 
-	@Override
+	@SuppressLint("InflateParams") @Override
 	public View getChildView(int groupPosition, int childPosition,
 			boolean isLastChild, View convertView, ViewGroup parent) {
 		final String childText = (String) getChild(groupPosition, childPosition);
