@@ -1,6 +1,6 @@
 package edu.gmu.ttaconline.atcguide;
 
-import java.io.UnsupportedEncodingException;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -69,7 +69,7 @@ public class FirstTrial extends FragmentActivity {
 	Intent currentIntent;
 	OnClickListener addATCLick;
 	boolean exploreVA = false;
-	String exploringVA="Exploring VA";
+	String exploringVA = "Exploring VA";
 	boolean open = false;
 
 	// areas
@@ -110,14 +110,25 @@ public class FirstTrial extends FragmentActivity {
 		}
 	}
 
-	@SuppressWarnings("unused")
+	
 	private void checkUri() {
 
 		Uri uri = getIntent().getData();
 		if (uri != null) {
 		try {
 				exploringVA=""+getIntent().getStringExtra("dataFromAIMVANavigator");
-							
+				Area exploreArea=getAreaByName("Exploring VA");
+				if(null!= exploreArea && null!=exploreArea.tasks&& exploreArea.tasks.size()!=0){
+					Task exploreTask= exploreArea.tasks.get(0);
+					if(exploreTask!=null && exploreTask.ats!=null && exploreTask.ats.size()!=0)
+					{
+						AT exploreAT=exploreTask.ats.get(0);
+						exploreAT.setATName(exploringVA);
+					}
+				}
+				
+				
+				
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -202,9 +213,6 @@ public class FirstTrial extends FragmentActivity {
 	 * Place the special listener to call navigator app
 	 */
 	private void setSpecialATListener() {
-
-
-
 		/* Requires: */
 		/* Modifies: */
 		/* Effects: */
@@ -212,16 +220,11 @@ public class FirstTrial extends FragmentActivity {
 		add.setImageResource(R.drawable.navigator);
 		add.setOnClickListener(new View.OnClickListener() {
 
-
-
 			@Override
 			public void onClick(View v) {
 
-
-
 				Toast.makeText(context, "Call the navigator App",
 						Toast.LENGTH_SHORT).show();
-
 				// go to the AIM VA Eligibility at
 				// http://aimeligibility.com
 				Uri aimEligible = Uri
@@ -314,9 +317,9 @@ public class FirstTrial extends FragmentActivity {
 			// int atCount = -1;
 			String iepAlt = currentIntent.getStringExtra("iepalt");
 			if (null != iepAlt && iepAlt.equalsIgnoreCase("Yes")) {
-				// TODO: Add Aim Navigator to area and create special view
+				// Add Aim Navigator to area and create special view
 				// Add AreaName as Exploring AT
-				// Add Onclick Listener: OnClick: Add extra button to call app
+				// Add On click Listener: OnClick: Add extra button to call application
 				// add check to the data for incoming URL
 				// Auto Fill from the data
 				Area nav = new Area("Exploring VA");
@@ -370,7 +373,7 @@ public class FirstTrial extends FragmentActivity {
 						assistiveTech.setTextColor(Color.BLACK);
 						assistiveTech.setId(id++);
 						if (area.getAreaName().equalsIgnoreCase("Exploring VA")) {
-							assistiveTech.setText(exploringVA);
+							
 							assistiveTech
 									.setOnClickListener(getExplorerATListener());
 
@@ -400,7 +403,7 @@ public class FirstTrial extends FragmentActivity {
 
 	@Override
 	protected void onRestart() {
-		// TODO Auto-generated method stub
+	
 		super.onRestart();
 		Toast.makeText(context, "Restart called",Toast.LENGTH_SHORT).show();
 	}
@@ -428,9 +431,9 @@ public class FirstTrial extends FragmentActivity {
 			// int atCount = -1;
 			String iepAlt = currentIntent.getStringExtra("iepalt");
 			if (null != iepAlt && iepAlt.equalsIgnoreCase("Yes")) {
-				// TODO: Add Aim Navigator to area and create special view
+				// Add Aim Navigator to area and create special view
 				// Add AreaName as Exploring AT
-				// Add OnClick Listener: OnClick: Add extra button to call app
+				// Add OnClick Listener: OnClick: Add extra button to call application
 				// add check to the data for incoming URL
 				// Auto Fill from the data
 				Area nav;
@@ -533,8 +536,7 @@ public class FirstTrial extends FragmentActivity {
 									assistiveTech.setId(at.id);
 									if (area.getAreaName().equalsIgnoreCase(
 											"Exploring VA")) {
-										assistiveTech.setText(exploringVA);
-										at.setATName(exploringVA);
+										
 										assistiveTech
 												.setOnClickListener(getExplorerATListener());
 									} else {

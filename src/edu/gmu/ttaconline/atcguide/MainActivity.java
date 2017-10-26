@@ -194,8 +194,7 @@ public class MainActivity extends Activity {
 					// Intent i = new Intent();
 					break;
 				case R.id.trial1:
-					Toast.makeText(context, "trial1 ", Toast.LENGTH_SHORT)
-							.show();
+					loadFirstTrial(tag);
 					break;
 				case R.id.trial2:
 					Toast.makeText(context, "trial2 ", Toast.LENGTH_SHORT)
@@ -205,9 +204,6 @@ public class MainActivity extends Activity {
 					toast("Opening");
 					previewRecord(tag);
 					 //log(tag);
-					
-					
-
 					break;
 				case R.id.deleterecordbutton:
 					Toast.makeText(context, "Cannot delete sample data",
@@ -243,6 +239,24 @@ public class MainActivity extends Activity {
 		bar.setIndeterminate(true);
 		bar.bringToFront();
 		MainActivity.activity.startService(currentIntent);
+	}
+	public static void loadFirstTrial(String studentId) {
+		//PDFLogic.activity = MainActivity.activity;
+		PersistenceBean.persistCurrentId(studentId, context);
+		Intent currentIntent = PersistenceBean.getExistingIntent(studentId,
+				context);
+		// Intent pdfService= new
+		currentIntent.putExtra("revisitTrial1", true);
+		// Intent(activity.getApplicationContext(),PDFLogic.class);
+		currentIntent.setClass(context, FirstTrial.class);
+		//currentIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		//currentIntent.setFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+		// Intent pdfService= new
+		// Intent(getApplicationContext(),PDFLogic.class);
+//		android.widget.ProgressBar bar = new android.widget.ProgressBar(context);
+//		bar.setIndeterminate(true);
+//		bar.bringToFront();
+		MainActivity.activity.startActivity(currentIntent);
 	}
 
 }

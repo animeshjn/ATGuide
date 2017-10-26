@@ -117,7 +117,9 @@
     <string name="spelling">Spelling</string>
     <string name="math">Math</string>
     <string name="Listening">Listening</string>
-
+    <string name="Task">Task</string>
+    <string name="discussion">Trial Discussion</string>
+    <string name="attried">AT or Service tried: </string>
     <string-array name="atareas">
         <item>@string/reading</item>
         <item>@string/writing</item>
@@ -185,5 +187,6 @@
     </string-array>
 
     <string name="title_activity_second_trial">SecondTrial</string>
+    <string name="title_activity_revisit_first_trial">RevisitFirstTrial</string>
 
 </resources>

@@ -92,11 +92,12 @@
             android:launchMode="singleTask"
             android:screenOrientation="landscape"
             android:windowSoftInputMode="adjustPan" >
-           
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data
                     android:host="trial1.atguide.com"
                     android:scheme="http" />
@@ -111,6 +112,10 @@
         <activity
             android:name=".SecondTrial"
             android:label="@string/title_activity_second_trial" >
+        </activity>
+        <activity
+            android:name=".RevisitFirstTrial"
+            android:label="@string/title_activity_revisit_first_trial" >
         </activity>
     </application>
 
