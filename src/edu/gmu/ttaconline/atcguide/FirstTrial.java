@@ -80,6 +80,7 @@ public class FirstTrial extends FragmentActivity {
 	 */
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_first_trial);
 		context = getApplicationContext();
@@ -89,34 +90,60 @@ public class FirstTrial extends FragmentActivity {
 		// Get existing useful data from intent and SQLite
 		
 		try {
-			getData();
-			checkUri();
-			
+			try{
+				getData();
+				checkUri();	
+			}catch(Exception e)
+			{
+				Log.e("AT GUIDE", "Exception in FirstTrial.onCreate 97: *" + e);	
+			}
 			//toast("data string"+ getIntent().getDataString());
 			// if not open
 			if (!open) {
-				placeArea();
+				
+				try{
+					placeArea();	
+				}
+				catch(Exception e){
+					Log.e("AT GUIDE", "Exception in FirstTrial.onCreate 108: *" + e);
+				}
+				
 			} else {
-				placeAreaFromDB();
+				try{
+					placeAreaFromDB();	
+				}
+				catch(Exception e){
+					Log.e("AT GUIDE", "Exception in FirstTrial.onCreate 116: *" + e);
+				}
+				
 			}
 			activity = this;
 			datePick = (EditText) findViewById(R.id.date);
 			// setATListener();
 			setDatePickListener();
-			clickFirstItem();
+			
+			try{
+				clickFirstItem();	
+			}
+			catch(Exception e){
+				Log.e("AT GUIDE", "Exception in FirstTrial.onCreate.clickFirstItem 129: *" + e);
+			}
+		
 			setNextListener();
 		} catch (Exception e) {
-			Log.e("AT GUIDE", "Exception in FirstTrial.onCreate 104: *" + e);
-		}
+			Log.e("AT GUIDE", "Exception in FirstTrial.onCreate 127: *" + e);
+			}
 	}
 
 	
 	private void checkUri() {
 
+
 		Uri uri = getIntent().getData();
 		if (uri != null) {
 		try {
 				exploringVA=""+getIntent().getStringExtra("dataFromAIMVANavigator");
+				log("Data from AIMVA Navigator:"+exploringVA);
 				Area exploreArea=getAreaByName("Exploring VA");
 				if(null!= exploreArea && null!=exploreArea.tasks&& exploreArea.tasks.size()!=0){
 					Task exploreTask= exploreArea.tasks.get(0);
@@ -130,7 +157,9 @@ public class FirstTrial extends FragmentActivity {
 				
 				
 			} catch (Exception e) {
-				e.printStackTrace();
+				Log.e("ATGUIDE","Exception in checkUri caught at line 135: "+e);
+				
+				log("Exception"+e);
 			}
 		}
 	}
@@ -180,13 +209,30 @@ public class FirstTrial extends FragmentActivity {
 	private void clickFirstItem() {
 
 		ListView lv = (ListView) findViewById(R.id.instructionalAreasList);
+		if(null==lv)
+		{toast("ListView is null");
+		Log.e("ATGUIDE","ListView null");}
 		MergeAdapter m = (MergeAdapter) lv.getAdapter();
+		if(null==m)
+		{toast("merge adapter is null");
+		Log.e("ATGUIDE","Merge adapter null");}
+		
 		m.getCount();
 		View first = (View) m.getItem(0); // Linear Layout
 		if (first != null && first instanceof LinearLayout) {
 			LinearLayout taskLay = (LinearLayout) ((LinearLayout) first)
 					.getChildAt(1);
-			taskLay.getChildAt(1).callOnClick();
+			if(taskLay==null){
+				Log.e("ATGUIDE","task Layout is null");
+				
+			}else
+			{View taskChild=taskLay.getChildAt(1);
+			if(taskChild!=null)
+			{taskChild.callOnClick();}
+			else{
+				Log.e("ATGUIDE","task Child at 1 is null");
+			}
+			}
 		}
 	}
 
@@ -213,6 +259,7 @@ public class FirstTrial extends FragmentActivity {
 	 * Place the special listener to call navigator app
 	 */
 	private void setSpecialATListener() {
+
 		/* Requires: */
 		/* Modifies: */
 		/* Effects: */
@@ -220,8 +267,10 @@ public class FirstTrial extends FragmentActivity {
 		add.setImageResource(R.drawable.navigator);
 		add.setOnClickListener(new View.OnClickListener() {
 
+
 			@Override
 			public void onClick(View v) {
+
 
 				Toast.makeText(context, "Call the navigator App",
 						Toast.LENGTH_SHORT).show();
@@ -301,6 +350,7 @@ public class FirstTrial extends FragmentActivity {
 	private void placeArea() {
 
 
+
 		// Modifies: this view
 		/*
 		 * Effects: places the area, task and AT on the left panels & sets their
@@ -331,7 +381,7 @@ public class FirstTrial extends FragmentActivity {
 				explorer.setAreaname(nav.getAreaName());
 				explorer.taskname = "Exploring VA";
 				nav.addTask(explorer);
-				areaList.add(nav);
+				areaList.add(0,nav);
 
 			}
 
@@ -373,7 +423,8 @@ public class FirstTrial extends FragmentActivity {
 						assistiveTech.setTextColor(Color.BLACK);
 						assistiveTech.setId(id++);
 						if (area.getAreaName().equalsIgnoreCase("Exploring VA")) {
-							
+							assistiveTech.setText(exploringVA);
+
 							assistiveTech
 									.setOnClickListener(getExplorerATListener());
 
@@ -415,6 +466,8 @@ public class FirstTrial extends FragmentActivity {
 	@SuppressLint("InflateParams") private void placeAreaFromDB() {
 
 
+
+
 		// Modifies: this view
 		/*
 		 * Effects: places the area, task and AT on the left panels & sets their
@@ -444,6 +497,7 @@ public class FirstTrial extends FragmentActivity {
 					nav = new Area("Exploring VA");
 				}
 				// nav.addTask();
+				if(nav.parentId==0)
 				nav.parentId = id++;
 				// nav.tasks.clear();
 				AT exploreAT = null;
@@ -469,7 +523,7 @@ public class FirstTrial extends FragmentActivity {
 					exploreAT = new AT();
 					exploreAT.ATName = exploringVA;
 					exploreAT.participants = "";
-					exploreAT.firstTrialDate = "";
+					exploreAT.firstTrialDate = "";	
 					exploreAT.task = "Exploring VA";
 				}
 				Task explorer=null;
@@ -489,7 +543,7 @@ public class FirstTrial extends FragmentActivity {
 				nav.tasks.clear();
 				nav.addTask(explorer);
 				if(null==navOld)
-				areaList.add(nav);
+				areaList.add(0,nav);
 			}
 
 			for (Area area : areaList) {
@@ -912,7 +966,13 @@ public class FirstTrial extends FragmentActivity {
 
 					t.ats.add(at);
 					setAtToView(at, v);
-					assistiveTech.setOnClickListener(getATListener());
+					
+					if(t.areaname.equals("Exploring VA")){
+						assistiveTech.setOnClickListener(getExplorerATListener());
+					}
+					else{
+						assistiveTech.setOnClickListener(getATListener());
+					}
 					Log.d("ATGuide", "Area Text: " + areaText);
 					Log.d("ATGuide", "Area Text: " + areaText);
 					taskLayout.addView(assistiveTech);

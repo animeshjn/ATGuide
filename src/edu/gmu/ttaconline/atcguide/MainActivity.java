@@ -248,7 +248,7 @@ public class MainActivity extends Activity {
 		// Intent pdfService= new
 		currentIntent.putExtra("revisitTrial1", true);
 		// Intent(activity.getApplicationContext(),PDFLogic.class);
-		currentIntent.setClass(context, FirstTrial.class);
+		currentIntent.setClass(context, RevisitFirstTrial.class);
 		//currentIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		//currentIntent.setFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
 		// Intent pdfService= new
