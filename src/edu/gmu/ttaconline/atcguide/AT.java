@@ -16,7 +16,7 @@ public class AT {
 	public String firstTrialDate = "";
 	public boolean firstWorking = false;
 	/*For part two*/
-	public boolean solutionWorking = false;
+	public boolean solutionWorking = true;
 	public String trial1CompletionDate = "";
 	public String trial1Action="";
 	public String trial1Persons = "";
