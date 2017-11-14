@@ -425,7 +425,12 @@ public class PersistenceBean {
 			values.put(ATStore.COL_1stTrialWorking, at.firstWorking);
 			values.put(ATStore.COL_AREA_NAME, areaName);
 			values.put(ATStore.COL_TASK_NAME, taskName);
+			
 			values.put(ATStore.COL_SOLUTION, solutionWorking);
+			values.put(ATStore.COL_TRIAL1_COMPLETION, at.trial1CompletionDate);
+			values.put(ATStore.COL_TRIAL1_Action, at.trial1Action);
+			values.put(ATStore.COL_TRIAL1_Persons, at.trial1Persons);
+			
 			db.insert(ATStore.TABLE_NAME, null, values);
 			db.close();
 		} catch (Exception e) {

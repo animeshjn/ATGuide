@@ -10,8 +10,10 @@ import com.commonsware.cwac.merge.MergeAdapter;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
@@ -48,6 +50,9 @@ public class RevisitFirstTrial extends FragmentActivity {
 	/* Instance variables */
 	ArrayList<Area> areaList;// Store the lists of all areas
 	ArrayList<String> trial1Texts = new ArrayList<String>();// store text only
+	ArrayList<Area> trial2List = new ArrayList<Area>();;
+	ArrayList<String> trial2TextList = new ArrayList<String>();
+	String studentid="";
 	Calendar myCalendar = Calendar.getInstance();
 	EditText datePick;
 	MergeAdapter merge = new MergeAdapter();
@@ -65,6 +70,7 @@ public class RevisitFirstTrial extends FragmentActivity {
 	boolean exploreVA = false;
 	String exploringVA = "Exploring VA";
 	boolean open = false;
+	boolean trial2=false;
 
 	// areas
 	/* Methods */
@@ -91,7 +97,7 @@ public class RevisitFirstTrial extends FragmentActivity {
 			// if not open
 
 			placeAreaFromDB();
-
+			studentid=getIntent().getStringExtra("studentid");
 			activity = this;
 			datePick = (EditText) findViewById(R.id.date);
 			// setATListener();
@@ -142,26 +148,47 @@ public class RevisitFirstTrial extends FragmentActivity {
 		nextButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				PersistenceBean.persistAreaObject(areaList, "trial1"
-						+ PersistenceBean.getCurrentId(context), context);
-				PDFLogic.activity = activity;
-				currentIntent.setClass(context, PDFLogic.class);
-				currentIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-				currentIntent
-						.setFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
-				// Intent pdfService= new
-				currentIntent.putExtra("trial1", true);
-				PersistenceBean.persistIntent(
-						PersistenceBean.getCurrentId(context), currentIntent,
-						context);
-				// Intent(getApplicationContext(),PDFLogic.class);
-				android.widget.ProgressBar bar = new android.widget.ProgressBar(
-						getApplicationContext());
-				bar.setIndeterminate(true);
-				bar.bringToFront();
-				Log.d("ATGUIDE", "" + currentIntent.toString());
-				startService(currentIntent);
-			}
+				// Alert About trial 2
+				validateSolutions();
+				if (trial2) {
+					AlertDialog.Builder info = new AlertDialog.Builder(activity);
+					info.setMessage(getResources()
+							.getString(R.string.trial1nav).toString());
+					info.setCancelable(true);
+					info.setPositiveButton("Ok",
+							new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog,
+										int id) {
+									// FWD to trial 2
+									currentIntent.putExtra("trial2", trial2);
+									currentIntent.setClass(context,
+											FirstTrial.class);
+									PersistenceBean.persistAreaObject(
+											trial2List, "trial2" + studentid,
+											context);
+									Log.d("ATGUIDE",
+											"student id on next persist"
+													+ studentid);
+									PersistenceBean.persistInstructionalAreas(
+											"trial2" + studentid,
+											trial2TextList, context);
+									startActivity(currentIntent);
+								}
+							});
+					info.setNeutralButton("Cancel",
+							new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog,
+										int id) {
+									dialog.cancel();
+								}
+							});
+					AlertDialog infoAlert = info.create();
+					infoAlert.setCanceledOnTouchOutside(false);
+					infoAlert.setCancelable(false);
+					infoAlert.show();
+				
+				}
+				}
 		});
 
 	}
@@ -831,6 +858,42 @@ public class RevisitFirstTrial extends FragmentActivity {
 				setChildrenVisibility((LinearLayout) currentView, visibility);
 			}
 			currentView.setVisibility(visibility);
+
+		}
+
+	}
+	
+	/**
+	 * Validate solutions for second trial
+	 */
+	private void validateSolutions() {
+		// Abstract function:
+		// Get all area
+		// Get each task
+		// Add the solution not working to separate list
+		// save the list
+		// For all selected / persisted Area
+		trial2 = false;
+
+		for (Area checkArea : areaList) {
+			// For each task in this area
+			for (Task task : checkArea.tasks) {
+				// If any of the strategies in current task are not working
+				if (!task.solutions) {
+					
+					for(AT at: task.ats)
+					{
+						if(!at.solutionWorking)
+						{
+							trial2List.add(checkArea);
+							trial2TextList.add("" + checkArea.getAreaName());
+							trial2 = true;
+						}
+					}
+					
+					
+				}
+			}
 
 		}
 

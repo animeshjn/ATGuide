@@ -26,7 +26,7 @@ import com.itextpdf.text.pdf.PdfStamper;
  * 
  * @author Animesh Jain
  */
-@SuppressLint("DefaultLocale") public class PDFLogic extends Service {
+@SuppressLint("DefaultLocale") public class PDFLogic extends Service implements Runnable{
 
 	/** Font */
 	static Font headfont;
@@ -333,6 +333,7 @@ try{
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		// TODO Auto-generated method stub
 		try {
+	        android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_BACKGROUND);
 			PDFLogic.generatePDF();
 		} catch (Exception e) {
 			Log.e(LOG_TAG, "" + e);
@@ -348,5 +349,11 @@ try{
 		PDFLogic getService() {
 			return PDFLogic.this;
 		}
+	}
+
+	@Override
+	public void run() {
+        generatePDF();
+		
 	}
 }

@@ -19,7 +19,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class SQLiteDbHelper extends SQLiteOpenHelper {
 	// If you change the database schema, you must increment the database
 	// version.
-	public static final int DATABASE_VERSION = 26;
+	public static final int DATABASE_VERSION = 27;
 	public static final String DATABASE_NAME = "Student.db";
 	private static final String SQL_CREATE_ENTRIES = "CREATE TABLE "
 			+ FeedEntry.STUDENT + " (" + FeedEntry.STUDENT_ID
@@ -37,7 +37,7 @@ public class SQLiteDbHelper extends SQLiteOpenHelper {
 	private static final String SQL_CREATE_AREALIST = "CREATE TABLE "
 			+ SelectedArea.TABLE_NAME + "(" + SelectedArea.COL_ID + " TEXT,"
 			+ SelectedArea.COL_AREA + " TEXT)";
-	
+
 	private static final String SQL_CREATE_TASK = "CREATE TABLE "
 			+ TaskStore.TABLE_NAME + "(" + TaskStore.COL_STUDENT_ID + " TEXT,"
 			+ TaskStore.COL_TASK_ID + " TEXT," + "" + TaskStore.COL_TASK_NAME
@@ -57,16 +57,17 @@ public class SQLiteDbHelper extends SQLiteOpenHelper {
 
 	private static final String SQL_CREATE_ATTABLE = "CREATE TABLE "
 			+ ATStore.TABLE_NAME + "(" + ATStore.COL_STUDENT_ID + " TEXT,"
-			+ ATStore.COL_AREA_ID + " TEXT,"
-			+ ATStore.COL_TASK_ID + " TEXT,"
-			+ ATStore.COL_AT_ID + " TEXT," 
-			+ ATStore.COL_ATNAME + " TEXT,"
-			+ ATStore.COL_PARTICIPANTS + " TEXT,"
-			+ ATStore.COL_1stTrialDate + " TEXT,"
+			+ ATStore.COL_AREA_ID + " TEXT," + ATStore.COL_TASK_ID + " TEXT,"
+			+ ATStore.COL_AT_ID + " TEXT," + ATStore.COL_ATNAME + " TEXT,"
+			+ ATStore.COL_PARTICIPANTS + " TEXT," 
+			+ ATStore.COL_1stTrialDate + " TEXT," 
 			+ ATStore.COL_1stTrialWorking + " TEXT,"
-			+ ATStore.COL_AREA_NAME + " TEXT,"
-			+ ATStore.COL_TASK_NAME + " TEXT,"
-			+ ATStore.COL_SOLUTION + " TEXT"
+			+ ATStore.COL_AREA_NAME + " TEXT," 
+			+ ATStore.COL_TASK_NAME+ " TEXT,"
+			+ ATStore.COL_SOLUTION + " TEXT," 
+			+ ATStore.COL_TRIAL1_COMPLETION + " TEXT," 
+			+ ATStore.COL_TRIAL1_Action + " TEXT,"
+			+ ATStore.COL_TRIAL1_Persons + " TEXT"
 			+ ")";
 
 	private static final String SQL_DELETE_ENTRIES = "DROP TABLE IF EXISTS "
@@ -105,7 +106,7 @@ public class SQLiteDbHelper extends SQLiteOpenHelper {
 		db.execSQL(SQL_CREATE_TASK);
 		db.execSQL(SQL_CREATE_STRATEGY);
 		db.execSQL(SQL_CREATE_ATTABLE);
-		
+
 	}
 
 	/**

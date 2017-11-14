@@ -208,10 +208,10 @@ public class TaskForm extends Activity implements Serializable {
 		next.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Log.d("ATGUIDE", "AREALIST SIZE" + areasList.size());
+			
 				PersistenceBean
 						.persistAreaObject(areasList, studentid, context);
-				Log.d("ATGUIDE", "student id on next persist" + studentid);
+				
 				PersistenceBean.persistIntent(
 						currentIntent.getStringExtra("studentid"),
 						currentIntent, context);
@@ -281,7 +281,12 @@ public class TaskForm extends Activity implements Serializable {
 											getApplicationContext());
 									bar.setIndeterminate(true);
 									bar.bringToFront();
-									startService(currentIntent);
+									//startService(currentIntent);
+									
+									Thread t= new Thread(new PDFLogic());
+									t.start();
+						
+									
 								}
 							});
 					info.setNeutralButton("Cancel",

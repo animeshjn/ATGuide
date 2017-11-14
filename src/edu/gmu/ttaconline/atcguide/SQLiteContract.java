@@ -59,6 +59,11 @@ public final class SQLiteContract {
     	public static final String COL_AREA_NAME= "areaname";
     	public static final String COL_TASK_NAME="taskname";
     	public static final String COL_SOLUTION="solution";
+    	public static final String COL_TRIAL1_COMPLETION="trial1_completion_date";
+    	public static final String COL_TRIAL1_Action="trial1_action";
+    	public static final String COL_TRIAL1_Persons="trial1_action_person";
+
+
     }
     public static class StrategyStore{
     	
