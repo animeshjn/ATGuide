@@ -423,7 +423,7 @@ public class PersistenceBean {
 			values.put(ATStore.COL_PARTICIPANTS, participants);
 			values.put(ATStore.COL_1stTrialDate, firstTrialDate);
 			values.put(ATStore.COL_1stTrialWorking, at.firstWorking);
-			values.put(ATStore.COL_AREA_NAME, areaName);
+			values.put(ATStore.COL_AREA_NAME, at.getInstructionalArea());
 			values.put(ATStore.COL_TASK_NAME, taskName);
 			
 			values.put(ATStore.COL_SOLUTION, solutionWorking);
@@ -625,7 +625,9 @@ public class PersistenceBean {
 						.getColumnIndex(ATStore.COL_PARTICIPANTS));
 				currentAT.firstTrialDate = cursor.getString(cursor
 						.getColumnIndex(ATStore.COL_1stTrialDate));
-
+				currentAT.instructionalArea = cursor.getString(cursor
+						.getColumnIndex(ATStore.COL_AREA_NAME));
+				
 				currentAT.firstWorking = Boolean.parseBoolean(cursor
 						.getString(cursor
 								.getColumnIndex(ATStore.COL_1stTrialWorking)));

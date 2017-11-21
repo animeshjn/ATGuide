@@ -18,7 +18,7 @@
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
-            android:launchMode="singleInstance"
+            android:launchMode="singleTask"
             android:screenOrientation="landscape"
             android:windowSoftInputMode="adjustPan" >
             <intent-filter>
@@ -32,9 +32,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
-                <data
-                    android:host="atguide.com"
-                    android:scheme="host" />
+                  
             </intent-filter>
         </activity>
 
@@ -93,14 +91,14 @@
             android:screenOrientation="landscape"
             android:windowSoftInputMode="adjustPan" >
             <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
+              <action android:name="android.intent.action.VIEW" /> 
+                <action android:name="relaunch.activity.ACTIVITY_SELF_START_INTENT" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-
-                <data
+				<data
                     android:host="trial1.atguide.com"
                     android:scheme="http" />
+             
             </intent-filter>
         </activity>
         <activity

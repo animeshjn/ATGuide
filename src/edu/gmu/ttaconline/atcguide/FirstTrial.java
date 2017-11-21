@@ -88,7 +88,7 @@ public class FirstTrial extends FragmentActivity {
 				+ PersistenceBean.getCurrentId(context), context);
 		inflater = getLayoutInflater();
 		// Get existing useful data from intent and SQLite
-		
+		toast("On Create Called");
 		try {
 			try{
 				getData();
@@ -236,6 +236,27 @@ public class FirstTrial extends FragmentActivity {
 		}
 	}
 
+	@Override
+	protected void onNewIntent(Intent intent) {
+		// TODO Auto-generated method stub
+		//super.onNewIntent(intent);
+		Toast.makeText(context, "New Intent Called", Toast.LENGTH_SHORT).show();
+		EditText ATname= (EditText) findViewById(R.id.at);
+				Uri uri = intent.getData();
+				if (uri != null) {
+				try {
+						exploringVA=""+intent.getStringExtra("dataFromAIMVANavigator");
+						log("Data from AIMVA Navigator:"+exploringVA);
+						ATname.setText(""+exploringVA);
+					} catch (Exception e) {
+						Log.e("ATGUIDE","Exception in checkUri caught at line 135: "+e);
+						
+						log("Exception"+e);
+					}
+	}
+				
+	
+	}
 	/**
 	 * Set Listener for Assistive technology. Select the listener
 	 */
@@ -281,15 +302,19 @@ public class FirstTrial extends FragmentActivity {
 				try {
 					Intent aimIntent = new Intent(
 							Intent.ACTION_VIEW, aimEligible);
+//					aimIntent
+//							.addFlags(Intent.URI_INTENT_SCHEME);
 					aimIntent
-							.addFlags(Intent.URI_INTENT_SCHEME);
-					aimIntent
-							.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
-					aimIntent
-							.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+					.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+				aimIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_SINGLE_TOP);
+			
+//					aimIntent
+//							.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+				//	aimIntent.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
+					
 					aimIntent.putExtras(currentIntent);
-					aimIntent
-							.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+//					aimIntent
+//							.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
 					aimIntent
 							.setDataAndNormalize(aimEligible);
 					PackageManager packageManager = getPackageManager();
@@ -333,7 +358,7 @@ public class FirstTrial extends FragmentActivity {
 						aimIntent.putExtras(currentIntent);
 						startActivity(aimIntent);
 					}
-					finish();
+			
 				} catch (Exception e) {
 					Log.e("ATGUIDE", " " + e.getMessage());
 				}
@@ -372,7 +397,10 @@ public class FirstTrial extends FragmentActivity {
 				// Add On click Listener: OnClick: Add extra button to call application
 				// add check to the data for incoming URL
 				// Auto Fill from the data
-				Area nav = new Area("Exploring VA");
+				Area nav=getAreaByName("Exploring VA");
+				
+				if(null==nav) 
+				{nav = new Area("Exploring VA");
 				// nav.addTask();
 				nav.parentId = id++;
 				Task explorer = new Task();
@@ -381,7 +409,7 @@ public class FirstTrial extends FragmentActivity {
 				explorer.setAreaname(nav.getAreaName());
 				explorer.taskname = "Exploring VA";
 				nav.addTask(explorer);
-				areaList.add(0,nav);
+				areaList.add(0,nav);}
 
 			}
 
@@ -464,10 +492,6 @@ public class FirstTrial extends FragmentActivity {
 	 * Place the elements: Area, Task and ATs from database
 	 */
 	@SuppressLint("InflateParams") private void placeAreaFromDB() {
-
-
-
-
 		// Modifies: this view
 		/*
 		 * Effects: places the area, task and AT on the left panels & sets their
@@ -484,11 +508,6 @@ public class FirstTrial extends FragmentActivity {
 			// int atCount = -1;
 			String iepAlt = currentIntent.getStringExtra("iepalt");
 			if (null != iepAlt && iepAlt.equalsIgnoreCase("Yes")) {
-				// Add Aim Navigator to area and create special view
-				// Add AreaName as Exploring AT
-				// Add OnClick Listener: OnClick: Add extra button to call application
-				// add check to the data for incoming URL
-				// Auto Fill from the data
 				Area nav;
 				Area navOld = getAreaByName("Exploring VA");
 				if (null != navOld) {
@@ -496,16 +515,14 @@ public class FirstTrial extends FragmentActivity {
 				} else {
 					nav = new Area("Exploring VA");
 				}
-				// nav.addTask();
 				if(nav.parentId==0)
 				nav.parentId = id++;
-				// nav.tasks.clear();
+
 				AT exploreAT = null;
 				Task t;
 				if(null==nav.tasks||nav.tasks.size()==0)
 				{
 					t=null;
-					
 				}
 				else{t = nav.tasks.get(0);}
 				
@@ -517,8 +534,6 @@ public class FirstTrial extends FragmentActivity {
 						exploreAT = t.ats.get(0);
 					}
 				}
-					
-
 				if (null == exploreAT) {
 					exploreAT = new AT();
 					exploreAT.ATName = exploringVA;
@@ -526,6 +541,7 @@ public class FirstTrial extends FragmentActivity {
 					exploreAT.firstTrialDate = "";	
 					exploreAT.task = "Exploring VA";
 				}
+
 				Task explorer=null;
 				
 				if(null == t){
@@ -538,9 +554,10 @@ public class FirstTrial extends FragmentActivity {
 				else{
 					explorer= t;
 				}
-				explorer.ats.clear();
+				//explorer.ats.clear();
+				if(explorer.ats.size()==0)
 				explorer.ats.add(exploreAT);
-				nav.tasks.clear();
+				if(nav.tasks.size()==0)
 				nav.addTask(explorer);
 				if(null==navOld)
 				areaList.add(0,nav);
@@ -708,10 +725,10 @@ public class FirstTrial extends FragmentActivity {
 				// Remove Previous Listeners if set
 				EditText atname = (EditText) findViewById(R.id.at);
 				atname.removeTextChangedListener(_ATNameWatcher);
-				// atname.setText("Choose AT");//Default
+				atname.setText("Exploring VA");//Default
 				EditText participantView = (EditText) findViewById(R.id.participants);
 				participantView.removeTextChangedListener(participantsWatcher);
-				// participantView.setText("");//
+				participantView.setText("");//
 				EditText dateView = (EditText) findViewById(R.id.date);
 				dateView.removeTextChangedListener(trialDateWatcher);
 				// AT View

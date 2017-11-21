@@ -162,7 +162,7 @@ public class RevisitFirstTrial extends FragmentActivity {
 									// FWD to trial 2
 									currentIntent.putExtra("trial2", trial2);
 									currentIntent.setClass(context,
-											FirstTrial.class);
+											SecondTrial.class);
 									PersistenceBean.persistAreaObject(
 											trial2List, "trial2" + studentid,
 											context);
@@ -188,6 +188,57 @@ public class RevisitFirstTrial extends FragmentActivity {
 					infoAlert.show();
 				
 				}
+				else{
+
+					AlertDialog.Builder info = new AlertDialog.Builder(activity);
+					info.setMessage(getResources().getString(
+							R.string.adequatesolution).toString());
+					info.setCancelable(true);
+					info.setPositiveButton("OK",
+							new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog,
+										int id) {
+									Toast.makeText(context, "Please Wait",
+											Toast.LENGTH_SHORT).show();
+									PDFLogic.activity = activity;
+									// Intent pdfService= new
+									// Intent(activity.getApplicationContext(),PDFLogic.class);
+									currentIntent.setClass(context,
+											PDFLogic.class);
+									currentIntent
+											.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+									currentIntent
+											.setFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+									// Intent pdfService= new
+									// Intent(getApplicationContext(),PDFLogic.class);
+									android.widget.ProgressBar bar = new android.widget.ProgressBar(
+											getApplicationContext());
+									bar.setIndeterminate(true);
+									bar.bringToFront();
+									//startService(currentIntent);
+									
+									Thread t= new Thread(new PDFLogic());
+									t.start();
+						
+									
+								}
+							});
+					info.setNeutralButton("Cancel",
+							new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog,
+										int id) {
+									dialog.cancel();
+								}
+							});
+					AlertDialog infoAlert = info.create();
+					infoAlert.setCanceledOnTouchOutside(false);
+					infoAlert.setCancelable(false);
+					infoAlert.show();
+					// setContentView(layoutResID);
+				
+				}
+				
+				
 				}
 		});
 

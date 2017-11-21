@@ -67,6 +67,7 @@ public class MainActivity extends Activity {
 	@Override
 	protected void onRestart() {
 		super.onRestart();
+		recreate();
 		//this.onCreate(new Bundle());
 	}
 
