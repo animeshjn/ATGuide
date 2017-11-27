@@ -68,6 +68,7 @@ public class SecondTrial extends FragmentActivity {
 	boolean exploreVA = false;
 	String exploringVA = "Exploring VA";
 	boolean open = false;
+	protected final String URI_SECOND_TRIAL="http://trial2.atguide.com";
 
 	// areas
 	/* Methods */
@@ -233,6 +234,32 @@ public class SecondTrial extends FragmentActivity {
 		}
 	}
 
+	@Override
+	protected void onNewIntent(Intent intent) {
+		
+//		super.onNewIntent(intent);
+
+
+	
+		//super.onNewIntent(intent);
+		
+		EditText ATname= (EditText) findViewById(R.id.at);
+				Uri uri = intent.getData();
+				if (uri != null) {
+				try {
+						exploringVA=""+intent.getStringExtra("dataFromAIMVANavigator");
+						log("Data from AIMVA Navigator:"+exploringVA);
+						ATname.setText(""+exploringVA);
+					} catch (Exception e) {
+						Log.e("ATGUIDE","Exception in checkUri caught at line 135: "+e);
+						
+						log("Exception"+e);
+					}
+	}
+				
+	
+	
+	}
 	/**
 	 * Set Listener for Assistive technology. Select the listener
 	 */
@@ -279,14 +306,8 @@ public class SecondTrial extends FragmentActivity {
 					Intent aimIntent = new Intent(
 							Intent.ACTION_VIEW, aimEligible);
 					aimIntent
-							.addFlags(Intent.URI_INTENT_SCHEME);
-					aimIntent
-							.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
-					aimIntent
-							.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-					aimIntent.putExtras(currentIntent);
-					aimIntent
-							.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+					.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+				   aimIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_SINGLE_TOP);
 					aimIntent
 							.setDataAndNormalize(aimEligible);
 					PackageManager packageManager = getPackageManager();
@@ -328,9 +349,10 @@ public class SecondTrial extends FragmentActivity {
 								(Uri.parse("market://aimnavigator.com")));
 						Toast.makeText(getApplicationContext(), "AIM Navigator not installed",Toast.LENGTH_SHORT).show();
 						aimIntent.putExtras(currentIntent);
+						aimIntent.putExtra("RedirectUri", URI_SECOND_TRIAL);
 						startActivity(aimIntent);
 					}
-					finish();
+					
 				} catch (Exception e) {
 					Log.e("ATGUIDE", " " + e.getMessage());
 				}

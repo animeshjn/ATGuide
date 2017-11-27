@@ -116,6 +116,16 @@
         <activity
             android:name=".SecondTrial"
             android:label="@string/title_activity_second_trial" >
+             <intent-filter>
+              <action android:name="android.intent.action.VIEW" /> 
+                <action android:name="relaunch.activity.ACTIVITY_SELF_START_INTENT" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+				
+                    <data
+                    android:host="trial2.atguide.com"
+                    android:scheme="http" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".RevisitFirstTrial"
@@ -126,12 +136,12 @@
                 <action android:name="relaunch.activity.ACTIVITY_SELF_START_INTENT" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-				 <!-- <data
+				<data
                     android:host="revisitTrial1.atguide.com"
-                    android:scheme="http" />  -->
-                    <data
+                    android:scheme="http" /> 
+                   <!--  <data
                     android:host="trial1.atguide.com"
-                    android:scheme="http" />
+                    android:scheme="http" /> -->
             </intent-filter>
         </activity>
     </application>
