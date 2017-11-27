@@ -71,7 +71,7 @@ public class FirstTrial extends FragmentActivity {
 	boolean exploreVA = false;
 	String exploringVA = "Exploring VA";
 	boolean open = false;
-
+    final String URI_FIRST_TRIAL="http://trial1.atguide.com";
 	// areas
 	/* Methods */
 	// Control start point
@@ -134,10 +134,14 @@ public class FirstTrial extends FragmentActivity {
 			Log.e("AT GUIDE", "Exception in FirstTrial.onCreate 127: *" + e);
 			}
 	}
-
+ 
+	
 	
 	private void checkUri() {
-
+		// persistence bean/
+		//check if last call was to RevisitFirst Trial 
+		// then redirect to Revisit First Trial
+		
 
 		Uri uri = getIntent().getData();
 		if (uri != null) {
@@ -197,7 +201,10 @@ public class FirstTrial extends FragmentActivity {
 				bar.setIndeterminate(true);
 				bar.bringToFront();
 				Log.d("ATGUIDE", "" + currentIntent.toString());
-				startService(currentIntent);
+//				startService(currentIntent);
+				Thread pdfThread= new Thread(new PDFLogic());
+				pdfThread.start();
+				finish();
 			}
 		});
 
@@ -356,6 +363,7 @@ public class FirstTrial extends FragmentActivity {
 								(Uri.parse("market://aimnavigator.com")));
 						Toast.makeText(getApplicationContext(), "AIM Navigator not installed",Toast.LENGTH_SHORT).show();
 						aimIntent.putExtras(currentIntent);
+						aimIntent.putExtra("RedirectUri", URI_FIRST_TRIAL);
 						startActivity(aimIntent);
 					}
 			

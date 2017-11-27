@@ -281,6 +281,7 @@ public class TaskForm extends Activity implements Serializable {
 											getApplicationContext());
 									bar.setIndeterminate(true);
 									bar.bringToFront();
+									
 									//startService(currentIntent);
 									
 									Thread t= new Thread(new PDFLogic());

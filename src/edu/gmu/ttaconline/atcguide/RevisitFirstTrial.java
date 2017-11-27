@@ -71,7 +71,7 @@ public class RevisitFirstTrial extends FragmentActivity {
 	String exploringVA = "Exploring VA";
 	boolean open = false;
 	boolean trial2=false;
-
+	String URI__REVISIT_FIRST_TRIAL ="http://revisitTrial1.atguide.com";
 	// areas
 	/* Methods */
 	// Control start point
@@ -302,12 +302,15 @@ public class RevisitFirstTrial extends FragmentActivity {
 				try {
 					Intent aimIntent = new Intent(Intent.ACTION_VIEW,
 							aimEligible);
-					aimIntent.addFlags(Intent.URI_INTENT_SCHEME);
-					aimIntent
-							.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
-					aimIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//					aimIntent.addFlags(Intent.URI_INTENT_SCHEME);
+//					aimIntent
+//							.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+//					aimIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 					aimIntent.putExtras(currentIntent);
-					aimIntent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+					aimIntent
+					.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+				aimIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_SINGLE_TOP);
+//					aimIntent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
 					aimIntent.setDataAndNormalize(aimEligible);
 					PackageManager packageManager = getPackageManager();
 					List<ResolveInfo> activities = packageManager
@@ -343,9 +346,11 @@ public class RevisitFirstTrial extends FragmentActivity {
 								"AIM Navigator not installed",
 								Toast.LENGTH_SHORT).show();
 						aimIntent.putExtras(currentIntent);
+						aimIntent.putExtra("RedirectUri", URI__REVISIT_FIRST_TRIAL);
+
 						startActivity(aimIntent);
 					}
-					finish();
+				
 				} catch (Exception e) {
 					Log.e("ATGUIDE", " " + e.getMessage());
 				}
@@ -355,6 +360,33 @@ public class RevisitFirstTrial extends FragmentActivity {
 
 	}
 
+	
+	@Override
+	protected void onNewIntent(Intent intent) {
+		
+		//super.onNewIntent(intent);
+		toast("On New Intent Called");
+		
+		//super.onNewIntent(intent);
+		Toast.makeText(context, "New Intent Called", Toast.LENGTH_SHORT).show();
+		EditText ATname= (EditText) findViewById(R.id.at);
+				Uri uri = intent.getData();
+				if (uri != null) {
+				try {
+						exploringVA=""+intent.getStringExtra("dataFromAIMVANavigator");
+						log("Data from AIMVA Navigator:"+exploringVA);
+						ATname.setText(""+exploringVA);
+					} catch (Exception e) {
+						Log.e("ATGUIDE","Exception in checkUri caught at line 135: "+e);
+						
+						log("Exception"+e);
+					}
+	}
+				
+	
+	
+	}
+	
 	/**
 	 * Place all areas in the view
 	 */
