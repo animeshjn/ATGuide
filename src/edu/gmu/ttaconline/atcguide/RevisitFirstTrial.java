@@ -52,7 +52,7 @@ public class RevisitFirstTrial extends FragmentActivity {
 	ArrayList<String> trial1Texts = new ArrayList<String>();// store text only
 	ArrayList<Area> trial2List = new ArrayList<Area>();;
 	ArrayList<String> trial2TextList = new ArrayList<String>();
-	String studentid="";
+	String studentid = "";
 	Calendar myCalendar = Calendar.getInstance();
 	EditText datePick;
 	MergeAdapter merge = new MergeAdapter();
@@ -70,8 +70,9 @@ public class RevisitFirstTrial extends FragmentActivity {
 	boolean exploreVA = false;
 	String exploringVA = "Exploring VA";
 	boolean open = false;
-	boolean trial2=false;
-	String URI__REVISIT_FIRST_TRIAL ="http://revisitTrial1.atguide.com";
+	boolean trial2 = false;
+	String URI__REVISIT_FIRST_TRIAL = "http://revisitTrial1.atguide.com";
+
 	// areas
 	/* Methods */
 	// Control start point
@@ -97,7 +98,7 @@ public class RevisitFirstTrial extends FragmentActivity {
 			// if not open
 
 			placeAreaFromDB();
-			studentid=getIntent().getStringExtra("studentid");
+			studentid = getIntent().getStringExtra("studentid");
 			activity = this;
 			datePick = (EditText) findViewById(R.id.date);
 			// setATListener();
@@ -186,9 +187,8 @@ public class RevisitFirstTrial extends FragmentActivity {
 					infoAlert.setCanceledOnTouchOutside(false);
 					infoAlert.setCancelable(false);
 					infoAlert.show();
-				
-				}
-				else{
+
+				} else {
 
 					AlertDialog.Builder info = new AlertDialog.Builder(activity);
 					info.setMessage(getResources().getString(
@@ -215,12 +215,11 @@ public class RevisitFirstTrial extends FragmentActivity {
 											getApplicationContext());
 									bar.setIndeterminate(true);
 									bar.bringToFront();
-									//startService(currentIntent);
-									
-									Thread t= new Thread(new PDFLogic());
+									// startService(currentIntent);
+
+									Thread t = new Thread(new PDFLogic());
 									t.start();
-						
-									
+
 								}
 							});
 					info.setNeutralButton("Cancel",
@@ -235,11 +234,10 @@ public class RevisitFirstTrial extends FragmentActivity {
 					infoAlert.setCancelable(false);
 					infoAlert.show();
 					// setContentView(layoutResID);
-				
+
 				}
-				
-				
-				}
+
+			}
 		});
 
 	}
@@ -302,15 +300,29 @@ public class RevisitFirstTrial extends FragmentActivity {
 				try {
 					Intent aimIntent = new Intent(Intent.ACTION_VIEW,
 							aimEligible);
-//					aimIntent.addFlags(Intent.URI_INTENT_SCHEME);
-//					aimIntent
-//							.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
-//					aimIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-					aimIntent.putExtras(currentIntent);
+					// aimIntent.addFlags(Intent.URI_INTENT_SCHEME);
+					// aimIntent
+					// .addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+					// aimIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+					// aimIntent.putExtras(currentIntent);
+					aimIntent.putExtra(
+							"studentid",
+							""
+									+ currentIntent.getStringExtra("studentid")
+									+ ","
+									+ currentIntent
+											.getStringExtra("studentgrade")
+									+ ","
+									+ currentIntent
+											.getStringExtra("studentparticipant")
+									+ "," + URI__REVISIT_FIRST_TRIAL);
+
 					aimIntent
-					.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
-				aimIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_SINGLE_TOP);
-//					aimIntent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+							.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+					aimIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+							| Intent.FLAG_ACTIVITY_CLEAR_TOP
+							| Intent.FLAG_ACTIVITY_SINGLE_TOP);
+					// aimIntent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
 					aimIntent.setDataAndNormalize(aimEligible);
 					PackageManager packageManager = getPackageManager();
 					List<ResolveInfo> activities = packageManager
@@ -330,11 +342,11 @@ public class RevisitFirstTrial extends FragmentActivity {
 
 					aimIntent.putExtra("open", true);
 					PersistenceBean.persistIntent(
-							aimIntent.getStringExtra("studentid"),
+							currentIntent.getStringExtra("studentid"),
 							currentIntent, context);
 					// Log.d("ATGUIDE","intent "+aimIntent.getStringExtra("studentid")+aimIntent.getStringExtra("studentgrade"));
 					PersistenceBean.persistCurrentId(
-							aimIntent.getStringExtra("studentid"), context);
+							currentIntent.getStringExtra("studentid"), context);
 					if (installed)
 						startActivity(aimIntent);
 					else {
@@ -345,12 +357,13 @@ public class RevisitFirstTrial extends FragmentActivity {
 						Toast.makeText(getApplicationContext(),
 								"AIM Navigator not installed",
 								Toast.LENGTH_SHORT).show();
-						aimIntent.putExtras(currentIntent);
-						aimIntent.putExtra("RedirectUri", URI__REVISIT_FIRST_TRIAL);
+//						aimIntent.putExtras(currentIntent);
+//						aimIntent.putExtra("RedirectUri",
+//								URI__REVISIT_FIRST_TRIAL);
 
 						startActivity(aimIntent);
 					}
-				
+
 				} catch (Exception e) {
 					Log.e("ATGUIDE", " " + e.getMessage());
 				}
@@ -360,33 +373,32 @@ public class RevisitFirstTrial extends FragmentActivity {
 
 	}
 
-	
 	@Override
 	protected void onNewIntent(Intent intent) {
-		
-		//super.onNewIntent(intent);
+
+		// super.onNewIntent(intent);
 		toast("On New Intent Called");
-		
-		//super.onNewIntent(intent);
+
+		// super.onNewIntent(intent);
 		Toast.makeText(context, "New Intent Called", Toast.LENGTH_SHORT).show();
-		EditText ATname= (EditText) findViewById(R.id.at);
-				Uri uri = intent.getData();
-				if (uri != null) {
-				try {
-						exploringVA=""+intent.getStringExtra("dataFromAIMVANavigator");
-						log("Data from AIMVA Navigator:"+exploringVA);
-						ATname.setText(""+exploringVA);
-					} catch (Exception e) {
-						Log.e("ATGUIDE","Exception in checkUri caught at line 135: "+e);
-						
-						log("Exception"+e);
-					}
+		EditText ATname = (EditText) findViewById(R.id.at);
+		Uri uri = intent.getData();
+		if (uri != null) {
+			try {
+				exploringVA = ""
+						+ intent.getStringExtra("dataFromAIMVANavigator");
+				log("Data from AIMVA Navigator:" + exploringVA);
+				ATname.setText("" + exploringVA);
+			} catch (Exception e) {
+				Log.e("ATGUIDE", "Exception in checkUri caught at line 135: "
+						+ e);
+
+				log("Exception" + e);
+			}
+		}
+
 	}
-				
-	
-	
-	}
-	
+
 	/**
 	 * Place all areas in the view
 	 */
@@ -915,7 +927,7 @@ public class RevisitFirstTrial extends FragmentActivity {
 			action.setVisibility(View.INVISIBLE);
 			View personLayout = (View) findViewById(R.id.actionPersonLayout);
 			personLayout.setVisibility(View.INVISIBLE);
-		
+
 			View dateLayout = (View) findViewById(R.id.actionCompletionLayout);
 			dateLayout.setVisibility(View.INVISIBLE);
 		} else {
@@ -945,7 +957,7 @@ public class RevisitFirstTrial extends FragmentActivity {
 		}
 
 	}
-	
+
 	/**
 	 * Validate solutions for second trial
 	 */
@@ -963,18 +975,15 @@ public class RevisitFirstTrial extends FragmentActivity {
 			for (Task task : checkArea.tasks) {
 				// If any of the strategies in current task are not working
 				if (!task.solutions) {
-					
-					for(AT at: task.ats)
-					{
-						if(!at.solutionWorking)
-						{
+
+					for (AT at : task.ats) {
+						if (!at.solutionWorking) {
 							trial2List.add(checkArea);
 							trial2TextList.add("" + checkArea.getAreaName());
 							trial2 = true;
 						}
 					}
-					
-					
+
 				}
 			}
 
@@ -1035,7 +1044,7 @@ public class RevisitFirstTrial extends FragmentActivity {
 			public void onTextChanged(CharSequence s, int start, int before,
 					int count) {
 				at.trial1Action = (trimATName(s.toString()));
-				
+
 				// ((TextView)
 				// currentClicked).setText(trimATName(s.toString()));
 			}

@@ -308,7 +308,19 @@ public class SecondTrial extends FragmentActivity {
 					aimIntent
 					.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
 				   aimIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_SINGLE_TOP);
-					aimIntent
+				   aimIntent.putExtra(
+							"studentid",
+							""
+									+ currentIntent.getStringExtra("studentid")
+									+ ","
+									+ currentIntent
+											.getStringExtra("studentgrade")
+									+ ","
+									+ currentIntent
+											.getStringExtra("studentparticipant")
+									+ "," + URI_SECOND_TRIAL);
+				   
+				   aimIntent
 							.setDataAndNormalize(aimEligible);
 					PackageManager packageManager = getPackageManager();
 					List<ResolveInfo> activities = packageManager
@@ -329,12 +341,12 @@ public class SecondTrial extends FragmentActivity {
 					}
 
 					aimIntent.putExtra("open", true);
-					PersistenceBean.persistIntent(aimIntent
+					PersistenceBean.persistIntent(currentIntent
 							.getStringExtra("studentid"),
 							currentIntent, context);
 //					Log.d("ATGUIDE","intent "+aimIntent.getStringExtra("studentid")+aimIntent.getStringExtra("studentgrade"));
 					PersistenceBean.persistCurrentId(
-							aimIntent
+							currentIntent
 									.getStringExtra("studentid"),
 							context);
 					if (installed)
