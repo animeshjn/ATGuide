@@ -88,7 +88,7 @@ public class FirstTrial extends FragmentActivity {
 				+ PersistenceBean.getCurrentId(context), context);
 		inflater = getLayoutInflater();
 		// Get existing useful data from intent and SQLite
-		toast("On Create Called");
+		
 		try {
 			try {
 				getData();
@@ -300,8 +300,7 @@ public class FirstTrial extends FragmentActivity {
 			@Override
 			public void onClick(View v) {
 
-				Toast.makeText(context, "Call the navigator App",
-						Toast.LENGTH_SHORT).show();
+				
 
 				/** GO TO AIM Eligibility **/
 
@@ -327,20 +326,26 @@ public class FirstTrial extends FragmentActivity {
 					/** Set Extra Values **/
 //					aimIntent.putExtra("activityblah", "SOme String");
 					aimIntent.putExtra("studentid",
-							"" + currentIntent.getStringExtra("studentid")+","+currentIntent.getStringExtra("studentgrade")+","+currentIntent.getStringExtra("studentparticipant")+","+URI_FIRST_TRIAL);
-//					aimIntent.putExtra("studentgrade",
+							"id:" + currentIntent.getStringExtra("studentid")+","+currentIntent.getStringExtra("studentgrade")+","+currentIntent.getStringExtra("studentparticipant")+","+URI_FIRST_TRIAL);
+					Log.e("ATGUIDE",aimIntent.toString()+"");
+					//					aimIntent.putExtra("studentgrade",
 //							"");
-//					aimIntent.putExtra(
-//							"studentparticipant",
-//							""
-//									);
+					aimIntent.putExtra(
+							"studentparticipant",
+							""
+									);
+					aimIntent.putExtra(
+							"studentgrade",
+							""
+									);
+					
 					
 //					getIntent().putExtras(aimIntent);
 					
 					// aimIntent
 					// .addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
 
-					aimIntent.setDataAndNormalize(aimEligible);
+					aimIntent.setData(aimEligible);
 					PackageManager packageManager = getPackageManager();
 					List<ResolveInfo> activities = packageManager
 							.queryIntentActivities(aimIntent, 0);

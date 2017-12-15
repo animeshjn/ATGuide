@@ -22,6 +22,7 @@
     <string name="participants">Participants</string>
     <string name="date">Date</string>
     <string name="next">Next</string>
+    <string name="ok">OK</string>
     <string name="preschool">Pre-school</string>
     <string name="kindergarten">Kindergarten</string>
     <string name="grade1">1st Grade</string>
@@ -36,7 +37,7 @@
     <string name="grade10">10th Grade</string>
     <string name="grade11">11th Grade</string>
     <string name="grade12">12th Grade</string>
-
+    <string name="summary_end">In addition, you will discuss the outcome of the trial(s) during future meeting.</string>
     <string-array name="gradearray">
         <item>@string/preschool</item>
         <item>@string/kindergarten</item>
@@ -120,6 +121,7 @@
     <string name="Task">Task</string>
     <string name="discussion">Trial Discussion</string>
     <string name="attried">AT or Service tried: </string>
+
     <string-array name="atareas">
         <item>@string/reading</item>
         <item>@string/writing</item>
@@ -188,5 +190,6 @@
 
     <string name="title_activity_second_trial">SecondTrial</string>
     <string name="title_activity_revisit_first_trial">RevisitFirstTrial</string>
+    <string name="title_activity_form__summary">Form_Summary</string>
 
 </resources>

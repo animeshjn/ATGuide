@@ -128,8 +128,10 @@ public class PersistenceBean {
 		}
 		db.close();
 		if (rows > 0) {
-			Toast.makeText(context, "" + rows + " record(s) affected",
-					Toast.LENGTH_SHORT).show();
+//			Toast.makeText(context, "" + rows + " record(s) affected",
+//					Toast.LENGTH_SHORT).show();
+//			Log.d("ATGUIDE","");
+
 		}
 		Log.d("ATGUIDE", "IEP Goals persisted, number of row(s): " + rows);
 	}
@@ -175,8 +177,8 @@ public class PersistenceBean {
 			rows = db.insert(IntentStore.TABLE_NAME, null, values);
 			db.close();
 			if (rows > 0) {
-				Toast.makeText(context, "" + rows + " inserted",
-						Toast.LENGTH_SHORT).show();
+//				Toast.makeText(context, "" + rows + " inserted",
+//						Toast.LENGTH_SHORT).show();
 			}
 
 		} catch (Exception e) {
@@ -266,8 +268,8 @@ public class PersistenceBean {
 			Log.e("ATGUIDE", "Error parsing intent: " + e.getStackTrace());
 		}
 
-		Toast.makeText(context, "Retrieved: " + records + " records",
-				Toast.LENGTH_SHORT).show();
+//		Toast.makeText(context, "Retrieved: " + records + " records",
+//				Toast.LENGTH_SHORT).show();
 		if (requiredIntent == null) {
 			Log.e("ATGUIDE", "Required intent is null ");
 		}

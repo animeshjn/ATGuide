@@ -305,18 +305,17 @@ public class RevisitFirstTrial extends FragmentActivity {
 					// .addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
 					// aimIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 					// aimIntent.putExtras(currentIntent);
+					aimIntent.putExtra("studentid",
+							"" + currentIntent.getStringExtra("studentid")+","+currentIntent.getStringExtra("studentgrade")+","+currentIntent.getStringExtra("studentparticipant")+","+URI__REVISIT_FIRST_TRIAL);
 					aimIntent.putExtra(
-							"studentid",
+							"studentparticipant",
 							""
-									+ currentIntent.getStringExtra("studentid")
-									+ ","
-									+ currentIntent
-											.getStringExtra("studentgrade")
-									+ ","
-									+ currentIntent
-											.getStringExtra("studentparticipant")
-									+ "," + URI__REVISIT_FIRST_TRIAL);
-
+									);
+					aimIntent.putExtra(
+							"studentgrade",
+							""
+									);
+					
 					aimIntent
 							.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
 					aimIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
@@ -340,7 +339,7 @@ public class RevisitFirstTrial extends FragmentActivity {
 						}
 					}
 
-					aimIntent.putExtra("open", true);
+					//aimIntent.putExtra("open", true);
 					PersistenceBean.persistIntent(
 							currentIntent.getStringExtra("studentid"),
 							currentIntent, context);
@@ -350,8 +349,7 @@ public class RevisitFirstTrial extends FragmentActivity {
 					if (installed)
 						startActivity(aimIntent);
 					else {
-						Toast.makeText(context, "AIM Explorer not installed",
-								Toast.LENGTH_SHORT).show();
+						
 						aimIntent = new Intent(Intent.ACTION_VIEW, (Uri
 								.parse("market://aimnavigator.com")));
 						Toast.makeText(getApplicationContext(),
