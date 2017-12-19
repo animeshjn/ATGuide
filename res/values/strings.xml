@@ -54,7 +54,18 @@
         <item>@string/grade11</item>
         <item>@string/grade12</item>
     </string-array>
-
+	
+    
+    <string name="firstTrialSummary1">This form for the first trial has been saved.</string>
+	<string name="firstTrialSummary2">You will now need to implement new AT solutions.</string>
+	<string name="firstTrialSummary3">After completing the trial(s), please reopen this file and select "1st Trial" on the home page to finish the remaining part of the form.</string>   
+    <string name="firstTrialSummary4">In addition, you will discuss the outcome of the trial(s) during future meeting.</string>
+    
+    <string name="secondTrialSummary1">This form for the second trial has been saved.</string>
+	<string name="secondTrialSummary2">You will now need to implement new AT solutions.</string>
+	<string name="secondTrialSummary3">After completing the trial(s), please reopen this file and select "2nd Trial" on the home page to finish the remaining part of the form.</string>   
+    <string name="secondTrialSummary4">In addition, you will discuss the outcome of the trial(s) during future meeting.</string>
+    
     <string name="title_activity_iepgoals">IEPGoals</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>

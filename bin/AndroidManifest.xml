@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="edu.gmu.ttaconline.atcguide"
+    android:versionCode="1"
+    android:versionName="1.0" >
+
+    <uses-sdk
+        android:minSdkVersion="19"
+        android:targetSdkVersion="23" />
+
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme" >
+        <activity
+            android:name=".MainActivity"
+            android:label="@string/app_name"
+            android:launchMode="singleTask"
+            android:screenOrientation="landscape"
+            android:windowSoftInputMode="adjustPan" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <action android:name="relaunch.activity.ACTIVITY_SELF_START_INTENT" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <!--
+                  <data
+                    android:host="trial1.atguide.com"
+                    android:scheme="http" />
+                -->
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+            </intent-filter>
+        </activity>
+
+        <service
+            android:name=".PDFLogic"
+            android:exported="false" />
+
+        <activity
+            android:name=".InputForm"
+            android:label="@string/title_activity_input_form"
+            android:screenOrientation="landscape"
+            android:windowSoftInputMode="adjustPan" >
+        </activity>
+        <activity
+            android:name=".IEPGoals"
+            android:label="@string/title_activity_iepgoals"
+            android:screenOrientation="landscape" >
+        </activity>
+        <activity
+            android:name=".InstructionalAreas"
+            android:label="@string/title_activity_instructional_areas"
+            android:screenOrientation="landscape"
+            android:windowSoftInputMode="adjustPan" >
+        </activity>
+        <activity
+            android:name=".IEPReading"
+            android:label="@string/title_activity_iepreading"
+            android:launchMode="singleTask"
+            android:screenOrientation="landscape" >
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="iepreading.atguide.com"
+                    android:scheme="http" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".TaskForm"
+            android:label="@string/title_activity_task_form"
+            android:screenOrientation="landscape"
+            android:windowSoftInputMode="adjustPan" >
+        </activity>
+        <activity
+            android:name=".Waiting"
+            android:label="@string/title_activity_waiting"
+            android:windowSoftInputMode="adjustPan" >
+        </activity>
+        <activity
+            android:name=".FirstTrial"
+            android:label="@string/title_activity_first_trial"
+            android:launchMode="singleTask"
+            android:screenOrientation="landscape"
+            android:windowSoftInputMode="adjustPan" >
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <action android:name="relaunch.activity.ACTIVITY_SELF_START_INTENT" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="trial1.atguide.com"
+                    android:scheme="http" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".AT_List"
+            android:label="@string/title_activity_at__list"
+            android:screenOrientation="landscape"
+            android:windowSoftInputMode="adjustPan" >
+        </activity>
+        <activity
+            android:name=".SecondTrial"
+            android:label="@string/title_activity_second_trial" >
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <action android:name="relaunch.activity.ACTIVITY_SELF_START_INTENT" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="trial2.atguide.com"
+                    android:scheme="http" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".RevisitFirstTrial"
+            android:label="@string/title_activity_revisit_first_trial"
+            android:launchMode="singleTask" >
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <action android:name="relaunch.activity.ACTIVITY_SELF_START_INTENT" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="revisitTrial1.atguide.com"
+                    android:scheme="http" />
+                <!--
+                    <data
+                    android:host="trial1.atguide.com"
+                    android:scheme="http" />
+                -->
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".Form_Summary"
+            android:label="@string/title_activity_form__summary" >
+        </activity>
+    </application>
+
+</manifest>

@@ -351,7 +351,7 @@ public class RevisitFirstTrial extends FragmentActivity {
 					else {
 						
 						aimIntent = new Intent(Intent.ACTION_VIEW, (Uri
-								.parse("market://aimnavigator.com")));
+								.parse("market://com.kihdapps.aimnavigator")));
 						Toast.makeText(getApplicationContext(),
 								"AIM Navigator not installed",
 								Toast.LENGTH_SHORT).show();

@@ -135,17 +135,21 @@ public class FirstTrial extends FragmentActivity {
 		}
 	}
 
+	/**
+	 * Check if the current intent has URI from AIMNavigator
+	 * 
+	 */
 	private void checkUri() {
-		// persistence bean/
-		// check if last call was to RevisitFirst Trial
-		// then redirect to Revisit First Trial
-
+		/**Requires: Current Intent to be available by getIntent()**/
+		/**Modifies: Area Object "Exploring VA"**/
+		/**Effects: Sets the value form AIM VA Navigator into the Area Object of "Exploring VA"**/
+		
 		Uri uri = getIntent().getData();
 		if (uri != null) {
 			try {
 				exploringVA = ""
 						+ getIntent().getStringExtra("dataFromAIMVANavigator");
-				log("Data from AIMVA Navigator:" + exploringVA);
+				//log("Data from AIMVA Navigator:" + exploringVA);
 				Area exploreArea = getAreaByName("Exploring VA");
 				if (null != exploreArea && null != exploreArea.tasks
 						&& exploreArea.tasks.size() != 0) {
@@ -158,10 +162,8 @@ public class FirstTrial extends FragmentActivity {
 				}
 
 			} catch (Exception e) {
-				Log.e("ATGUIDE", "Exception in checkUri caught at line 135: "
+				Log.e("ATGUIDE", "Exception in FirstTrial.checkUri(): "
 						+ e);
-
-				log("Exception" + e);
 			}
 		}
 	}
@@ -184,25 +186,27 @@ public class FirstTrial extends FragmentActivity {
 				PersistenceBean.persistAreaObject(areaList, "trial1"
 						+ PersistenceBean.getCurrentId(context), context);
 				PDFLogic.activity = activity;
-				currentIntent.setClass(context, PDFLogic.class);
+				currentIntent.setClass(context, Form_Summary.class);
 				currentIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 				currentIntent
 						.setFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
 				// Intent pdfService= new
 				currentIntent.putExtra("trial1", true);
+				currentIntent.putExtra("activity_name", activity.getLocalClassName());
 				PersistenceBean.persistIntent(
 						PersistenceBean.getCurrentId(context), currentIntent,
 						context);
-				// Intent(getApplicationContext(),PDFLogic.class);
-				android.widget.ProgressBar bar = new android.widget.ProgressBar(
-						getApplicationContext());
-				bar.setIndeterminate(true);
-				bar.bringToFront();
-				Log.d("ATGUIDE", "" + currentIntent.toString());
-				// startService(currentIntent);
-				Thread pdfThread = new Thread(new PDFLogic());
-				pdfThread.start();
-				finish();
+//				// Intent(getApplicationContext(),PDFLogic.class);
+//				android.widget.ProgressBar bar = new android.widget.ProgressBar(
+//						getApplicationContext());
+//				bar.setIndeterminate(true);
+//				bar.bringToFront();
+//				Log.d("ATGUIDE", "" + currentIntent.toString());
+//				// startService(currentIntent);
+//				Thread pdfThread = new Thread(new PDFLogic());
+//				pdfThread.start();
+				startActivity(currentIntent);
+				
 			}
 		});
 
@@ -309,8 +313,6 @@ public class FirstTrial extends FragmentActivity {
 				try {
 					Intent aimIntent = new Intent(Intent.ACTION_VIEW,
 							aimEligible);
-					// aimIntent
-					// .addFlags(Intent.URI_INTENT_SCHEME);
 					/** Set FLAGS **/
 					 aimIntent
 					 .addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
@@ -318,18 +320,12 @@ public class FirstTrial extends FragmentActivity {
 					 | Intent.FLAG_ACTIVITY_CLEAR_TOP
 					 | Intent.FLAG_ACTIVITY_SINGLE_TOP);
 
-					// aimIntent
-					// .addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-					// aimIntent.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
-					// currentIntent.putExtra("RedirectUri", "some String ");
-
 					/** Set Extra Values **/
-//					aimIntent.putExtra("activityblah", "SOme String");
 					aimIntent.putExtra("studentid",
 							"id:" + currentIntent.getStringExtra("studentid")+","+currentIntent.getStringExtra("studentgrade")+","+currentIntent.getStringExtra("studentparticipant")+","+URI_FIRST_TRIAL);
 					Log.e("ATGUIDE",aimIntent.toString()+"");
-					//					aimIntent.putExtra("studentgrade",
-//							"");
+					/**
+					 * Remove Below Extras if removed from AIM VA Navigator MainActivity.java*/
 					aimIntent.putExtra(
 							"studentparticipant",
 							""
@@ -339,17 +335,12 @@ public class FirstTrial extends FragmentActivity {
 							""
 									);
 					
-					
-//					getIntent().putExtras(aimIntent);
-					
-					// aimIntent
-					// .addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
 
 					aimIntent.setData(aimEligible);
 					PackageManager packageManager = getPackageManager();
 					List<ResolveInfo> activities = packageManager
 							.queryIntentActivities(aimIntent, 0);
-					boolean isIntentSafe = true;// activities.size() > 0;
+					boolean isIntentSafe =  activities.size() > 0;
 					boolean installed = false;
 					if (isIntentSafe) {
 						for (ResolveInfo resolveInfo : activities) {
@@ -379,8 +370,8 @@ public class FirstTrial extends FragmentActivity {
 						Toast.makeText(getApplicationContext(),
 								"AIM Navigator not installed",
 								Toast.LENGTH_SHORT).show();
-						// aimIntent.putExtras(currentIntent);
-						// aimIntent.putExtra("redirecturi", URI_FIRST_TRIAL);
+						
+						
 						startActivity(aimIntent);
 					}
 
@@ -712,6 +703,7 @@ public class FirstTrial extends FragmentActivity {
 
 		datePick.setOnClickListener(new View.OnClickListener() {
 
+			@SuppressWarnings("deprecation")
 			@Override
 			public void onClick(View v) {
 
@@ -1087,6 +1079,7 @@ public class FirstTrial extends FragmentActivity {
 	 * 
 	 * @param tv
 	 */
+	@SuppressWarnings("deprecation")
 	public void highlightThis(View tv) {
 		ListView lv = (ListView) findViewById(R.id.instructionalAreasList);
 		MergeAdapter m = (MergeAdapter) lv.getAdapter();
