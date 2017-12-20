@@ -555,6 +555,7 @@ public class FirstTrial extends FragmentActivity {
 					exploreAT.participants = "";
 					exploreAT.firstTrialDate = "";
 					exploreAT.task = "Exploring VA";
+					exploreAT.instructionalArea="Exploring VA";
 				}
 
 				Task explorer = null;

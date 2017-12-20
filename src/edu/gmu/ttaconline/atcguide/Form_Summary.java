@@ -106,7 +106,7 @@ public class Form_Summary extends Activity {
 			public void onClick(View v) {
 //				PersistenceBean.persistAreaObject(areaList, "trial1"
 //						+ PersistenceBean.getCurrentId(context), context);
-				PDFLogic.activity = activity;
+				//PDFLogic.activity = activity;
 				currentIntent.setClass(context, PDFLogic.class);
 				currentIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 				currentIntent
@@ -127,11 +127,25 @@ public class Form_Summary extends Activity {
 				pdfThread.start();
 				Toast.makeText(context, "Please Wait", Toast.LENGTH_SHORT).show();
 				
+				
 			}
 		});
 
 	}
 
+	@Override
+	protected void onRestart() {
+	
+		super.onRestart();
+		Intent intents = new Intent(Form_Summary.this, MainActivity.class);
+		intents.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+		            | Intent.FLAG_ACTIVITY_CLEAR_TOP
+		            );
+		startActivity(intents);
+		finish();
+		
+		
+	}
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// Handle action bar item clicks here. The action bar will

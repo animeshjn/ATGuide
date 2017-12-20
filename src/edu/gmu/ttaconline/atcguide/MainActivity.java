@@ -10,7 +10,9 @@ import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.hardware.Camera.PreviewCallback;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -27,7 +29,7 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class MainActivity extends Activity {
+@SuppressLint("InflateParams") public class MainActivity extends Activity {
 	static Context context;
 	static Activity activity = null;
 
@@ -35,13 +37,34 @@ public class MainActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		context = getApplicationContext();
+		activity = this;
+		setCustomActionBar();
+		setContentView(R.layout.activity_main);
+		if (savedInstanceState == null) {
+			getFragmentManager().beginTransaction()
+					.add(R.id.container, new PlaceholderFragment()).commit();
+		}
+	}
+    
+	public OnClickListener getHelpListener(){
+		return new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO: Help Document Listener
+				Toast.makeText(context, "Opening Help Document", Toast.LENGTH_SHORT).show();
+			}
+		};
+	}
+	
+	protected void setCustomActionBar(){
 		getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
 		ActionBar action = getActionBar();
 		getActionBar().setDisplayUseLogoEnabled(false);
 		getActionBar().setDisplayShowHomeEnabled(false);
 		action.setDisplayShowCustomEnabled(true);
-		context = getApplicationContext();
-		activity = this;
+		
 		getActionBar().setHomeButtonEnabled(false);
 		View v = getLayoutInflater().inflate(R.layout.action_main, null);
 		v.findViewById(R.id.newrecord).setOnClickListener(
@@ -51,24 +74,38 @@ public class MainActivity extends Activity {
 						actionNew(v);
 					}
 				});
-
+		v.findViewById(R.id.helpbutton).setOnClickListener(getHelpListener());
 		v.setLayoutParams(new LinearLayout.LayoutParams(
 				LayoutParams.MATCH_PARENT,
 				LinearLayout.LayoutParams.MATCH_PARENT));
 		getActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
 		getActionBar().setCustomView(v);
-		setContentView(R.layout.activity_main);
-		if (savedInstanceState == null) {
-			getFragmentManager().beginTransaction()
-					.add(R.id.container, new PlaceholderFragment()).commit();
-		}
 	}
-
+	
 	@Override
 	protected void onRestart() {
 		super.onRestart();
-		recreate();
-		//this.onCreate(new Bundle());
+		//recreate();
+		
+//		final Activity ctx=this;
+//		Handler handler = new Handler();
+//		  handler.postDelayed(new Runnable()
+//		  {
+//		    @Override
+//		    public void run()
+//		    {
+//		      
+//		      if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB)
+//		      {
+//		        ctx.finish();
+//		        ctx.startActivity(ctx.getIntent());
+//		      } else ctx.recreate();
+//		    }
+//		  }, 1);
+			getFragmentManager().beginTransaction()
+					.add(R.id.container, new PlaceholderFragment()).commit();
+		
+		
 	}
 
 	public void actionNew(View v) {
@@ -91,14 +128,22 @@ public class MainActivity extends Activity {
 		// automatically handle clicks on the Home/Up button, so long
 		// as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
-		if (id == R.id.newrecord) {
+		
+		switch(id){
+		
+		case R.id.helpbutton:
+			Toast.makeText(context, "Opening Help", Toast.LENGTH_SHORT).show();
+			return true;
+		case R.id.newrecord:
 			Intent i = new Intent(context, InputForm.class);
 			Toast.makeText(context, "Enter student data", Toast.LENGTH_SHORT)
 					.show();
 			startActivity(i);
 			return true;
+			
 		}
 		
+
 		return super.onOptionsItemSelected(item);
 	}
 

@@ -170,7 +170,6 @@ public class SecondTrial extends FragmentActivity {
 		 * Modifies: Next button in the view Effects: Sets listener to the next
 		 * button
 		 * */
-
 		currentIntent = PersistenceBean.getExistingIntent(
 				PersistenceBean.getCurrentId(context), context);
 		Button nextButton = (Button) findViewById(R.id.nextbutton);
@@ -180,21 +179,16 @@ public class SecondTrial extends FragmentActivity {
 				PersistenceBean.persistAreaObject(areaList, "trial2"
 						+ PersistenceBean.getCurrentId(context), context);
 				PDFLogic.activity = activity;
-				currentIntent.setClass(context, PDFLogic.class);
+				currentIntent.setClass(context, Form_Summary.class);
 				currentIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 				currentIntent
 						.setFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
-				// Intent pdfService= new
+			
 				currentIntent.putExtra("trial2", true);
 				PersistenceBean.persistIntent(
 						PersistenceBean.getCurrentId(context), currentIntent,
 						context);
-				// Intent(getApplicationContext(),PDFLogic.class);
-				android.widget.ProgressBar bar = new android.widget.ProgressBar(
-						getApplicationContext());
-				bar.setIndeterminate(true);
-				bar.bringToFront();
-				Log.d("ATGUIDE", "" + currentIntent.toString());
+
 				startService(currentIntent);
 			}
 		});
@@ -512,72 +506,7 @@ public class SecondTrial extends FragmentActivity {
 					LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 			// The list view on left side
 			ListView instructional = (ListView) findViewById(R.id.instructionalAreasList);
-			// The list of area
-			// int atCount = -1;
-//			String iepAlt = currentIntent.getStringExtra("iepalt");
-//			if (null != iepAlt && iepAlt.equalsIgnoreCase("Yes")) {
-//				// Add Aim Navigator to area and create special view
-//				// Add AreaName as Exploring AT
-//				// Add OnClick Listener: OnClick: Add extra button to call application
-//				// add check to the data for incoming URL
-//				// Auto Fill from the data
-//				//Area nav;
-//			//	Area navOld = getAreaByName("Exploring VA");
-//				if (null != navOld) {
-//					nav = navOld;
-//				} else {
-//					nav = new Area("Exploring VA");
-//				}
-//				// nav.addTask();
-//				if(nav.parentId==0)
-//				nav.parentId = id++;
-//				// nav.tasks.clear();
-//				AT exploreAT = null;
-//				Task t;
-//				if(null==nav.tasks||nav.tasks.size()==0)
-//				{
-//					t=null;
-//					
-//				}
-//				else{t = nav.tasks.get(0);}
-//				
-//				if (null != t){
-//					if(t.ats.size()==0){
-//					exploreAT=null;	
-//					}
-//					else{
-//						exploreAT = t.ats.get(0);
-//					}
-//				}
-//					
-//
-//				if (null == exploreAT) {
-//					exploreAT = new AT();
-//					exploreAT.ATName = exploringVA;
-//					exploreAT.participants = "";
-//					exploreAT.firstTrialDate = "";	
-//					exploreAT.task = "Exploring VA";
-//				}
-//				Task explorer=null;
-//				
-//				if(null == t){
-//				explorer = new Task();
-//				explorer.solutions = false;
-//				explorer.taskid = id++;
-//				explorer.setAreaname(nav.getAreaName());
-//				explorer.taskname = "Exploring VA";
-//				}
-//				else{
-//					explorer= t;
-//				}
-//				explorer.ats.clear();
-//				explorer.ats.add(exploreAT);
-//				nav.tasks.clear();
-//				nav.addTask(explorer);
-//				if(null==navOld)
-//				areaList.add(0,nav);
-			//}
-
+		
 			for (Area area : areaList) {
 				// For each area get a Row
 				LinearLayout areaRow = (LinearLayout) inflater.inflate(
