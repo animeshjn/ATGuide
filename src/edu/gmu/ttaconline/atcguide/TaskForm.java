@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import com.commonsware.cwac.merge.MergeAdapter;
 
 import android.annotation.SuppressLint;
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -21,6 +22,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
@@ -78,10 +80,12 @@ public class TaskForm extends Activity implements Serializable {
 
 		super.onCreate(savedInstanceState);
 		try {
+			setCustomActionBar();
 			setContentView(R.layout.activity_task_form);
 			// get from db
 			activity = this;
 			context = getApplicationContext();
+			
 			try {
 				currentIntent = getIntentFromDb();// getIntent();//getIntentFromDb();}
 			} catch (Exception e) {
@@ -138,6 +142,36 @@ public class TaskForm extends Activity implements Serializable {
 		}
 	}
 
+	/**
+	 * Sets the Custom action bar to this view 
+	 */
+	protected void setCustomActionBar() {
+		getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
+		ActionBar action = getActionBar();
+		getActionBar().setDisplayUseLogoEnabled(false);
+		getActionBar().setDisplayShowHomeEnabled(false);
+		action.setDisplayShowCustomEnabled(true);
+
+		getActionBar().setHomeButtonEnabled(false);
+		View v = getLayoutInflater().inflate(R.layout.action_main, null);
+//		v.findViewById(R.id.newrecord).setOnClickListener(
+//				new OnClickListener() {
+//					@Override
+//					public void onClick(View v) {
+//						//actionNew(v);
+//					}
+//				});
+		//v.findViewById(R.id.helpbutton).setOnClickListener(getHelpListener());
+		v.setLayoutParams(new LinearLayout.LayoutParams(
+				LayoutParams.MATCH_PARENT,
+				LinearLayout.LayoutParams.MATCH_PARENT));
+		getActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+		getActionBar().setCustomView(v);
+	}
+
+	
+	
+	
 	/**
 	 * Checks if first trial is required for any tasks, identifies the tasks for
 	 * first trial

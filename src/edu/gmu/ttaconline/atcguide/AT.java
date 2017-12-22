@@ -114,8 +114,6 @@ public class AT {
 				+ "AT NAME "+ATName+"\n"
 				+ "First Trial Date"+firstTrialDate+"\n"
 				+ "Participants "+participants+"\n ..."
-				
-				
 				);
 		
 	}

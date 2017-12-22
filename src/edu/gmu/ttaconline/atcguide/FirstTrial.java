@@ -9,6 +9,7 @@ import java.util.Locale;
 import com.commonsware.cwac.merge.MergeAdapter;
 
 import android.annotation.SuppressLint;
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Context;
@@ -27,6 +28,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -82,8 +84,10 @@ public class FirstTrial extends FragmentActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 
 		super.onCreate(savedInstanceState);
+		setCustomActionBar();
 		setContentView(R.layout.activity_first_trial);
 		context = getApplicationContext();
+		
 		areaList = PersistenceBean.getPersistedAreaObjects("trial1"
 				+ PersistenceBean.getCurrentId(context), context);
 		inflater = getLayoutInflater();
@@ -134,7 +138,32 @@ public class FirstTrial extends FragmentActivity {
 			Log.e("AT GUIDE", "Exception in FirstTrial.onCreate 127: *" + e);
 		}
 	}
+	/**
+	 * Sets the Custom action bar to this view 
+	 */
+	protected void setCustomActionBar() {
+		getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
+		ActionBar action = getActionBar();
+		getActionBar().setDisplayUseLogoEnabled(false);
+		getActionBar().setDisplayShowHomeEnabled(false);
+		action.setDisplayShowCustomEnabled(true);
 
+		getActionBar().setHomeButtonEnabled(false);
+		View v = getLayoutInflater().inflate(R.layout.action_main, null);
+//		v.findViewById(R.id.newrecord).setOnClickListener(
+//				new OnClickListener() {
+//					@Override
+//					public void onClick(View v) {
+//						//actionNew(v);
+//					}
+//				});
+		//v.findViewById(R.id.helpbutton).setOnClickListener(getHelpListener());
+		v.setLayoutParams(new LinearLayout.LayoutParams(
+				LayoutParams.MATCH_PARENT,
+				LinearLayout.LayoutParams.MATCH_PARENT));
+		getActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+		getActionBar().setCustomView(v);
+	}
 	/**
 	 * Check if the current intent has URI from AIMNavigator
 	 * 

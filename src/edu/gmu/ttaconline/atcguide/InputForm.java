@@ -1,5 +1,6 @@
 package edu.gmu.ttaconline.atcguide;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -8,11 +9,14 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
+import android.widget.LinearLayout.LayoutParams;
 
 /**
  * InputForm Activity to begin the fill data transaction for this student
@@ -37,7 +41,9 @@ public class InputForm extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		context = getApplicationContext();
+		setCustomActionBar();
 		setContentView(R.layout.activity_input_form);
+		
 		currentIntent = getIntent();
 		isSample = currentIntent.getBooleanExtra("sample", false);
 		// case open : or if exists PersistedIntent(currentStudentId)
@@ -63,6 +69,41 @@ public class InputForm extends Activity {
 		});
 	}
 
+	
+	
+	/**
+	 * Sets the Custom action bar to this view 
+	 */
+	protected void setCustomActionBar() {
+		try{getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
+		ActionBar action = getActionBar();
+		
+		getActionBar().setDisplayUseLogoEnabled(false);
+		getActionBar().setDisplayShowHomeEnabled(false);
+		action.setDisplayShowCustomEnabled(true);
+		getActionBar().setHomeButtonEnabled(false);
+		View v = getLayoutInflater().inflate(R.layout.action_form, null);
+//		v.findViewById(R.id.newrecord).setOnClickListener(
+//				new OnClickListener() {
+//					@Override
+//					public void onClick(View v) {
+//						//actionNew(v);
+//					}
+//				});
+		//v.findViewById(R.id.helpbutton).setOnClickListener(getHelpListener());
+		v.setLayoutParams(new LinearLayout.LayoutParams(
+				LayoutParams.MATCH_PARENT,
+				LinearLayout.LayoutParams.MATCH_PARENT));
+		getActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+		getActionBar().setCustomView(v);}
+		catch(Exception e){
+			Log.e("ATGUIDE","ex: "+e);
+			Toast.makeText(context, "Exception "+e, Toast.LENGTH_SHORT).show();
+		}
+	}
+	/**
+	 * 
+	 */
 	private void fillDataFromIntent() {
 		
 		studentid =currentIntent.getStringExtra("studentid");

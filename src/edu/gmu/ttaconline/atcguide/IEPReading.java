@@ -3,6 +3,7 @@ package edu.gmu.ttaconline.atcguide;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -16,10 +17,13 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
+import android.widget.LinearLayout.LayoutParams;
 
 public class IEPReading extends Activity {
 	Intent currentIntent;
@@ -35,9 +39,11 @@ public class IEPReading extends Activity {
 
 		super.onCreate(savedInstanceState);
 		try {
+			setCustomActionBar();
 			setContentView(R.layout.activity_iepreading);
 			Log.d("ATGUIDE", "on create");
 			context = getApplicationContext();
+			
 			setIntentFromDB();
 			checkUri();
 			setValuesFromIntent();
@@ -49,6 +55,32 @@ public class IEPReading extends Activity {
 		}
 	}
 
+	/**
+	 * Sets the Custom action bar to this view 
+	 */
+	protected void setCustomActionBar() {
+		getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
+		ActionBar action = getActionBar();
+		getActionBar().setDisplayUseLogoEnabled(false);
+		getActionBar().setDisplayShowHomeEnabled(false);
+		action.setDisplayShowCustomEnabled(true);
+
+		getActionBar().setHomeButtonEnabled(false);
+		View v = getLayoutInflater().inflate(R.layout.action_main, null);
+//		v.findViewById(R.id.newrecord).setOnClickListener(
+//				new OnClickListener() {
+//					@Override
+//					public void onClick(View v) {
+//						//actionNew(v);
+//					}
+//				});
+		//v.findViewById(R.id.helpbutton).setOnClickListener(getHelpListener());
+		v.setLayoutParams(new LinearLayout.LayoutParams(
+				LayoutParams.MATCH_PARENT,
+				LinearLayout.LayoutParams.MATCH_PARENT));
+		getActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+		getActionBar().setCustomView(v);
+	}
 	/**
 	 * Set Intent From DB
 	 */

@@ -8,10 +8,10 @@
 	android:weightSum="100" >
 
     <ImageButton
-        android:id="@+id/newrecord"
+        android:id="@+id/home"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:src="@drawable/ic_action_plusbutton"
+        android:src="@drawable/ic_home"
         android:background="@drawable/actionbarbackground"
         android:contentDescription="New"
        android:layout_weight="1"/>

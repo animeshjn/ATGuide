@@ -1,5 +1,6 @@
 package edu.gmu.ttaconline.atcguide;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -7,11 +8,14 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
+import android.widget.LinearLayout.LayoutParams;
 
 /**
  * The activity that determines if the student have IEP Goals that require Assistive Technology solutions in any instructional areas
@@ -29,9 +33,12 @@ public class IEPGoals extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		//Set current view
+		setCustomActionBar();
 		setContentView(R.layout.activity_iepgoals);
 		//set Context
 		context=getApplicationContext();
+		
+		
 		//Set current view
 		setCurrentIntent();
 		isSample=currentIntent.getBooleanExtra("sample",false);
@@ -42,7 +49,32 @@ public class IEPGoals extends Activity {
 		//Calls for next activity
 		
 	}
+	/**
+	 * Sets the Custom action bar to this view 
+	 */
+	protected void setCustomActionBar() {
+		getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
+		ActionBar action = getActionBar();
+		getActionBar().setDisplayUseLogoEnabled(false);
+		getActionBar().setDisplayShowHomeEnabled(false);
+		action.setDisplayShowCustomEnabled(true);
 
+		getActionBar().setHomeButtonEnabled(false);
+		View v = getLayoutInflater().inflate(R.layout.action_main, null);
+//		v.findViewById(R.id.newrecord).setOnClickListener(
+//				new OnClickListener() {
+//					@Override
+//					public void onClick(View v) {
+//						//actionNew(v);
+//					}
+//				});
+		//v.findViewById(R.id.helpbutton).setOnClickListener(getHelpListener());
+		v.setLayoutParams(new LinearLayout.LayoutParams(
+				LayoutParams.MATCH_PARENT,
+				LinearLayout.LayoutParams.MATCH_PARENT));
+		getActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+		getActionBar().setCustomView(v);
+	}
 	/**
 	 * Sets the currentIntent from the running intent
 	 */
