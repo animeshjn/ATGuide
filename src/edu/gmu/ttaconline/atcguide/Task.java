@@ -36,7 +36,14 @@ public class Task {
 	public void setTaskname(String taskname) {
 		this.taskname = taskname;
 	}
-
+	
+	
+	public void logATs(){
+		
+		for(AT at:ats){
+			at.log();
+		}
+	}
 	
 	public void copyTask(Task task){
 		this.taskid=task.taskid;
@@ -74,7 +81,15 @@ public class Task {
 			if(at.id==id)
 				return at;
 		}
-		return null;
+		
+		AT at = new AT();
+		at.task = taskname;
+		at.ATName = "Choose AT";
+		at.instructionalArea = areaname;
+		at.id = id;
+		//setAtToView(at, v);
+		ats.add(at);
+		return at;
 	}
 	
 	

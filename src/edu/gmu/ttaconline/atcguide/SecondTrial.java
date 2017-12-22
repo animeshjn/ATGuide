@@ -96,8 +96,8 @@ public class SecondTrial extends FragmentActivity {
 				Log.e("AT GUIDE", "Exception in FirstTrial.onCreate 97: *" + e);	
 			}
 			//toast("data string"+ getIntent().getDataString());
-			// if not open
-			if (!open) {
+			// if not open!open
+			if (true) {
 				
 				try{
 					placeArea();	
@@ -124,7 +124,7 @@ public class SecondTrial extends FragmentActivity {
 				clickFirstItem();	
 			}
 			catch(Exception e){
-				Log.e("AT GUIDE", "Exception in FirstTrial.onCreate.clickFirstItem 129: *" + e);
+				Log.e("AT GUIDE", "Exception in SecondTrial.onCreate.clickFirstItem 129: *" + e);
 			}
 		
 			setNextListener();
@@ -189,7 +189,7 @@ public class SecondTrial extends FragmentActivity {
 						PersistenceBean.getCurrentId(context), currentIntent,
 						context);
 
-				startService(currentIntent);
+				startActivity(currentIntent);
 			}
 		});
 
@@ -391,45 +391,50 @@ public class SecondTrial extends FragmentActivity {
 			// The list of area
 			// int atCount = -1;
 			String iepAlt = currentIntent.getStringExtra("iepalt");
-			if (null != iepAlt && iepAlt.equalsIgnoreCase("Yes")) {
-				// Add Aim Navigator to area and create special view
-				// Add AreaName as Exploring AT
-				// Add On click Listener: OnClick: Add extra button to call application
-				// add check to the data for incoming URL
-				// Auto Fill from the data
-				Area nav = new Area("Exploring VA");
-				// nav.addTask();
-				nav.parentId = id++;
-				Task explorer = new Task();
-				explorer.solutions = false;
-				explorer.taskid = id++;
-				explorer.setAreaname(nav.getAreaName());
-				explorer.taskname = "Exploring VA";
-				nav.addTask(explorer);
-				areaList.add(0,nav);
-
-			}
+//			if (null != iepAlt && iepAlt.equalsIgnoreCase("Yes")) {
+//				// Add Aim Navigator to area and create special view
+//				// Add AreaName as Exploring AT
+//				// Add On click Listener: OnClick: Add extra button to call application
+//				// add check to the data for incoming URL
+//				// Auto Fill from the data
+//				Area nav = new Area("Exploring VA");
+//				// nav.addTask();
+//				nav.parentId = id++;
+//				Task explorer = new Task();
+//				explorer.solutions = false;
+//				explorer.taskid = id++;
+//				explorer.setAreaname(nav.getAreaName());
+//				explorer.taskname = "Exploring VA";
+//				nav.addTask(explorer);
+//				areaList.add(0,nav);
+//
+//			}
 
 			for (Area area : areaList) {
 				// For each area get a Row
 				LinearLayout areaRow = (LinearLayout) inflater.inflate(
 						R.layout.areataskrow, null);
-				areaRow.setId(id += 2);
-				// Add the area name
-				TextView areaTextView = (TextView) areaRow
-						.findViewById(R.id.areatextview);
-				// area.setBackground(getResources().getDrawable(R.drawable.textviewback));
-				areaTextView.setText(area.getAreaName());
-				areaTextView
-						.setTextAlignment(TextView.TEXT_ALIGNMENT_TEXT_START);
-				areaTextView.setLayoutParams(textViewParams);
-				areaTextView.setId(area.parentId);
-
+				area.logTasks();
+				
 				// Set onClick listener to the area name
 				// append current task for 1st trial
 				for (Task task : area.tasks) {
 					// If solutions aren't working
+					task.logATs();
+					log("Trial1 Solutions for the task "+task.taskname+" :"+task.trial1solutions);
+					
 					if (!task.trial1solutions) {
+						
+						areaRow.setId(id += 2);
+						// Add the area name
+						TextView areaTextView = (TextView) areaRow
+								.findViewById(R.id.areatextview);
+						// area.setBackground(getResources().getDrawable(R.drawable.textviewback));
+						areaTextView.setText(area.getAreaName());
+						areaTextView
+								.setTextAlignment(TextView.TEXT_ALIGNMENT_TEXT_START);
+						areaTextView.setLayoutParams(textViewParams);
+						areaTextView.setId(area.parentId);
 						// atCount++;
 						LinearLayout taskLayout = new LinearLayout(context);
 						taskLayout.setOrientation(LinearLayout.VERTICAL);
@@ -511,22 +516,23 @@ public class SecondTrial extends FragmentActivity {
 				// For each area get a Row
 				LinearLayout areaRow = (LinearLayout) inflater.inflate(
 						R.layout.areataskrow, null);
-				areaRow.setId(id += 2);
-				// Add the area name
-				TextView areaTextView = (TextView) areaRow
-						.findViewById(R.id.areatextview);
-				// area.setBackground(getResources().getDrawable(R.drawable.textviewback));
-				areaTextView.setText(area.getAreaName());
-				areaTextView
-						.setTextAlignment(TextView.TEXT_ALIGNMENT_TEXT_START);
-				areaTextView.setLayoutParams(textViewParams);
-				areaTextView.setId(area.parentId);
+				
 
 				// Set onClick listener to the area name
 				// append current task for 1st trial
 				for (Task task : area.tasks) {
 					// If solutions aren't working
-					if (!task.solutions) {
+					if (!task.trial1solutions) {
+						areaRow.setId(id += 2);
+						// Add the area name
+						TextView areaTextView = (TextView) areaRow
+								.findViewById(R.id.areatextview);
+						// area.setBackground(getResources().getDrawable(R.drawable.textviewback));
+						areaTextView.setText(area.getAreaName());
+						areaTextView
+								.setTextAlignment(TextView.TEXT_ALIGNMENT_TEXT_START);
+						areaTextView.setLayoutParams(textViewParams);
+						areaTextView.setId(area.parentId);
 						// atCount++;
 						LinearLayout taskLayout = new LinearLayout(context);
 						taskLayout.setOrientation(LinearLayout.VERTICAL);

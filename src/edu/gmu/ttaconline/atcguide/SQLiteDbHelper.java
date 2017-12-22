@@ -19,7 +19,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class SQLiteDbHelper extends SQLiteOpenHelper {
 	// If you change the database schema, you must increment the database
 	// version.
-	public static final int DATABASE_VERSION = 29;
+	public static final int DATABASE_VERSION = 30;
 	public static final String DATABASE_NAME = "Student.db";
 	private static final String SQL_CREATE_ENTRIES = "CREATE TABLE "
 			+ FeedEntry.STUDENT + " (" + FeedEntry.STUDENT_ID

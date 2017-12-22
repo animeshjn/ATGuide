@@ -1,5 +1,7 @@
 package edu.gmu.ttaconline.atcguide;
 
+import android.util.Log;
+
 /**
  * Bean to store Assistive Technology
  * 
@@ -106,6 +108,16 @@ public class AT {
 	public void setSecondTrialDate(String string) {
 		// TODO Auto-generated method stub
 		this.secondTrialDate=string;
+	}
+	public void log(){
+		Log.d("ATGUIDE","Logging AT \n"
+				+ "AT NAME "+ATName+"\n"
+				+ "First Trial Date"+firstTrialDate+"\n"
+				+ "Participants "+participants+"\n ..."
+				
+				
+				);
+		
 	}
 
 }

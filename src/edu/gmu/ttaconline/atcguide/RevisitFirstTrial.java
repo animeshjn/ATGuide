@@ -975,24 +975,35 @@ public class RevisitFirstTrial extends FragmentActivity {
 
 		for (Area checkArea : areaList) {
 			// For each task in this area
+			boolean areaTrial=false;
 			for (Task task : checkArea.tasks) {
-				// If any of the strategies in current task are not working
-				if (!task.trial1solutions) {
-
-					for (AT at : task.ats) {
-						if (!at.solutionWorking) {
-							trial2List.add(checkArea);
-							trial2TextList.add("" + checkArea.getAreaName());
-							trial2 = true;
-						}
+				// If any task does have second trial, add this area for second trial
+				task.trial1solutions=true;
+				for(AT at: task.ats){
+					if(!at.solutionWorking){
+						areaTrial=true;
+						task.trial1solutions=false;
+						trial2 = true;
 					}
+					
+				}
+					
+				
+				
 
 				}
-			}
+			
+		if(areaTrial){
+			
+			trial2List.add(checkArea);
+			trial2TextList.add("" + checkArea.getAreaName());
+		}	
+		
+		}
 
 		}
 
-	}
+	
 
 	/**
 	 * Listener to the change in AT Name
