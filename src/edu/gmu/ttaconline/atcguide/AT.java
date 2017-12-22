@@ -12,17 +12,27 @@ public class AT {
 	public int id;
 	public String ATName = "";
 	public String task = "";
-	public String participants = "";
-	public String firstTrialDate = "";
-	public boolean firstWorking = false;
-	/*For part two*/
-	public boolean solutionWorking = true;
-	public String trial1CompletionDate = "";
-	public String trial1Action="";
-	public String trial1Persons = "";
-	/*For part three (Trial2)*/
-	/*TODO: Add Trial2 fields*/
+	public String participants = ""; //part1
+	public String firstTrialDate = "";//part1
 	
+	
+	public boolean firstWorking = false;//part2
+	/*For part two*/
+	public boolean solutionWorking = true;//part3
+	
+	
+	public String trial1CompletionDate = ""; //part2
+	public String trial1Action="";//part2
+	public String trial1Persons = "";//part2
+	/*For part four (Trial2)*/
+	/*TODO: Add Trial2 fields*/
+	public String secondTrialDate = "";//part3
+	public String trial2Participants = "";
+	
+	public boolean trial2solutionWorking = true; //part4
+	public String trial2CompletionDate = "";//part4
+	public String trial2Action="";//part4
+	public String trial2Persons = "";//part4
 	/**
 	 * @return instructionalArea
 	 */
@@ -91,6 +101,11 @@ public class AT {
 	 */
 	public void setSolutionWorking(boolean solutionWorking) {
 		this.solutionWorking = solutionWorking;
+	}
+
+	public void setSecondTrialDate(String string) {
+		// TODO Auto-generated method stub
+		this.secondTrialDate=string;
 	}
 
 }

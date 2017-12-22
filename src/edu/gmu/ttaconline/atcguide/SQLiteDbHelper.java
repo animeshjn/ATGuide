@@ -19,7 +19,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class SQLiteDbHelper extends SQLiteOpenHelper {
 	// If you change the database schema, you must increment the database
 	// version.
-	public static final int DATABASE_VERSION = 27;
+	public static final int DATABASE_VERSION = 29;
 	public static final String DATABASE_NAME = "Student.db";
 	private static final String SQL_CREATE_ENTRIES = "CREATE TABLE "
 			+ FeedEntry.STUDENT + " (" + FeedEntry.STUDENT_ID
@@ -42,7 +42,8 @@ public class SQLiteDbHelper extends SQLiteOpenHelper {
 			+ TaskStore.TABLE_NAME + "(" + TaskStore.COL_STUDENT_ID + " TEXT,"
 			+ TaskStore.COL_TASK_ID + " TEXT," + "" + TaskStore.COL_TASK_NAME
 			+ " TEXT, " + TaskStore.COL_AREA_NAME + "," + TaskStore.COL_AREA_ID
-			+ " TEXT," + TaskStore.COL_SOLUTION + " TEXT)";
+			+ " TEXT," + TaskStore.COL_SOLUTION + " TEXT,"
+			+ TaskStore.COL_SOLUTION_T1 + " TEXT," + TaskStore.COL_SOLUTION_T2 + " TEXT)";
 
 	public static final String SQL_CREATE_STRATEGY = "CREATE TABLE "
 			+ StrategyStore.TABLE_NAME + "(" + StrategyStore.COL_STUDENT_ID
@@ -59,15 +60,22 @@ public class SQLiteDbHelper extends SQLiteOpenHelper {
 			+ ATStore.TABLE_NAME + "(" + ATStore.COL_STUDENT_ID + " TEXT,"
 			+ ATStore.COL_AREA_ID + " TEXT," + ATStore.COL_TASK_ID + " TEXT,"
 			+ ATStore.COL_AT_ID + " TEXT," + ATStore.COL_ATNAME + " TEXT,"
-			+ ATStore.COL_PARTICIPANTS + " TEXT," 
-			+ ATStore.COL_1stTrialDate + " TEXT," 
-			+ ATStore.COL_1stTrialWorking + " TEXT,"
-			+ ATStore.COL_AREA_NAME + " TEXT," 
-			+ ATStore.COL_TASK_NAME+ " TEXT,"
-			+ ATStore.COL_SOLUTION + " TEXT," 
-			+ ATStore.COL_TRIAL1_COMPLETION + " TEXT," 
-			+ ATStore.COL_TRIAL1_Action + " TEXT,"
-			+ ATStore.COL_TRIAL1_Persons + " TEXT"
+			+ ATStore.COL_PARTICIPANTS + " TEXT," + ATStore.COL_1stTrialDate
+			+ " TEXT," + ATStore.COL_1stTrialWorking + " TEXT,"
+			+ ATStore.COL_AREA_NAME + " TEXT," + ATStore.COL_TASK_NAME
+			+ " TEXT," + ATStore.COL_SOLUTION + " TEXT,"
+			+ ATStore.COL_TRIAL1_COMPLETION + " TEXT,"
+			+ ATStore.COL_TRIAL1_Action + " TEXT," + ATStore.COL_TRIAL1_Persons
+			+ " TEXT," + ATStore.COL_2ndTrialDate
+			+ " TEXT,"
+			+ ATStore.COL_TRIAL2_Persons
+			+ " TEXT,"
+			+ ATStore.COL_PARTICIPANTS_T2
+			+ " TEXT,"
+			+ ATStore.COL_SOLUTION_T1 + " TEXT,"
+			+ ATStore.COL_TRIAL2_COMPLETION + " TEXT,"
+			+ ATStore.COL_TRIAL2_Action + " TEXT"
+			
 			+ ")";
 
 	private static final String SQL_DELETE_ENTRIES = "DROP TABLE IF EXISTS "

@@ -343,11 +343,25 @@ public class PersistenceBean {
 		String taskName = task.getTaskname();
 		String areaName = task.getAreaname();
 		String solution = null;
+		String trial1solution = null;
+		String trial2solution = null;
 
 		if (task.solutions) {
 			solution = "yes";
 		} else
 			solution = "no";
+		
+		if (task.trial1solutions) {
+			trial1solution = "yes";
+		} else
+			trial1solution = "no";
+		
+		if (task.trial2solutions) {
+			trial2solution = "yes";
+		} else
+			trial2solution = "no";
+		
+		
 		Set<String> StrategyKeys = task.strategies.keySet();
 		// studentid, taskid
 		try {
@@ -366,6 +380,10 @@ public class PersistenceBean {
 			values.put(TaskStore.COL_AREA_NAME, areaName);
 			values.put(TaskStore.COL_AREA_ID, areaId);
 			values.put(TaskStore.COL_SOLUTION, solution);
+			
+			values.put(TaskStore.COL_SOLUTION_T1, trial1solution);
+			values.put(TaskStore.COL_SOLUTION_T2, trial2solution);
+			
 			db.insert(TaskStore.TABLE_NAME, null, values);
 			Log.d("ATGUIDE",
 					"Inserting into strategy store on an iterative loop");
@@ -427,12 +445,19 @@ public class PersistenceBean {
 			values.put(ATStore.COL_1stTrialWorking, at.firstWorking);
 			values.put(ATStore.COL_AREA_NAME, at.getInstructionalArea());
 			values.put(ATStore.COL_TASK_NAME, taskName);
-			
+			values.put(ATStore.COL_2ndTrialDate, firstTrialDate);
+
 			values.put(ATStore.COL_SOLUTION, solutionWorking);
 			values.put(ATStore.COL_TRIAL1_COMPLETION, at.trial1CompletionDate);
 			values.put(ATStore.COL_TRIAL1_Action, at.trial1Action);
 			values.put(ATStore.COL_TRIAL1_Persons, at.trial1Persons);
-			
+			values.put(ATStore.COL_SOLUTION_T1, at.trial2solutionWorking);
+			values.put(ATStore.COL_SOLUTION_T1, at.trial2solutionWorking);
+			values.put(ATStore.COL_TRIAL2_COMPLETION, at.trial2CompletionDate);
+			values.put(ATStore.COL_TRIAL2_Action, at.trial2Action);
+			values.put(ATStore.COL_TRIAL2_Persons, at.trial2Persons);
+			values.put(ATStore.COL_PARTICIPANTS_T2, at.trial2Participants);
+
 			db.insert(ATStore.TABLE_NAME, null, values);
 			db.close();
 		} catch (Exception e) {
@@ -500,9 +525,8 @@ public class PersistenceBean {
 	public static ArrayList<Area> getPersistedAreaObjects(String studentid,
 			Context context) {
 		ArrayList<Area> areaObjList = new ArrayList<Area>();
-		// TODO Find all area for this student Id
 		// get all area objects
-		// contents:
+		
 		// For each task: persist(Task);
 		{
 
@@ -577,6 +601,16 @@ public class PersistenceBean {
 						currentTask.taskid + "", studentid, context);
 				currentTask.ats = getPersistedATs(area, currentTask, studentid,
 						context);
+				
+				currentTask.trial1solutions=
+				Boolean.parseBoolean(cursor
+						.getString(cursor
+								.getColumnIndex(TaskStore.COL_SOLUTION_T1)));
+				currentTask.trial2solutions=
+						Boolean.parseBoolean(cursor
+								.getString(cursor
+										.getColumnIndex(TaskStore.COL_SOLUTION_T2)));
+				
 				tasks.add(currentTask);
 				cursor.moveToNext();
 			}
@@ -617,22 +651,57 @@ public class PersistenceBean {
 				// For each AT
 				AT currentAT = new AT();
 				currentAT.ATName = area.getAreaName();
-				currentAT.setATName(cursor.getString(cursor
-						.getColumnIndex(ATStore.COL_ATNAME)));
-				currentAT.id = cursor.getInt(cursor
-						.getColumnIndex(ATStore.COL_AT_ID));
-				currentAT.task = cursor.getString(cursor
-						.getColumnIndex(ATStore.COL_TASK_NAME));
-				currentAT.participants = cursor.getString(cursor
-						.getColumnIndex(ATStore.COL_PARTICIPANTS));
-				currentAT.firstTrialDate = cursor.getString(cursor
-						.getColumnIndex(ATStore.COL_1stTrialDate));
 				currentAT.instructionalArea = cursor.getString(cursor
 						.getColumnIndex(ATStore.COL_AREA_NAME));
+				currentAT.id = cursor.getInt(cursor
+						.getColumnIndex(ATStore.COL_AT_ID));
+				
+				currentAT.setATName(cursor.getString(cursor
+						.getColumnIndex(ATStore.COL_ATNAME)));
+				
+				currentAT.task = cursor.getString(cursor
+						.getColumnIndex(ATStore.COL_TASK_NAME));
+				
+				currentAT.participants = cursor.getString(cursor
+						.getColumnIndex(ATStore.COL_PARTICIPANTS));
+				
+				currentAT.firstTrialDate = cursor.getString(cursor
+						.getColumnIndex(ATStore.COL_1stTrialDate));
 				
 				currentAT.firstWorking = Boolean.parseBoolean(cursor
 						.getString(cursor
 								.getColumnIndex(ATStore.COL_1stTrialWorking)));
+				
+				currentAT.solutionWorking = Boolean.parseBoolean(cursor
+						.getString(cursor
+								.getColumnIndex(ATStore.COL_SOLUTION)));
+				
+				currentAT.trial1CompletionDate=cursor.getString(cursor
+						.getColumnIndex(ATStore.COL_TRIAL1_COMPLETION));
+				currentAT.trial1Action=cursor.getString(cursor
+						.getColumnIndex(ATStore.COL_TRIAL1_Action));
+				currentAT.trial1Persons=cursor.getString(cursor
+						.getColumnIndex(ATStore.COL_TRIAL1_Persons));
+				
+				currentAT.secondTrialDate = cursor.getString(cursor
+						.getColumnIndex(ATStore.COL_2ndTrialDate));
+				
+				currentAT.trial2CompletionDate=cursor.getString(cursor
+						.getColumnIndex(ATStore.COL_TRIAL2_COMPLETION));
+				currentAT.trial2Action=cursor.getString(cursor
+						.getColumnIndex(ATStore.COL_TRIAL2_Action));
+				currentAT.trial2Persons=cursor.getString(cursor
+						.getColumnIndex(ATStore.COL_TRIAL2_Persons));
+				currentAT.trial2Participants = cursor.getString(cursor
+						.getColumnIndex(ATStore.COL_PARTICIPANTS_T2));
+				
+				currentAT.trial2solutionWorking=Boolean.parseBoolean(cursor
+						.getString(cursor
+								.getColumnIndex(ATStore.COL_SOLUTION_T1)));
+				
+				
+				
+				
 				atList.add(currentAT);
 				cursor.moveToNext();
 			}

@@ -45,6 +45,8 @@ public final class SQLiteContract {
     	public static final String COL_AREA_NAME= "areaname";
     	public static final String COL_TASK_NAME="taskname";
     	public static final String COL_SOLUTION="solution";
+    	public static final String COL_SOLUTION_T1="solutiont1";
+    	public static final String COL_SOLUTION_T2="solutiont2";
     }
     public static class ATStore{
     	public static final String TABLE_NAME= "ATS";
@@ -58,10 +60,18 @@ public final class SQLiteContract {
     	public static final String COL_1stTrialWorking= "firsttrialworking";
     	public static final String COL_AREA_NAME= "areaname";
     	public static final String COL_TASK_NAME="taskname";
+    	
     	public static final String COL_SOLUTION="solution";
     	public static final String COL_TRIAL1_COMPLETION="trial1_completion_date";
     	public static final String COL_TRIAL1_Action="trial1_action";
     	public static final String COL_TRIAL1_Persons="trial1_action_person";
+    	public static final String COL_2ndTrialDate= "secondtrialdate";
+
+    	public static final String COL_PARTICIPANTS_T2= "participants_trial_2";
+    	public static final String COL_SOLUTION_T1="solution_t1";
+    	public static final String COL_TRIAL2_COMPLETION="trial2_completion_date";
+    	public static final String COL_TRIAL2_Action="trial2_action";
+    	public static final String COL_TRIAL2_Persons="trial2_action_person";
 
 
     }

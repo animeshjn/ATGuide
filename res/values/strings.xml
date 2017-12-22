@@ -38,6 +38,7 @@
     <string name="grade11">11th Grade</string>
     <string name="grade12">12th Grade</string>
     <string name="summary_end">In addition, you will discuss the outcome of the trial(s) during future meeting.</string>
+
     <string-array name="gradearray">
         <item>@string/preschool</item>
         <item>@string/kindergarten</item>
@@ -54,18 +55,15 @@
         <item>@string/grade11</item>
         <item>@string/grade12</item>
     </string-array>
-	
-    
+
     <string name="firstTrialSummary1">This form for the first trial has been saved.</string>
-	<string name="firstTrialSummary2">You will now need to implement new AT solutions.</string>
-	<string name="firstTrialSummary3">After completing the trial(s), please reopen this file and select "1st Trial" on the home page to finish the remaining part of the form.</string>   
+    <string name="firstTrialSummary2">You will now need to implement new AT solutions.</string>
+    <string name="firstTrialSummary3">After completing the trial(s), please reopen this file and select "1st Trial" on the home page to finish the remaining part of the form.</string>
     <string name="firstTrialSummary4">In addition, you will discuss the outcome of the trial(s) during future meeting.</string>
-    
     <string name="secondTrialSummary1">This form for the second trial has been saved.</string>
-	<string name="secondTrialSummary2">You will now need to implement new AT solutions.</string>
-	<string name="secondTrialSummary3">After completing the trial(s), please reopen this file and select "2nd Trial" on the home page to finish the remaining part of the form.</string>   
+    <string name="secondTrialSummary2">You will now need to implement new AT solutions.</string>
+    <string name="secondTrialSummary3">After completing the trial(s), please reopen this file and select "2nd Trial" on the home page to finish the remaining part of the form.</string>
     <string name="secondTrialSummary4">In addition, you will discuss the outcome of the trial(s) during future meeting.</string>
-    
     <string name="title_activity_iepgoals">IEPGoals</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
@@ -122,6 +120,7 @@
     <string name="title_activity_waiting">Waiting</string>
     <string name="title_activity_first_trial">FirstTrial</string>
     <string name="trial1nav">There have been changes in the student\'s functional or academic performance, or current strategies are NOT adequate and could require new assistive technology or a change in current AT (devices or services) provided.</string>
+    <string name="trial2nav">There have been changes in the student\'s functional or academic performance, or current strategies are NOT adequate and could require new assistive technology or a change in current AT (devices or services) provided.</string>
     <string name="adequatesolution">Current strategies are adequate and documented in student\'s IEP.</string>
     <string name="title_activity_at__list">AT_List</string>
     <string name="reading">Reading</string>
@@ -202,5 +201,6 @@
     <string name="title_activity_second_trial">SecondTrial</string>
     <string name="title_activity_revisit_first_trial">RevisitFirstTrial</string>
     <string name="title_activity_form__summary">Form_Summary</string>
+    <string name="title_activity_revisit_second_trial">RevisitSecondTrial</string>
 
 </resources>

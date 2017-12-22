@@ -141,6 +141,17 @@ public class Area {
 		}
 		return null;
 	}
+	
+	public Task getTaskByName(String taskname) {
+		/* Requires: Exact name of the Task to be found */
+		/* Modifies: */
+		/* Effects: returns the task matching given id in this Area */
+		for (Task task : tasks) {
+			if (task.taskname.equals(taskname))
+				return task;
+		}
+		return null;
+	}
 
 	/**
 	 * Logger method to log all tasks in this area

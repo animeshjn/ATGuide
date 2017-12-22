@@ -429,7 +429,7 @@ public class SecondTrial extends FragmentActivity {
 				// append current task for 1st trial
 				for (Task task : area.tasks) {
 					// If solutions aren't working
-					if (!task.solutions) {
+					if (!task.trial1solutions) {
 						// atCount++;
 						LinearLayout taskLayout = new LinearLayout(context);
 						taskLayout.setOrientation(LinearLayout.VERTICAL);
@@ -780,8 +780,8 @@ public class SecondTrial extends FragmentActivity {
 		((TextView) findViewById(R.id.taskname)).setText(at.task);
 		((EditText) findViewById(R.id.at)).setText(at.getATName());
 		((EditText) findViewById(R.id.participants)).setText(at
-				.getParticipants());
-		((EditText) findViewById(R.id.date)).setText(at.getFirstTrialDate());
+				.trial2Participants);
+		((EditText) findViewById(R.id.date)).setText(at.secondTrialDate);
 		setATNameListener(at, currentClicked);
 		setPartcipantListener(at);
 		setCompletionDateListener(at);
@@ -838,7 +838,7 @@ public class SecondTrial extends FragmentActivity {
 			public void onTextChanged(CharSequence s, int start, int before,
 					int count) {
 				// Text Changed , bind to AT
-				at.setParticipants(s.toString());
+				at.trial2Participants= s.toString();
 			}
 
 			@Override
@@ -872,7 +872,7 @@ public class SecondTrial extends FragmentActivity {
 			public void onTextChanged(CharSequence s, int start, int before,
 					int count) {
 				// Text Changed , bind to AT
-				at.setFirstTrialDate(s.toString());
+				at.setSecondTrialDate(s.toString());
 			}
 
 			@Override

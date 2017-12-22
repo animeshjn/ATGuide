@@ -190,21 +190,13 @@ public class FirstTrial extends FragmentActivity {
 				currentIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 				currentIntent
 						.setFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
-				// Intent pdfService= new
+				
 				currentIntent.putExtra("trial1", true);
 				currentIntent.putExtra("activity_name", activity.getLocalClassName());
 				PersistenceBean.persistIntent(
 						PersistenceBean.getCurrentId(context), currentIntent,
 						context);
-//				// Intent(getApplicationContext(),PDFLogic.class);
-//				android.widget.ProgressBar bar = new android.widget.ProgressBar(
-//						getApplicationContext());
-//				bar.setIndeterminate(true);
-//				bar.bringToFront();
-//				Log.d("ATGUIDE", "" + currentIntent.toString());
-//				// startService(currentIntent);
-//				Thread pdfThread = new Thread(new PDFLogic());
-//				pdfThread.start();
+
 				startActivity(currentIntent);
 				
 			}
@@ -249,7 +241,7 @@ public class FirstTrial extends FragmentActivity {
 
 	@Override
 	protected void onNewIntent(Intent intent) {
-		// TODO Auto-generated method stub
+		
 		// super.onNewIntent(intent);
 		Toast.makeText(context, "New Intent Called", Toast.LENGTH_SHORT).show();
 		EditText ATname = (EditText) findViewById(R.id.at);
@@ -390,8 +382,8 @@ public class FirstTrial extends FragmentActivity {
 	@SuppressLint("InflateParams")
 	private void placeArea() {
 
-		// Modifies: this view
-		/*
+		/** Modifies: this view */
+		/**
 		 * Effects: places the area, task and AT on the left panels & sets their
 		 * respective listeners
 		 */

@@ -42,14 +42,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.LinearLayout.LayoutParams;
 
-public class RevisitFirstTrial extends FragmentActivity {
+public class RevisitSecondTrial extends FragmentActivity {
 	/*
 	 * Overview: Type inheriting from activity for the first trial of the AT
 	 * trials
 	 */
 	/* Instance variables */
 	ArrayList<Area> areaList;// Store the lists of all areas
-	ArrayList<String> trial1Texts = new ArrayList<String>();// store text only
+	ArrayList<String> trial2Texts = new ArrayList<String>();// store text only
 	ArrayList<Area> trial2List = new ArrayList<Area>();;
 	ArrayList<String> trial2TextList = new ArrayList<String>();
 	String studentid = "";
@@ -71,7 +71,7 @@ public class RevisitFirstTrial extends FragmentActivity {
 	String exploringVA = "Exploring VA";
 	boolean open = false;
 	boolean trial2 = false;
-	String URI__REVISIT_FIRST_TRIAL = "http://revisitTrial1.atguide.com";
+	String URI__REVISIT_SECOND_TRIAL = "http://revisitTrial2.atguide.com";
 
 	// areas
 	/* Methods */
@@ -83,9 +83,9 @@ public class RevisitFirstTrial extends FragmentActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_revisit_first_trial);
+		setContentView(R.layout.activity_revisit_second_trial);
 		context = getApplicationContext();
-		areaList = PersistenceBean.getPersistedAreaObjects("trial1"
+		areaList = PersistenceBean.getPersistedAreaObjects("trial2"
 				+ PersistenceBean.getCurrentId(context), context);
 		inflater = getLayoutInflater();
 		// Get existing useful data from intent and SQLite
@@ -154,7 +154,7 @@ public class RevisitFirstTrial extends FragmentActivity {
 				if (trial2) {
 					AlertDialog.Builder info = new AlertDialog.Builder(activity);
 					info.setMessage(getResources()
-							.getString(R.string.trial1nav).toString());
+							.getString(R.string.trial2nav).toString());
 					info.setCancelable(true);
 					info.setPositiveButton("Ok",
 							new DialogInterface.OnClickListener() {
@@ -306,7 +306,7 @@ public class RevisitFirstTrial extends FragmentActivity {
 					// aimIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 					// aimIntent.putExtras(currentIntent);
 					aimIntent.putExtra("studentid",
-							"" + currentIntent.getStringExtra("studentid")+","+currentIntent.getStringExtra("studentgrade")+","+currentIntent.getStringExtra("studentparticipant")+","+URI__REVISIT_FIRST_TRIAL);
+							"" + currentIntent.getStringExtra("studentid")+","+currentIntent.getStringExtra("studentgrade")+","+currentIntent.getStringExtra("studentparticipant")+","+URI__REVISIT_SECOND_TRIAL);
 					aimIntent.putExtra(
 							"studentparticipant",
 							""
@@ -680,13 +680,13 @@ public class RevisitFirstTrial extends FragmentActivity {
 
 		try {
 			selectedInstructional = PersistenceBean.getPersistedAreaList(
-					"trial1" + PersistenceBean.getCurrentId(context), context);
+					"trial2" + PersistenceBean.getCurrentId(context), context);
 			open = getIntent().getBooleanExtra("open", false);
 			currentIntent = PersistenceBean.getExistingIntent(
 					PersistenceBean.getCurrentId(context), context);
 
 			for (CharSequence cs : selectedInstructional) {
-				trial1Texts.add(cs.toString());
+				trial2Texts.add(cs.toString());
 			}
 		} catch (Exception e) {
 			Log.e("ATGUIDE", "Error retrieving data  firsttrial->getData() "
@@ -721,7 +721,7 @@ public class RevisitFirstTrial extends FragmentActivity {
 			public void onClick(View v) {
 
 				DatePickerDialog dialog = new DatePickerDialog(
-						RevisitFirstTrial.this, date, myCalendar
+						RevisitSecondTrial.this, date, myCalendar
 								.get(Calendar.YEAR), myCalendar
 								.get(Calendar.MONTH), myCalendar
 								.get(Calendar.DAY_OF_MONTH));
@@ -866,7 +866,7 @@ public class RevisitFirstTrial extends FragmentActivity {
 		 * the view.
 		 */
 		final Task parentTask = getAreaByName(at.instructionalArea).getTaskByName(at.task);
-		
+
 		setATNameListener(at, currentClicked);
 		setPartcipantListener(at);
 		setCompletionDateListener(at);
@@ -876,9 +876,9 @@ public class RevisitFirstTrial extends FragmentActivity {
 		((TextView) findViewById(R.id.taskname)).setText(at.task);
 		((EditText) findViewById(R.id.atTriedEdit)).setText(at.getATName());
 
-		((EditText) findViewById(R.id.at)).setText(at.trial1Action);
-		((EditText) findViewById(R.id.participants)).setText(at.trial1Persons);
-		((EditText) findViewById(R.id.date)).setText(at.getFirstTrialDate());
+		((EditText) findViewById(R.id.at)).setText(at.trial2Action);
+		((EditText) findViewById(R.id.participants)).setText(at.trial2Persons);
+		((EditText) findViewById(R.id.date)).setText(at.trial2CompletionDate);
 		RadioGroup solutions = (RadioGroup) findViewById(R.id.solutionradiogroup);
 
 		solutions
@@ -891,33 +891,32 @@ public class RevisitFirstTrial extends FragmentActivity {
 
 						if (isChecked && (checkedId == R.id.solutionyes)) {
 							// t.solutions = true;
-							View action = (View) findViewById(R.id.trialActionLayout);
-							action.setVisibility(View.INVISIBLE);
-							View personLayout = (View) findViewById(R.id.actionPersonLayout);
-							personLayout.setVisibility(View.INVISIBLE);
+//							View action = (View) findViewById(R.id.trialActionLayout);
+//							action.setVisibility(View.INVISIBLE);
+//							View personLayout = (View) findViewById(R.id.actionPersonLayout);
+//							personLayout.setVisibility(View.INVISIBLE);
 							at.solutionWorking = true;
-							parentTask.trial1solutions =true;
-							View dateLayout = (View) findViewById(R.id.actionCompletionLayout);
-							dateLayout.setVisibility(View.INVISIBLE);
+							parentTask.trial2solutions=true;
+//							View dateLayout = (View) findViewById(R.id.actionCompletionLayout);
+//							dateLayout.setVisibility(View.INVISIBLE);
 
 						} else if (isChecked && (checkedId == R.id.solutionno)) {
 							// t.solutions = false;
 							// make next fields visible
-							View action = (View) findViewById(R.id.trialActionLayout);
-							action.setVisibility(View.VISIBLE);
-							setChildrenVisibility((LinearLayout) action,
-									View.VISIBLE);
-							View personLayout = (View) findViewById(R.id.actionPersonLayout);
-							personLayout.setVisibility(View.VISIBLE);
-							setChildrenVisibility((LinearLayout) personLayout,
-									View.VISIBLE);
+//							View action = (View) findViewById(R.id.trialActionLayout);
+//							action.setVisibility(View.VISIBLE);
+//							setChildrenVisibility((LinearLayout) action,
+//									View.VISIBLE);
+//							View personLayout = (View) findViewById(R.id.actionPersonLayout);
+//							personLayout.setVisibility(View.VISIBLE);
+//							setChildrenVisibility((LinearLayout) personLayout,
+//									View.VISIBLE);
 							at.solutionWorking = false;
-							parentTask.trial1solutions =false;
-
-							View dateLayout = (View) findViewById(R.id.actionCompletionLayout);
-							dateLayout.setVisibility(View.VISIBLE);
-							setChildrenVisibility((LinearLayout) dateLayout,
-									View.VISIBLE);
+							parentTask.trial2solutions=false;
+//							View dateLayout = (View) findViewById(R.id.actionCompletionLayout);
+//							dateLayout.setVisibility(View.VISIBLE);
+//							setChildrenVisibility((LinearLayout) dateLayout,
+//									View.VISIBLE);
 						}
 
 					}
@@ -926,13 +925,13 @@ public class RevisitFirstTrial extends FragmentActivity {
 		if (at.solutionWorking) {
 			((RadioButton) solutions.findViewById(R.id.solutionyes))
 					.setChecked(true);
-			View action = (View) findViewById(R.id.trialActionLayout);
-			action.setVisibility(View.INVISIBLE);
-			View personLayout = (View) findViewById(R.id.actionPersonLayout);
-			personLayout.setVisibility(View.INVISIBLE);
-
-			View dateLayout = (View) findViewById(R.id.actionCompletionLayout);
-			dateLayout.setVisibility(View.INVISIBLE);
+//			View action = (View) findViewById(R.id.trialActionLayout);
+//			action.setVisibility(View.INVISIBLE);
+//			View personLayout = (View) findViewById(R.id.actionPersonLayout);
+//			personLayout.setVisibility(View.INVISIBLE);
+//
+//			View dateLayout = (View) findViewById(R.id.actionCompletionLayout);
+//			dateLayout.setVisibility(View.INVISIBLE);
 		} else {
 			((RadioButton) solutions.findViewById(R.id.solutionno))
 					.setChecked(true);
@@ -977,10 +976,10 @@ public class RevisitFirstTrial extends FragmentActivity {
 			// For each task in this area
 			for (Task task : checkArea.tasks) {
 				// If any of the strategies in current task are not working
-				if (!task.trial1solutions) {
+				if (!task.solutions) {
 
 					for (AT at : task.ats) {
-						if (!at.solutionWorking) {
+						if (!at.trial2solutionWorking) {
 							trial2List.add(checkArea);
 							trial2TextList.add("" + checkArea.getAreaName());
 							trial2 = true;
@@ -1046,7 +1045,7 @@ public class RevisitFirstTrial extends FragmentActivity {
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before,
 					int count) {
-				at.trial1Action = (trimATName(s.toString()));
+				at.trial2Action = (trimATName(s.toString()));
 
 				// ((TextView)
 				// currentClicked).setText(trimATName(s.toString()));
@@ -1085,7 +1084,7 @@ public class RevisitFirstTrial extends FragmentActivity {
 			public void onTextChanged(CharSequence s, int start, int before,
 					int count) {
 				// Text Changed , bind to AT
-				at.trial1Persons = (s.toString());
+				at.trial2Persons = (s.toString());
 			}
 
 			@Override
@@ -1119,7 +1118,7 @@ public class RevisitFirstTrial extends FragmentActivity {
 			public void onTextChanged(CharSequence s, int start, int before,
 					int count) {
 				// Text Changed , bind to AT
-				at.trial1CompletionDate = (s.toString());
+				at.trial2CompletionDate = (s.toString());
 			}
 
 			@Override

@@ -9,10 +9,7 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
-import android.hardware.Camera.PreviewCallback;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -29,7 +26,8 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
-@SuppressLint("InflateParams") public class MainActivity extends Activity {
+@SuppressLint("InflateParams")
+public class MainActivity extends Activity {
 	static Context context;
 	static Activity activity = null;
 
@@ -46,25 +44,26 @@ import android.widget.Toast;
 					.add(R.id.container, new PlaceholderFragment()).commit();
 		}
 	}
-    
-	public OnClickListener getHelpListener(){
+
+	public OnClickListener getHelpListener() {
 		return new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				// TODO: Help Document Listener
-				Toast.makeText(context, "Opening Help Document", Toast.LENGTH_SHORT).show();
+				Toast.makeText(context, "Opening Help Document",
+						Toast.LENGTH_SHORT).show();
 			}
 		};
 	}
-	
-	protected void setCustomActionBar(){
+
+	protected void setCustomActionBar() {
 		getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
 		ActionBar action = getActionBar();
 		getActionBar().setDisplayUseLogoEnabled(false);
 		getActionBar().setDisplayShowHomeEnabled(false);
 		action.setDisplayShowCustomEnabled(true);
-		
+
 		getActionBar().setHomeButtonEnabled(false);
 		View v = getLayoutInflater().inflate(R.layout.action_main, null);
 		v.findViewById(R.id.newrecord).setOnClickListener(
@@ -81,31 +80,15 @@ import android.widget.Toast;
 		getActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
 		getActionBar().setCustomView(v);
 	}
-	
+
 	@Override
 	protected void onRestart() {
 		super.onRestart();
-		//recreate();
-		
-//		final Activity ctx=this;
-//		Handler handler = new Handler();
-//		  handler.postDelayed(new Runnable()
-//		  {
-//		    @Override
-//		    public void run()
-//		    {
-//		      
-//		      if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB)
-//		      {
-//		        ctx.finish();
-//		        ctx.startActivity(ctx.getIntent());
-//		      } else ctx.recreate();
-//		    }
-//		  }, 1);
-			getFragmentManager().beginTransaction()
-					.add(R.id.container, new PlaceholderFragment()).commit();
-		
-		
+		// recreate();
+
+		getFragmentManager().beginTransaction()
+				.add(R.id.container, new PlaceholderFragment()).commit();
+
 	}
 
 	public void actionNew(View v) {
@@ -128,9 +111,9 @@ import android.widget.Toast;
 		// automatically handle clicks on the Home/Up button, so long
 		// as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
-		
-		switch(id){
-		
+
+		switch (id) {
+
 		case R.id.helpbutton:
 			Toast.makeText(context, "Opening Help", Toast.LENGTH_SHORT).show();
 			return true;
@@ -140,9 +123,8 @@ import android.widget.Toast;
 					.show();
 			startActivity(i);
 			return true;
-			
+
 		}
-		
 
 		return super.onOptionsItemSelected(item);
 	}
@@ -244,13 +226,14 @@ import android.widget.Toast;
 					loadFirstTrial(tag);
 					break;
 				case R.id.trial2:
-					Toast.makeText(context, "trial2 ", Toast.LENGTH_SHORT)
-							.show();
+					// Toast.makeText(context, "trial2 ", Toast.LENGTH_SHORT)
+					// .show();
+					loadSecondTrial(tag);
 					break;
 				case R.id.preview:
 					toast("Opening");
 					previewRecord(tag);
-					 //log(tag);
+					// log(tag);
 					break;
 				case R.id.deleterecordbutton:
 					Toast.makeText(context, "Cannot delete sample data",
@@ -287,8 +270,9 @@ import android.widget.Toast;
 		bar.bringToFront();
 		MainActivity.activity.startService(currentIntent);
 	}
+
 	public static void loadFirstTrial(String studentId) {
-		//PDFLogic.activity = MainActivity.activity;
+		// PDFLogic.activity = MainActivity.activity;
 		PersistenceBean.persistCurrentId(studentId, context);
 		Intent currentIntent = PersistenceBean.getExistingIntent(studentId,
 				context);
@@ -296,13 +280,25 @@ import android.widget.Toast;
 		currentIntent.putExtra("revisitTrial1", true);
 		// Intent(activity.getApplicationContext(),PDFLogic.class);
 		currentIntent.setClass(context, RevisitFirstTrial.class);
-		//currentIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-		//currentIntent.setFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+		// currentIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		// currentIntent.setFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
 		// Intent pdfService= new
 		// Intent(getApplicationContext(),PDFLogic.class);
-//		android.widget.ProgressBar bar = new android.widget.ProgressBar(context);
-//		bar.setIndeterminate(true);
-//		bar.bringToFront();
+		// android.widget.ProgressBar bar = new
+		// android.widget.ProgressBar(context);
+		// bar.setIndeterminate(true);
+		// bar.bringToFront();
+		MainActivity.activity.startActivity(currentIntent);
+
+	}
+
+	public static void loadSecondTrial(String studentId) {
+
+		PersistenceBean.persistCurrentId(studentId, context);
+		Intent currentIntent = PersistenceBean.getExistingIntent(studentId,
+				context);
+		currentIntent.putExtra("revisitTrial2", true);
+		currentIntent.setClass(context, RevisitSecondTrial.class);
 		MainActivity.activity.startActivity(currentIntent);
 	}
 
